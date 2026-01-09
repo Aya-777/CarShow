@@ -1,20 +1,40 @@
-// CarShow.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include <Windows.h>
+#include <GL/freeglut.h>
+#include "Point.h"
 
-#include <iostream>
+using namespace std;
 
-int main()
+struct color3f
 {
-    std::cout << "Hello World!\n";
+	float r, g, b;
+	color3f() { r = 0; g = 0; b = 0; }
+	color3f(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
+};
+
+void display();
+void idle();
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutCreateWindow("Idk");
+	glutFullScreen();
+	glutDisplayFunc(display);
+	glutIdleFunc(idle);
+
+	glutMainLoop();
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void display()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	glutSwapBuffers();
+}
+
+void idle()
+{
+	display();
+}
