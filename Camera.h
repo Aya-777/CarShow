@@ -4,6 +4,7 @@
 #define M_PI_2 1.57079632679489661923
 #include <iostream>
 #include <vector>
+#include "Door.h"
 //#include "Point.h"
 //#include "Elevator.h"
 struct Wall {

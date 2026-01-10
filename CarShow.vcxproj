@@ -135,17 +135,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Cuboid.h" />
+    <ClInclude Include="Cylinder.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="Lighting.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Pyramid.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
     <ClInclude Include="Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

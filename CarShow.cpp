@@ -2,6 +2,7 @@
 #include <GL/freeglut.h>
 #include "Point.h"
 #include "Cuboid.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -19,9 +20,12 @@ void reshape(int w, int h);
 void init();
 void timer(int value);
 void idle();
+void specialKeysUp(int key, int x, int y);
+static void keyboardCallback(unsigned char key, int x, int y);
+static void specialKeysCallback(int key, int x, int y);
 
 
-Cuboid buildingStructure(Point(0, 0, 0), 50, 300, 630);
+
 // Global variables
 Point center = Point(0, -3, 0);
 Texture texture;
@@ -32,6 +36,8 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
+Cuboid buildingStructure(Point(0, 0, 0), 50, 300, 630);
+Camera camera;
 
 
 int main(int argc, char** argv)
@@ -40,11 +46,15 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(g_iHeight, g_iWidth);
 	glutCreateWindow("weee");
-	glutFullScreen();
+	//glutFullScreen();
 	init();
+	glutSpecialUpFunc(specialKeysUp);
+	glutSpecialFunc(specialKeysCallback);   // For arrow keys
+	glutKeyboardFunc(keyboardCallback);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
+	camera.SetPos(-10.0f, -10.0f, 50.0f);
 
 
 	glutTimerFunc(1, timer, 0);
@@ -56,7 +66,8 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(g_background.r, g_background.g, g_background.b, 1.0);
 	glLoadIdentity();
-	glTranslatef(0, 0, -10);
+	//glTranslatef(0, 0, -10);
+	camera.Refresh();
 
 	//setupLighting();
 	//setupShadow();
@@ -88,10 +99,17 @@ void init()
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-	//glColor3ub(80, 80, 80);
+	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
 	buildingStructure.draw();
 	glEndList();
 
+	// transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Optional: if using textures with transparency
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
 
 
 }
@@ -106,4 +124,54 @@ void reshape(int w, int h)
 	glLoadIdentity();
 	gluPerspective(60.f, (float)w / (float)h, g_fNear, g_fFar);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+static void specialKeysCallback(int key, int x, int y)
+{
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        camera.Move(10.0);
+        break;
+    case GLUT_KEY_DOWN:
+        camera.Move(-2.0);
+        break;
+    case GLUT_KEY_LEFT:
+        camera.Strafe(-2.0);
+        break;
+    case GLUT_KEY_RIGHT:
+        camera.Strafe(2.0);
+        break;
+    }
+    glutPostRedisplay();
+}
+static void keyboardCallback(unsigned char key, int x, int y)
+{
+	switch (key)
+	{
+	case 'a':
+		camera.RotateYaw(-5.0);
+		break; // Rotate Left
+	case 'd':
+		camera.RotateYaw(5.0);
+		break; // Rotate Right
+	case 'w':
+		camera.Fly(2.0);
+		break; // Move Up
+	case 's':
+		camera.Fly(-2.0);
+		break; // Move Down
+		glutPostRedisplay();
+	}
+}
+void specialKeysUp(int key, int x, int y)
+{
+	if (key == GLUT_KEY_UP)
+		cout << "up released" << endl;
+	if (key == GLUT_KEY_DOWN)
+		cout << "down released" << endl;
+	if (key == GLUT_KEY_RIGHT)
+		cout << "right released" << endl;
+	if (key == GLUT_KEY_LEFT)
+		cout << "left released" << endl;
 }
