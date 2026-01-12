@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <GL/freeglut.h>
 #include "Point.h"
 #include "Cuboid.h"
@@ -36,8 +36,21 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-Cuboid buildingStructure(Point(0, 0, 0), 50, 300, 630);
+Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
 Camera camera;
+
+
+void drawGround()
+{
+	glDisable(GL_TEXTURE_2D);
+	glColor3f(0.7f, 0.7f, 0.7f);
+	glBegin(GL_QUADS);
+	glVertex3f(-2000.0f, -3.0f, -2000.0f);
+	glVertex3f(2000.0f, -3.0f, -2000.0f);
+	glVertex3f(2000.0f, -3.0f, 2000.0f);
+	glVertex3f(-2000.0f, -3.0f, 2000.0f);
+	glEnd();
+}
 
 
 int main(int argc, char** argv)
@@ -54,7 +67,8 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
-	camera.SetPos(-10.0f, -10.0f, 50.0f);
+	camera.SetPos(-500.0f, 10.0f, 800.0f);
+	camera.RotateYaw(-1.0);
 
 
 	glutTimerFunc(1, timer, 0);
@@ -71,6 +85,7 @@ void display()
 
 	//setupLighting();
 	//setupShadow();
+	drawGround();
 	glCallList(displayListID);
 
 	glutSwapBuffers();
@@ -99,7 +114,8 @@ void init()
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-	glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+	glColor3f(0.2f, 0.3f, 0.8f);
 	buildingStructure.draw();
 	glEndList();
 
@@ -150,10 +166,10 @@ static void keyboardCallback(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 'a':
-		camera.RotateYaw(-5.0);
+		camera.RotateYaw(-0.02);
 		break; // Rotate Left
 	case 'd':
-		camera.RotateYaw(5.0);
+		camera.RotateYaw(0.02);
 		break; // Rotate Right
 	case 'w':
 		camera.Fly(2.0);
