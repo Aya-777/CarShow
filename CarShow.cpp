@@ -1,9 +1,8 @@
 ﻿#include <GL/freeglut.h>
 #include "Truck.h"
-#include "Point.h"
 
 // Create a global instance of your Truck
-Truck myTruck(Point(0.0f, 2.5f, 0.0f));
+Truck myTruck(Point(0,0,0));
 // Function to initialize lighting and depth
 void init() {
     glEnable(GL_DEPTH_TEST); // Ensures 3D objects overlap correctly
@@ -25,9 +24,9 @@ void display() {
 
     // Set the camera position
     // (Eye position, Look-at point, Up vector)
-    gluLookAt(10.0, 5.0, 10.0, 
-              0.0, 0.0, 0.0, 
-              0.0, 1.0, 0.0);
+    gluLookAt(10.0, 5.0, 10.0,
+        0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0);
 
     // Draw a simple floor grid
     glBegin(GL_LINES);
