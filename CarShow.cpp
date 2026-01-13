@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Cuboid.h"
 #include "Camera.h"
+#include "Building.h"
 
 using namespace std;
 
@@ -36,8 +37,9 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
 Camera camera;
+Building buildingStructure;
 
 
 void drawGround()
@@ -59,10 +61,10 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(g_iHeight, g_iWidth);
 	glutCreateWindow("weee");
-	//glutFullScreen();
+	glutFullScreen();
 	init();
 	glutSpecialUpFunc(specialKeysUp);
-	glutSpecialFunc(specialKeysCallback);   // For arrow keys
+	glutSpecialFunc(specialKeysCallback);
 	glutKeyboardFunc(keyboardCallback);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
@@ -79,13 +81,19 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(g_background.r, g_background.g, g_background.b, 1.0);
+
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glTranslatef(0, 0, -10);
+
 	camera.Refresh();
 
-	//setupLighting();
-	//setupShadow();
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	drawGround();
+
+	buildingStructure.draw();
+
 	glCallList(displayListID);
 
 	glutSwapBuffers();
@@ -102,6 +110,7 @@ void timer(int value)
 	glutTimerFunc(1000 / 30, timer, 0);	//call the timer again each 1 millisecond
 
 }
+
 //initialize some variables
 void init()
 {
@@ -114,18 +123,9 @@ void init()
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
-	glColor3f(0.2f, 0.3f, 0.8f);
-	buildingStructure.draw();
+		//glColor3f(0.2f, 0.3f, 0.8f);
+		
 	glEndList();
-
-	// transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// Optional: if using textures with transparency
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.1f);
 
 
 }
