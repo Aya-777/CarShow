@@ -6,12 +6,14 @@
 
 class Truck {
 private:
-    float length=10.0, height=2.5, width=2.5;
+    float length=70.0, height=25, width=25;
     Wheel wheelUnit; // Shared wheel settings
     Point wheelPositions[6];
 
 public:
     Point position;
+    float doorAngle;
+    bool doorsOpen;
     float wheelSpin;
     float steerAngle;
     bool isMovable;
