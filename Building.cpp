@@ -15,6 +15,9 @@ void Building::draw() {
 	glColor4f(0.2f, 0.3f, 0.8f, 0.5f); // 50% transparent white
 	building.draw();
 
+	Cuboid administrationBuilding(Point(-75,0,365), 100, 80, 150);
+	administrationBuilding.draw();
+
 }
 
 Building::Building(){}
