@@ -19,6 +19,7 @@ struct color3f
 //definition of all functions
 
 void display();
+void updateScene();
 void reshape(int w, int h);
 void init();
 void timer(int value);
@@ -49,7 +50,8 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 //Building buildingStructure;
-Truck t(Point(0, 3.5, 0));
+bool isInsideView = false;
+Truck t(Point(110, 3.5, 0));
 
 
 void drawGround()
@@ -83,6 +85,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 	camera.SetPos(-500.0f, 10.0f, 800.0f);
 	camera.RotateYaw(-1.0);
+	camera.SetPitch(0);
 
 
 	glutTimerFunc(1, timer, 0);
@@ -105,7 +108,7 @@ void display()
 	drawGround();
 	glPushMatrix();
 
-	glRotatef(180.0f, 0.0f, 1.0f, 0.0f); // لفها 180 درجة
+	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 	t.draw();
 	
 	glPopMatrix();
@@ -120,6 +123,7 @@ void display()
 void idle()
 {
 	t.update();
+	updateScene();
 	display();
 }
 
@@ -162,6 +166,38 @@ void reshape(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void updateScene() {
+	t.update();
+
+	if (isInsideView) {
+		// 1. Define the LOCAL position of the driver's head relative to truck center
+		float localX = t.length * 0.2f;   // Inside the cabin area
+		float localY = t.height * 0.35f;  // Eye level
+		float localZ = t.width * 0.0001f;  // Driver side seat
+
+		// 2. Convert truck's logical rotation to Radians
+		float rad = t.rotationAngle * (M_PI / 180.0f);
+
+		// 3. Calculate Logical World Position
+		float logicX = t.position.x + (localX * cos(rad) + localZ * sin(rad));
+		float logicZ = t.position.z - (localX * sin(rad) - localZ * cos(rad));
+		float logicY = t.position.y + localY;
+
+		// 4. ACCOUNT FOR THE 180° FLIP in display()
+		// Since display() does glRotatef(180, 0, 1, 0), the actual visual 
+		// position is the negative of the logical X and Z.
+		float finalX = -logicX;
+		float finalZ = -logicZ;
+
+		camera.SetPos(finalX, logicY, finalZ);
+
+		// 5. SET THE DIRECTION (Yaw)
+		float finalYaw = -rad + M_PI;
+		camera.SetYaw(finalYaw);
+	}
+
+	glutPostRedisplay();
+}
 static void specialKeysCallback(int key, int x, int y)
 {
 	switch (key)
@@ -173,16 +209,18 @@ static void specialKeysCallback(int key, int x, int y)
 		camera.Move(-10.0);
 		break;
 	case GLUT_KEY_LEFT:
-		camera.Strafe(-10.0);
+		camera.Strafe(10.0);
 		break;
 	case GLUT_KEY_RIGHT:
-		camera.Strafe(10.0);
+		camera.Strafe(-10.0);
 		break;
 	}
 	glutPostRedisplay();
 }
 static void keyboardCallback(unsigned char key, int x, int y)
 {
+	float rad = t.rotationAngle * (M_PI / 180.0f);
+	float step = 2.0f;
 	switch (key)
 	{
 	case 'a':
@@ -198,16 +236,48 @@ static void keyboardCallback(unsigned char key, int x, int y)
 		camera.Fly(-2.0);
 		break; // Move Down
 	case 'g': // 'G' for Go
-	case 'G':
-		t.isMovable = !t.isMovable;
-		break;
-
 	case 'o': // 'O' for Open
 	case 'O':
 		t.doorsOpen = !t.doorsOpen;
 		break;
 		glutPostRedisplay();
+
+	case '1': // FORWARD
+		t.position.x += cos(rad) * step;
+		t.position.z -= sin(rad) * step;
+		t.wheelSpin -= 10.0f; // Spin wheels when moving
+		break;
+
+	case '2': // BACKWARD
+		t.position.x -= cos(rad) * step;
+		t.position.z += sin(rad) * step;
+		t.wheelSpin += 10.0f;
+		break;
+
+	case '3': // ROTATE LEFT (Turn truck)
+		t.rotationAngle += 5.0f;
+		t.steerAngle = 20.0f; // Visual steering effect
+		break;
+
+	case '4': // ROTATE RIGHT (Turn truck)
+		t.rotationAngle -= 5.0f;
+		t.steerAngle = -20.0f;
+		break;
+
+	case ' ': // SPACE KEY
+		isInsideView = !isInsideView;
+		if (isInsideView) {
+			cout << "Entered Driver View" << endl;
+		}
+		else {
+			// Optional: Move camera back to a "Follow" position when exiting
+			//camera.SetPos(-500.0f, 10.0f, 800.0f);
+			camera.Strafe(20);
+		}
+		break;
 	}
+	//Camera Position : x = 96.5 y = 17.25z = -6.25
+	//	Camera Position : x = -0.994844 y = 0z = 0.101421
 }
 void specialKeysUp(int key, int x, int y)
 {

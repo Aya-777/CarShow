@@ -141,7 +141,6 @@
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="Glass.cpp" />
     <ClCompile Include="Lighting.cpp" />
-    <ClCompile Include="Model1.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -157,7 +156,7 @@
     <ClInclude Include="Door.h" />
     <ClInclude Include="Glass.h" />
     <ClInclude Include="Lighting.h" />
-    <ClInclude Include="Model1.h" />
+    <ClInclude Include="Model_3DS.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />
@@ -169,6 +168,15 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Models\ArmChair\Armchair car N220417.3DS" />
+    <None Include="Models\ArmChair\Armchair car N220417.gsm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Models\ArmChair\archibase.net.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Models\ArmChair\BLeather.bmp" />
+    <Image Include="Models\ArmChair\d 2222.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

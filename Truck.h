@@ -5,23 +5,27 @@
 #include <vector>
 
 class Truck {
-private:
+public:
     float length=70.0, height=25, width=25;
     Wheel wheelUnit;
     Point wheelPositions[6];
 
 public:
     Point position;
+    Point drveSeat;
     float doorAngle;
     bool doorsOpen;
     float wheelSpin;
     float steerAngle;
     bool isMovable;
+    float rotationAngle;
+    float speed;
 
 
     Truck(Point position);
     void update();
     void draw();
+    //void load();
 };
 
 #endif

@@ -1,6 +1,13 @@
 ﻿#include "Truck.h"
 #include "Cuboid.h"
 #include "Glass.h"
+//#include "Model_3DS.h"
+#include "Texture.h"
+
+
+//Model_3DS armChair;
+//GlTexture
+//GLTexture armChairTexture;
 
 Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.2f) {
     this->position = position;
@@ -26,11 +33,27 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
     wheelPositions[5] = Point(-length * 0.35f, groundY, -zOffset);
 }
 
+void load() {
+	//armChair = Model_3DS();
+	//armChair.Load("Models / ArmChair / Armchair car N220417.3DS");
+	//armChairTexture.
+}
 void Truck::update() {
     if (isMovable) {
-        position.x += 0.5f;
-        wheelSpin -= 1.0f;
-        if (position.x > 1000.0f) position.x = -1000.0f;
+        // "Forward" direction math (Assuming X is forward)
+        // Convert degrees to radians for cos/sin
+        float rad = rotationAngle * (3.14159f / 180.0f);
+
+        // Move position based on current heading
+        position.x += cos(rad) * 0.5f;
+        position.z -= sin(rad) * 0.5f;
+
+        // Roll the wheels based on movement
+        wheelSpin -= 5.0f;
+
+        // Update truck heading based on steering (The truck turns while moving)
+        // If steerAngle is positive, truck turns left; negative, truck turns right.
+        rotationAngle += (steerAngle * 0.1f);
     }
 
     if (doorsOpen) {
@@ -39,12 +62,15 @@ void Truck::update() {
     else {
         if (doorAngle > 0.0f) doorAngle -= 0.2f;
     }
+
+    
 }
+
 
 void Truck::draw() {
     glPushMatrix();
     glTranslatef(position.x, position.y, position.z);
-
+    glRotatef(rotationAngle, 0, 1, 0);
     // --- 1. MAIN CONTAINER ---
     glColor3f(0.2f, 0.4f, 0.8f);
     float containerLengthX = length * 0.7f;
@@ -68,8 +94,21 @@ void Truck::draw() {
         Cuboid leftWall(Point(0, 0, -cabW / 2), cabH, thickness, cabL);
         leftWall.draw();
 
+        glPushMatrix();
+            //glColor3f(0.1,0.8,0.1);
+            Glass leftGlass(Point(0, cabH / 2, -cabW/2 - 0.8), cabH/5, thickness, cabL/2);
+            leftGlass.draw(0.1, 0.8, 0.1, 0.5);
+        glPopMatrix();
+
+        glColor3f(0.7f, 0.0f, 0.0f);
         Cuboid rightWall(Point(0, 0, cabW / 2), cabH, thickness, cabL);
         rightWall.draw();
+
+        glPushMatrix();
+            //glColor3f(0.1, 0.8, 0.1);
+            Glass rightGlass(Point(0, cabH / 2, cabW / 2 + 0.1), cabH / 5, thickness, cabL / 2);
+            rightGlass.draw(0.1, 0.8, 0.1, 0.5);
+        glPopMatrix();
 
         Cuboid roof(Point(0, cabH, 0), thickness, cabW, cabL);
         roof.draw();
@@ -123,6 +162,7 @@ void Truck::draw() {
 
     // --- 4. WHEELS ---
     wheelUnit.spinAngle = wheelSpin;
+    wheelUnit.steerAngle = this->steerAngle;
     for (int i = 0; i < 6; i++) {
         wheelUnit.draw(wheelPositions[i], (i < 2));
     }

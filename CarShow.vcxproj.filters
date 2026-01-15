@@ -54,9 +54,6 @@
     <ClCompile Include="Glass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">
@@ -98,12 +95,25 @@
     <ClInclude Include="Glass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model1.h">
+    <ClInclude Include="Model_3DS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Models\ArmChair\Armchair car N220417.3DS" />
+    <None Include="Models\ArmChair\Armchair car N220417.gsm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Models\ArmChair\archibase.net.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Models\ArmChair\BLeather.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Models\ArmChair\d 2222.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
