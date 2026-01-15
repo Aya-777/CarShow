@@ -4,6 +4,7 @@
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Truck.h"
+#include "Sofa.h"
 //#include "Building.h"
 
 using namespace std;
@@ -106,7 +107,7 @@ void display()
 
 	glRotatef(180.0f, 0.0f, 1.0f, 0.0f); // لفها 180 درجة
 	t.draw();
-
+	
 	glPopMatrix();
 	//buildingStructure.draw();
 

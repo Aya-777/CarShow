@@ -7,7 +7,7 @@
 class Truck {
 private:
     float length=70.0, height=25, width=25;
-    Wheel wheelUnit; // Shared wheel settings
+    Wheel wheelUnit;
     Point wheelPositions[6];
 
 public:
