@@ -140,12 +140,15 @@
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="FamilyCar.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
+    <ClCompile Include="testcar.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
@@ -153,12 +156,14 @@
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="FamilyCar.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Wheel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
