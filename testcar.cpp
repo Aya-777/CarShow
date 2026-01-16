@@ -216,111 +216,58 @@ GLvoid DrawGLScene()
 	glVertex3f(1.8, 0.2, 0.2);
 	glVertex3f(1.8, 0.5, 0.2);
 
-	//*********************ENTER WINDOW**********************************
+	//*********************ENTER WINDOWS & GLASS**********************************
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glColor3f(0.3, 0.3, 0.3);
-	glVertex3f(0.77, 0.63+ windowOffset, 0.3);
-	glVertex3f(0.75, 0.5+ windowOffset, 0.3);        //quad front window
-	glVertex3f(1.2, 0.5+ windowOffset, 0.3);
-	glVertex3f(1.22, 0.63+ windowOffset, 0.3);
-
-	glVertex3f(1.27, 0.63+ windowOffset, .3);
-	glVertex3f(1.25, 0.5+ windowOffset, 0.3);        //quad back window
-	glVertex3f(1.65, 0.5+ windowOffset, 0.3);
-	glVertex3f(1.67, 0.63+ windowOffset, 0.3);
-
-	glColor3f(r, g, b);
-	glVertex3f(0.7, 0.65, 0.2);
-	glVertex3f(0.7, 0.5, .2);       //first separation
-	glVertex3f(0.75, 0.5, 0.2);
-	glVertex3f(0.77, 0.65, 0.2);
-
-	glVertex3f(1.2, 0.65, 0.2);
-	glVertex3f(1.2, 0.5, .2);       //second separation
-	glVertex3f(1.25, 0.5, 0.2);
-	glVertex3f(1.27, 0.65, 0.2);
-
-	glVertex3f(1.65, 0.65, 0.2);
-	glVertex3f(1.65, 0.5, .2);     //3d separation
-	glVertex3f(1.7, 0.5, 0.2);
-	glVertex3f(1.7, 0.65, 0.2);
-
-	glVertex3f(0.75, 0.65, 0.2);
-	glVertex3f(0.75, 0.63, 0.2);        //line strip
-	glVertex3f(1.7, 0.63, 0.2);
-	glVertex3f(1.7, 0.65, 0.2);
-
-	glVertex3f(0.75, 0.65, 0.6);
-	glVertex3f(0.75, 0.63, 0.6);        //line strip
-	glVertex3f(1.7, 0.63, 0.6);
-	glVertex3f(1.7, 0.65, 0.6);
-
-	glColor3f(0.3, 0.3, 0.3);
-	glVertex3f(0.77, 0.63+ windowOffset, 0.6);
-	glVertex3f(0.75, 0.5+ windowOffset, 0.6);        //quad front window
-	glVertex3f(1.2, 0.5+ windowOffset, 0.6);
-	glVertex3f(1.22, 0.63+ windowOffset, 0.6);
-
-	glVertex3f(1.27, 0.63+ windowOffset, .6);
-	glVertex3f(1.25, 0.5+ windowOffset, 0.6);        //quad back window
-	glVertex3f(1.65, 0.5+ windowOffset, 0.6);
-	glVertex3f(1.67, 0.63+ windowOffset, 0.6);
-
-	glColor3f(r, g, b);
-	glVertex3f(0.7, 0.65, 0.6);
-	glVertex3f(0.7, 0.5, .6);       //first separation
-	glVertex3f(0.75, 0.5, 0.6);
-	glVertex3f(0.77, 0.65, 0.6);
-
-	glVertex3f(1.2, 0.65, 0.6);
-	glVertex3f(1.2, 0.5, .6);       //second separation
-	glVertex3f(1.25, 0.5, 0.6);
-	glVertex3f(1.27, 0.65, 0.6);
-
-	glVertex3f(1.65, 0.65, 0.6);
-	glVertex3f(1.65, 0.5, .6);
-	glVertex3f(1.7, 0.5, 0.6);
-	glVertex3f(1.7, 0.65, 0.6);
-	glEnd();
-
-
-	//**************************************************************
 	glBegin(GL_QUADS);
+	// 1. DRIVER'S WINDOW (Front Left - Moving)
+	glColor4f(0.5f, 0.7f, 1.0f, 0.4f); // Transparent Blue
+	glVertex3f(0.77, 0.64, 0.2);
+	glVertex3f(0.75, 0.5, 0.2);
+	glVertex3f(1.2, 0.5, 0.2);
+	glVertex3f(1.22, 0.64, 0.2);
 
-	/* top of cube*/
-	glColor3f(0.3, 0.3, 0.3);
-	glVertex3f(0.6, 0.5, 0.6);
-	glVertex3f(0.6, 0.5, 0.2);        //quad front window
-	glVertex3f(0.7, 0.65, 0.2);
-	glVertex3f(0.7, 0.65, 0.6);
+	// 2. PASSENGER WINDOW (Front Right - Static)
+	glColor4f(0.5f, 0.7f, 1.0f, 0.4f);
+	glVertex3f(0.77, 0.64 + windowOffset, 0.6);
+	glVertex3f(0.75, 0.5, 0.6);
+	glVertex3f(1.2, 0.5, 0.6);
+	glVertex3f(1.22, 0.64 + windowOffset, 0.6);
 
-	glVertex3f(1.7, 0.65, .6);
-	glVertex3f(1.7, 0.65, 0.2);        //quad back window
+	// 3. REAR WINDOWS (Static)
+	glVertex3f(1.27, 0.64, 0.2); glVertex3f(1.25, 0.5, 0.2);
+	glVertex3f(1.65, 0.5, 0.2);  glVertex3f(1.67, 0.63, 0.2);
+
+	glVertex3f(1.27, 0.64, 0.6); glVertex3f(1.25, 0.5, 0.6);
+	glVertex3f(1.65, 0.5, 0.6);  glVertex3f(1.67, 0.63, 0.6);
+
+	// 4. THE WINDSHIELD (Front Glass - Now a Quad)
+	// Connecting the front body to the roof
+	glColor4f(0.6f, 0.8f, 1.0f, 0.3f);
+	glVertex3f(0.6, 0.5, 0.6);   // Bottom Right
+	glVertex3f(0.6, 0.5, 0.2);   // Bottom Left
+	glVertex3f(0.7, 0.65, 0.2);  // Top Left
+	glVertex3f(0.7, 0.65, 0.6);  // Top Right
+
+	// 5. THE REAR WINDOW (Back Glass - Now a Quad)
+	glVertex3f(1.7, 0.65, 0.6);
+	glVertex3f(1.7, 0.65, 0.2);
 	glVertex3f(1.8, 0.5, 0.2);
 	glVertex3f(1.8, 0.5, 0.6);
+	glEnd();
 
+	glDisable(GL_BLEND); // Turn off blending so car body stays solid
 
-	//
-	glBegin(GL_TRIANGLES);                /* start drawing the cube.*/
-
-	/* top of cube*/
-	glColor3f(0.3, 0.3, 0.3);
-	glVertex3f(0.6, 0.5, 0.6);
-	glVertex3f(0.7, 0.65, 0.6);       //tri front window
-	glVertex3f(0.7, 0.5, 0.6);
-
-	glVertex3f(0.6, 0.5, 0.2);
-	glVertex3f(0.7, 0.65, 0.2);       //tri front window
-	glVertex3f(0.7, 0.5, 0.2);
-
-	glVertex3f(1.7, 0.65, 0.2);
-	glVertex3f(1.8, 0.5, 0.2);       //tri back window
-	glVertex3f(1.7, 0.5, 0.2);
-
-	glVertex3f(1.7, 0.65, 0.6);
-	glVertex3f(1.8, 0.5, 0.6);       //tri back window
-	glVertex3f(1.7, 0.5, 0.6);
-
+	// 6. WINDOW SEPARATIONS (Frames) - Draw these after glass
+	glBegin(GL_QUADS);
+	glColor3f(r, g, b);
+	// Pillar between front and back windows (Left)
+	glVertex3f(1.2, 0.65, 0.2); glVertex3f(1.2, 0.5, 0.2);
+	glVertex3f(1.25, 0.5, 0.2); glVertex3f(1.27, 0.65, 0.2);
+	// Pillar between front and back windows (Right)
+	glVertex3f(1.2, 0.65, 0.6); glVertex3f(1.2, 0.5, 0.6);
+	glVertex3f(1.25, 0.5, 0.6); glVertex3f(1.27, 0.65, 0.6);
 	glEnd();
 	//************IGNITION SYSTEM
 	glPushMatrix();
