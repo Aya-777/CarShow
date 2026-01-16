@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -125,12 +125,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -154,6 +154,7 @@
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="ModelTree.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />

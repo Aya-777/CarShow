@@ -1,9 +1,14 @@
-﻿#include <Windows.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#define STB_IMAGE_IMPLEMENTATION
+#include <Windows.h>
+#include <GL/stb_image.h>
 #include <GL/freeglut.h>
 #include "Point.h"
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Building.h"
+#include "Skybox.h"
+#include "ModelTree.h"
 
 using namespace std;
 
@@ -47,7 +52,13 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
-
+//Sky:
+Texture texFront, texBack, texLeft, texRight, texUp, texDown;
+Texture texRoad, texGrass;
+SkyBox mySky;
+//tree:
+SmartTreeModel myTree;
+GLuint texTrunk, texLeaves;
 
 void drawGround()
 {
@@ -61,7 +72,67 @@ void drawGround()
 	glEnd();
 }
 
+GLuint loadTextureSTB(const char* filename) {
+	int width, height, channels;
+	unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
+	if (!data) {
+		printf("❌ فشل تحميل الصورة: %s\n", filename);
+		return 0;
+	}
 
+	GLuint texID;
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
+	printf("✅ تم تحميل الصورة بنجاح: %s\n", filename);
+	return texID;
+}
+
+GLuint loadBMP_custom(const char* imagepath) {
+	unsigned char header[54];
+	unsigned int dataPos;
+	unsigned int width, height;
+	unsigned int imageSize;
+	unsigned char* data;
+
+	FILE* file = fopen(imagepath, "rb");
+	if (!file) { printf("Image could not be opened\n"); return 0; }
+
+	if (fread(header, 1, 54, file) != 54) { printf("Not a correct BMP file\n"); return 0; }
+	if (header[0] != 'B' || header[1] != 'M') { printf("Not a correct BMP file\n"); return 0; }
+
+	dataPos = *(int*)&(header[0x0A]);
+	imageSize = *(int*)&(header[0x22]);
+	width = *(int*)&(header[0x12]);
+	height = *(int*)&(header[0x16]);
+
+	if (imageSize == 0)    imageSize = width * height * 3;
+	if (dataPos == 0)      dataPos = 54;
+
+	data = new unsigned char[imageSize];
+	fread(data, 1, imageSize, file);
+	fclose(file);
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, data);
+
+	delete[] data;
+	return textureID;
+}
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -105,7 +176,19 @@ void display()
 
 	glCallList(displayListID);
 
+	for (int i = 0; i < 3; i++)
+	{
+		glPushMatrix();
+		float xPos = -500.0f + (i * 150.0f);
+		float zPos = -400.0f; 
+		glTranslatef(xPos, -3.0f, zPos);
+
+		glScalef(5.0f, 5.0f, 5.0f);
+		myTree.draw(1.0f, texTrunk, texLeaves);
+		glPopMatrix();
+	}
 	glutSwapBuffers();
+
 }
 
 
@@ -123,17 +206,32 @@ void timer(int value)
 //initialize some variables
 void init()
 {
-	g_background.r = 255;
-	g_background.g = 255;
-	g_background.b = 255;
-
+	g_background.r =1;
+	g_background.g = 1;
+	g_background.b =1;
+	glEnable(GL_DEPTH_TEST);
 	//load textures here
+	texFront.loadTexture("Textures/Sky_Clouds.jpg");
+	texBack.loadTexture("Textures/Sky_Clouds.jpg");
+	texLeft.loadTexture("Textures/Sky_Clouds.jpg");
+	texRight.loadTexture("Textures/Sky_Clouds.jpg");
+	texUp.loadTexture("Textures/Sky_Clouds.jpg");
+	texDown.loadTexture("Textures/Sky_Clouds.jpg");
+	mySky.SKYFRONT = texFront.textureID;
+	mySky.SKYBACK = texBack.textureID;
+	mySky.SKYLEFT = texLeft.textureID;
+	mySky.SKYRIGHT = texRight.textureID;
+	mySky.SKYUP = texUp.textureID;
+	mySky.SKYDOWN = texDown.textureID;
+	//load tree model
 
+	myTree.loadOBJ("models/Tree-Model/Tree1.obj");
+	texTrunk = loadTextureSTB("models/Tree-Model/bark_loo.bmp");
+	texLeaves = loadTextureSTB("models/Tree-Model/bat.bmp");
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-		//glColor3f(0.2f, 0.3f, 0.8f);
-		
+	mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
 	glEndList();
 
 
