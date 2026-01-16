@@ -148,6 +148,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Truck.cpp" />
     <ClCompile Include="Wheel.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Truck.h" />
     <ClInclude Include="Wheel.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

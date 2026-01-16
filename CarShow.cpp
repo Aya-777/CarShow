@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Truck.h"
 #include "Sofa.h"
+#include "Window.h"
 //#include "Building.h"
 
 using namespace std;
@@ -52,7 +53,7 @@ float g_mouseSensitivity = 0.0025f;
 //Building buildingStructure;
 bool isInsideView = false;
 Truck t(Point(110, 3.5, 0));
-
+Window myWindow(Point(0, 0, 0), 100.0f, 200.0f, 200.0f, 5.15f, 5.15f, 5.15f, 5.15f, true);
 
 void drawGround()
 {
@@ -110,6 +111,7 @@ void display()
 
 	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 	t.draw();
+	//myWindow.draw(0.8f, 0.3f, 0.3f);
 	
 	glPopMatrix();
 	//buildingStructure.draw();
@@ -270,8 +272,6 @@ static void keyboardCallback(unsigned char key, int x, int y)
 			cout << "Entered Driver View" << endl;
 		}
 		else {
-			// Optional: Move camera back to a "Follow" position when exiting
-			//camera.SetPos(-500.0f, 10.0f, 800.0f);
 			camera.Strafe(20);
 		}
 		break;

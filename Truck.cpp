@@ -3,6 +3,7 @@
 #include "Glass.h"
 //#include "Model_3DS.h"
 #include "Texture.h"
+#include "Window.h"
 
 
 //Model_3DS armChair;
@@ -92,10 +93,12 @@ void Truck::draw() {
         cabFloor.draw();
 
         Cuboid leftWall(Point(0, 0, -cabW / 2), cabH, thickness, cabL);
+        Window leftWindow(Point(0, 0, -cabW / 2), cabH, thickness, cabL, cabH / 4, cabH / 6, cabW / 6, cabW / 6, false);
+        //leftWindow.draw(0.8, 0.1, 0.1);
         leftWall.draw();
 
         glPushMatrix();
-            //glColor3f(0.1,0.8,0.1);
+            glColor3f(0.1,0.8,0.1);
             Glass leftGlass(Point(0, cabH / 2, -cabW/2 - 0.8), cabH/5, thickness, cabL/2);
             leftGlass.draw(0.1, 0.8, 0.1, 0.5);
         glPopMatrix();
