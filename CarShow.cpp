@@ -54,6 +54,7 @@ float g_mouseSensitivity = 0.0025f;
 bool isInsideView = false;
 Truck t(Point(110, 3.5, 0));
 Window myWindow(Point(0, 0, 0), 100.0f, 200.0f, 200.0f, 5.15f, 5.15f, 5.15f, 5.15f, true);
+//Window leftWindow(Point(0, 0,0), 1, 100.0, 100, 20, 20, 0.5, 0.5, true);
 
 void drawGround()
 {
@@ -112,6 +113,7 @@ void display()
 	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 	t.draw();
 	//myWindow.draw(0.8f, 0.3f, 0.3f);
+	//leftWindow.draw(0.8f, 0.1f, 0.1f);
 	
 	glPopMatrix();
 	//buildingStructure.draw();

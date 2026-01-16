@@ -8,7 +8,7 @@ public:
     float l, w, h; // l = thickness, w = width, h = height
     float gapBottom, gapTop, gapLeft, gapRight;
     bool hasGlass;
-    float glassR = 0.5f, glassG = 0.8f, glassB = 0.9f, glassAlpha = 0.3f;
+    float glassR = 0.5f, glassG = 0.8f, glassB = 0.9f, glassAlpha = 0.5f;
 
     Window(Point pos, float l, float w, float h, float gapBottom, float gapTop, float gapLeft, float gapRight, bool hasGlass);
     void draw(float r, float g, float b);

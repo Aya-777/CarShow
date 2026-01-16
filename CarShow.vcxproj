@@ -157,7 +157,6 @@
     <ClInclude Include="Door.h" />
     <ClInclude Include="Glass.h" />
     <ClInclude Include="Lighting.h" />
-    <ClInclude Include="Model_3DS.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />

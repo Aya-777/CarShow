@@ -92,27 +92,6 @@ void Truck::draw() {
         Cuboid cabFloor(Point(0, 0, 0), thickness, cabW, cabL);
         cabFloor.draw();
 
-        Cuboid leftWall(Point(0, 0, -cabW / 2), cabH, thickness, cabL);
-        Window leftWindow(Point(0, 0, -cabW / 2), cabH, thickness, cabL, cabH / 4, cabH / 6, cabW / 6, cabW / 6, false);
-        //leftWindow.draw(0.8, 0.1, 0.1);
-        leftWall.draw();
-
-        glPushMatrix();
-            glColor3f(0.1,0.8,0.1);
-            Glass leftGlass(Point(0, cabH / 2, -cabW/2 - 0.8), cabH/5, thickness, cabL/2);
-            leftGlass.draw(0.1, 0.8, 0.1, 0.5);
-        glPopMatrix();
-
-        glColor3f(0.7f, 0.0f, 0.0f);
-        Cuboid rightWall(Point(0, 0, cabW / 2), cabH, thickness, cabL);
-        rightWall.draw();
-
-        glPushMatrix();
-            //glColor3f(0.1, 0.8, 0.1);
-            Glass rightGlass(Point(0, cabH / 2, cabW / 2 + 0.1), cabH / 5, thickness, cabL / 2);
-            rightGlass.draw(0.1, 0.8, 0.1, 0.5);
-        glPopMatrix();
-
         Cuboid roof(Point(0, cabH, 0), thickness, cabW, cabL);
         roof.draw();
 
@@ -134,14 +113,25 @@ void Truck::draw() {
         Cuboid tablwo(Point(cabL / 2.3, 0, 0), cabH / 3, cabW, thickness * 5);
         tablwo.draw();
 
-        float topWallH = cabH / 5.0f;
-        glColor3f(0.8f, 0.1f, 0.1f);
-        Cuboid frontWall(Point(cabL / 2.0f, cabH - topWallH, 0), topWallH, cabW, thickness);
-        frontWall.draw();
-        float glassH = cabH - cabH / 3.0f - topWallH;
+        glPushMatrix();
+        Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
+        leftWall.draw(0.8, 0.1, 0.1);
+        Window driverDoor(Point(0, cabH / 3, -cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
+        driverDoor.draw(0.1, 0.8, 0.1);
+        glPopMatrix();
 
-        Glass frontGlass(Point(cabL / 2.0f, cabH / 3.0f, 0), glassH, cabW, thickness);
-        frontGlass.draw(0.1f, 0.8f, 1.0f, 0.8f);
+        glPushMatrix();
+        Window righttWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
+        righttWall.draw(0.8, 0.1, 0.1);
+        Window door2(Point(0, cabH / 3, cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
+        door2.draw(0.1, 0.8, 0.1);
+        glPopMatrix();
+
+        glPushMatrix();
+        glRotatef(90, 0, 90, 0);
+        Window frontWall(Point(0, 0, cabL / 2), thickness, cabW, cabH, cabH/3, cabH / 6, cabL / 6, cabL / 6, true);
+        frontWall.draw(0.8, 0.1, 0.1);
+        glPopMatrix();
 
     glPopMatrix();
 
