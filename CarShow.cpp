@@ -4,6 +4,8 @@
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Building.h"
+#include "Road.h"  //salma
+#include "ParkingRoad.h" //salma
 
 using namespace std;
 
@@ -47,6 +49,9 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
+Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
+ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
 
 
 void drawGround()
@@ -102,6 +107,9 @@ void display()
 	drawGround();
 
 	buildingStructure.draw();
+	mainRoad.draw(); //salma
+	sideRoad.draw(); //salma
+	parking.draw(); //salma
 
 	glCallList(displayListID);
 
