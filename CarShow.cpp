@@ -53,6 +53,7 @@ float g_mouseSensitivity = 0.0025f;
 //Building buildingStructure;
 bool isInsideView = false;
 Truck t(Point(110, 3.5, 0));
+Cuboid c(Point (300, 0, 0),30,30,30);
 Window myWindow(Point(0, 0, 0), 100.0f, 200.0f, 200.0f, 5.15f, 5.15f, 5.15f, 5.15f, true);
 //Window leftWindow(Point(0, 0,0), 1, 100.0, 100, 20, 20, 0.5, 0.5, true);
 
@@ -111,6 +112,8 @@ void display()
 	glPushMatrix();
 
 	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+	glColor3f(0.8, 0.1, 0.1);
+	c.draw();
 	t.draw();
 	//myWindow.draw(0.8f, 0.3f, 0.3f);
 	//leftWindow.draw(0.8f, 0.1f, 0.1f);
@@ -239,13 +242,14 @@ static void keyboardCallback(unsigned char key, int x, int y)
 	case 's':
 		camera.Fly(-2.0);
 		break; // Move Down
-	case 'g': // 'G' for Go
 	case 'o': // 'O' for Open
 	case 'O':
 		t.doorsOpen = !t.doorsOpen;
 		break;
 		glutPostRedisplay();
-
+	case 'p':
+		t.driverDoorOpen = !t.driverDoorOpen;
+		break;
 	case '1': // FORWARD
 		t.position.x += cos(rad) * step;
 		t.position.z -= sin(rad) * step;

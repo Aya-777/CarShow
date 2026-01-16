@@ -20,7 +20,8 @@ public:
     bool isMovable;
     float rotationAngle;
     float speed;
-
+    bool driverDoorOpen = false;   // Is the door toggled open?
+    float driverDoorAngle = 0.0f;  // Current angle for animation
 
     Truck(Point position);
     void update();

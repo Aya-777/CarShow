@@ -56,6 +56,12 @@ void Truck::update() {
         // If steerAngle is positive, truck turns left; negative, truck turns right.
         rotationAngle += (steerAngle * 0.1f);
     }
+    if (driverDoorOpen) {
+        if (driverDoorAngle < 80.0f) driverDoorAngle += 0.2f; // Adjust speed here
+    }
+    else {
+        if (driverDoorAngle > 0.0f) driverDoorAngle -= 0.2f;
+    }
 
     if (doorsOpen) {
         if (doorAngle < 90.0f) doorAngle += 0.2f;
@@ -116,9 +122,30 @@ void Truck::draw() {
         glPushMatrix();
         Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
         leftWall.draw(0.8, 0.1, 0.1);
-        Window driverDoor(Point(0, cabH / 3, -cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
+        // --- Inside Truck::draw() ---
+
+// Driver Door Section
+        glPushMatrix();
+        // 1. Move to the hinge position (Front edge of the door)
+        // We adjust X by adding half the door length to find the front edge
+        float doorLen = cabL - cabL / 3;
+        glTranslatef(doorLen / 2, cabH / 3, -cabW / 2);
+
+        // 2. Rotate around the Y-axis (the hinge)
+        // We use negative angle so it swings "out" towards the left
+        glRotatef(-driverDoorAngle, 0, 1, 0);
+
+        // 3. Translate back so the door's center aligns with the hinge
+        // Since Cuboid/Window is drawn centered on X, we move it back by half its length
+        glTranslatef(-doorLen / 2, 0, 0);
+
+        // 4. Draw the door at local (0,0,0)
+        Window driverDoor(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2,
+            cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
         driverDoor.draw(0.1, 0.8, 0.1);
         glPopMatrix();
+        glPopMatrix();
+
 
         glPushMatrix();
         Window righttWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
