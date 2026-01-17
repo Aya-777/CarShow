@@ -14,7 +14,7 @@ GLint Ysize = 800;
 float i, theta;
 GLint nml = 0, day = 1;
 
-char name3[] = "PROJECT:  3D CAR  ANIMATION";
+char name3[] = "FAMILY CAR";
 
 GLfloat xt = 0.0, yt = 0.0, zt = 0.0, xw = 0.0;
 GLfloat xs = 1.0, ys = 1.0, zs = 1.0;
@@ -26,7 +26,6 @@ int count = 1, flg = 1;
 GLUquadricObj* t;
 
 GLfloat windowOffset = 0.0f;
-int windowState = 0; // 0 = stationary, 1 = opening, -1 = closing
 const float MAX_OPEN = -0.13f;
 
 static void SpecialKeyFunc(int Key, int x, int y);
@@ -45,8 +44,8 @@ GLvoid InitGL(GLfloat Width, GLfloat Height)
 {
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glLineWidth(2.0);              /* Add line width,   ditto */
-	Transform(Width, Height); /* Perform the transformation */
+	glLineWidth(2.0);
+	Transform(Width, Height); 
 	t = gluNewQuadric();
 	gluQuadricDrawStyle(t, GLU_FILL);
 
@@ -75,6 +74,43 @@ void init()
 	glutPostRedisplay();
 }
 
+// --- SIDE MIRRORS ---
+void drawMirrors() {
+	glColor3f(r, g, b);
+
+	// LEFT MIRROR (Driver Side)
+	glPushMatrix();
+	glTranslatef(0.62, 0.52, 0.17); 
+	glScalef(0.08, 0.05, 0.05);     // Make it a small rectangular block
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// RIGHT MIRROR (Passenger Side)
+	glPushMatrix();
+	glTranslatef(0.62, 0.52, 0.63);
+	glScalef(0.08, 0.05, 0.05);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.8, 0.8, 0.8); // Light grey
+	glBegin(GL_QUADS);
+	// Left mirror face
+	glVertex3f(0.65, 0.50, 0.18);
+	glVertex3f(0.65, 0.50, 0.22);
+	glVertex3f(0.65, 0.54, 0.22);
+	glVertex3f(0.65, 0.54, 0.18);
+
+	// Right mirror face
+	glVertex3f(0.63, 0.50, 0.65);
+	glVertex3f(0.63, 0.50, 0.69);
+	glVertex3f(0.63, 0.54, 0.69);
+	glVertex3f(0.63, 0.54, 0.65);
+	glEnd();
+	glPopMatrix();
+}
+
+
 GLvoid DrawGLScene()
 {
 
@@ -83,15 +119,6 @@ GLvoid DrawGLScene()
 	if (count == 1)
 		InitGL(Xsize, Ysize);
 	else
-		//// Handle smooth animation
-		//if (windowState == 1) { // Opening
-		//	if (windowOffset > MAX_OPEN) windowOffset -= 0.002f;
-		//	else windowState = 0; // Stop when fully open
-		//}
-		//else if (windowState == -1) { // Closing
-		//	if (windowOffset < 0.0f) windowOffset += 0.002f;
-		//	else windowState = 0; // Stop when fully closed
-		//}
 	glClearColor(0.1, 0.1, 0.1, 0);
 	glPushMatrix();
 	glLoadIdentity();
@@ -123,8 +150,8 @@ GLvoid DrawGLScene()
 	glPointSize(200.0);
 
 
-
-	glBegin(GL_QUADS);                /* OBJECT MODULE*/
+	//********************** CAR'S BODY ****************************************** 
+	glBegin(GL_QUADS); 
 
 	/* top of cube*/
 	//************************FRONT BODY****************************************
@@ -164,12 +191,13 @@ GLvoid DrawGLScene()
 	glVertex3f(0.6, 0.5, 0.2);
 	glVertex3f(0.2, 0.4, 0.2);
 	//****************************************************************************
-	glVertex3f(0.7, 0.65, 0.6);
-	glVertex3f(0.7, 0.65, 0.2);
-	glVertex3f(1.7, 0.65, 0.2);        //top cover
-	glVertex3f(1.7, 0.65, 0.6);
+	glVertex3f(0.7, 0.67, 0.6);
+	glVertex3f(0.7, 0.67, 0.2);
+	glVertex3f(1.7, 0.67, 0.2);        //top cover
+	glVertex3f(1.7, 0.67, 0.6);
+
 	//***************************back guard******************************
-	glColor3f(r, g, b);            /* Set The Color To Blue*/
+	glColor3f(r, g, b);
 	glVertex3f(1.8, 0.5, 0.6);
 	glVertex3f(1.8, 0.5, 0.2);
 	glVertex3f(2.1, 0.4, 0.2);
@@ -198,6 +226,7 @@ GLvoid DrawGLScene()
 	glVertex3f(1.8, 0.5, 0.6);
 	glVertex3f(2.1, 0.4, 0.6);
 	glVertex3f(2.1, 0.2, 0.6);
+
 	//******************MIDDLE BODY************************************
 	glVertex3f(0.6, 0.5, 0.6);
 	glVertex3f(0.6, 0.2, 0.6);
@@ -221,54 +250,140 @@ GLvoid DrawGLScene()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glBegin(GL_QUADS);
-	// 1. DRIVER'S WINDOW (Front Left - Moving)
-	glColor4f(0.5f, 0.7f, 1.0f, 0.4f); // Transparent Blue
-	glVertex3f(0.77, 0.64, 0.2);
-	glVertex3f(0.75, 0.5, 0.2);
-	glVertex3f(1.2, 0.5, 0.2);
-	glVertex3f(1.22, 0.64, 0.2);
-
-	// 2. PASSENGER WINDOW (Front Right - Static)
+	// 1. DRIVER'S WINDOW (Front Right)
 	glColor4f(0.5f, 0.7f, 1.0f, 0.4f);
-	glVertex3f(0.77, 0.64 + windowOffset, 0.6);
-	glVertex3f(0.75, 0.5, 0.6);
+	glVertex3f(0.77, 0.65, 0.2);
+	glVertex3f(0.63, 0.5, 0.2);
+	glVertex3f(1.2, 0.5, 0.2);
+	glVertex3f(1.22, 0.65, 0.2);
+
+	// 2. PASSENGER WINDOW (Front Left)
+	glColor4f(0.5f, 0.7f, 1.0f, 0.4f);
+	glVertex3f(0.77, 0.65 + windowOffset, 0.6);
+	glVertex3f(0.63, 0.5, 0.6);
 	glVertex3f(1.2, 0.5, 0.6);
-	glVertex3f(1.22, 0.64 + windowOffset, 0.6);
+	glVertex3f(1.22, 0.65 + windowOffset, 0.6);
 
 	// 3. REAR WINDOWS (Static)
-	glVertex3f(1.27, 0.64, 0.2); glVertex3f(1.25, 0.5, 0.2);
-	glVertex3f(1.65, 0.5, 0.2);  glVertex3f(1.67, 0.63, 0.2);
+	glVertex3f(1.27, 0.65, 0.2);
+	glVertex3f(1.25, 0.5, 0.2);
+	glVertex3f(1.78, 0.5, 0.2);
+	glVertex3f(1.67, 0.65, 0.2);
 
-	glVertex3f(1.27, 0.64, 0.6); glVertex3f(1.25, 0.5, 0.6);
-	glVertex3f(1.65, 0.5, 0.6);  glVertex3f(1.67, 0.63, 0.6);
+	glVertex3f(1.27, 0.65, 0.6);
+	glVertex3f(1.25, 0.5, 0.6);
+	glVertex3f(1.78, 0.5, 0.6);
+	glVertex3f(1.67, 0.65, 0.6);
 
-	// 4. THE WINDSHIELD (Front Glass - Now a Quad)
-	// Connecting the front body to the roof
+	// 4. THE WINDSHIELD (Front Glass)
 	glColor4f(0.6f, 0.8f, 1.0f, 0.3f);
 	glVertex3f(0.6, 0.5, 0.6);   // Bottom Right
 	glVertex3f(0.6, 0.5, 0.2);   // Bottom Left
-	glVertex3f(0.7, 0.65, 0.2);  // Top Left
-	glVertex3f(0.7, 0.65, 0.6);  // Top Right
+	glVertex3f(0.7, 0.66, 0.2);  // Top Left
+	glVertex3f(0.7, 0.66, 0.6);  // Top Right
 
-	// 5. THE REAR WINDOW (Back Glass - Now a Quad)
-	glVertex3f(1.7, 0.65, 0.6);
-	glVertex3f(1.7, 0.65, 0.2);
+	// 5. THE REAR WINDOW (Back Glass)
+	glVertex3f(1.7, 0.66, 0.6);
+	glVertex3f(1.7, 0.66, 0.2);
 	glVertex3f(1.8, 0.5, 0.2);
 	glVertex3f(1.8, 0.5, 0.6);
 	glEnd();
 
 	glDisable(GL_BLEND); // Turn off blending so car body stays solid
 
-	// 6. WINDOW SEPARATIONS (Frames) - Draw these after glass
+	// --- WINDOW FRAMES (CAR BODY COLOR) ---
 	glBegin(GL_QUADS);
-	glColor3f(r, g, b);
-	// Pillar between front and back windows (Left)
-	glVertex3f(1.2, 0.65, 0.2); glVertex3f(1.2, 0.5, 0.2);
-	glVertex3f(1.25, 0.5, 0.2); glVertex3f(1.27, 0.65, 0.2);
-	// Pillar between front and back windows (Right)
-	glVertex3f(1.2, 0.65, 0.6); glVertex3f(1.2, 0.5, 0.6);
-	glVertex3f(1.25, 0.5, 0.6); glVertex3f(1.27, 0.65, 0.6);
+	glColor3f(r, g, b); // Use the car's current color
+
+	// 1. LEFT SIDE FRAMES (Z = 0.2)
+	// A-Pillar (Front diagonal frame)
+	glVertex3f(0.6, 0.5, 0.2);
+	glVertex3f(0.62, 0.5, 0.2);
+	glVertex3f(0.82, 0.65, 0.2);
+	glVertex3f(0.7, 0.65, 0.2);
+
+	// B-Pillar (Middle vertical frame between front/back windows)
+	glVertex3f(1.2, 0.5, 0.2);
+	glVertex3f(1.25, 0.5, 0.2);
+	glVertex3f(1.25, 0.65, 0.2);
+	glVertex3f(1.2, 0.65, 0.2);
+
+	// C-Pillar (Rear diagonal frame)
+	glVertex3f(1.7, 0.65, 0.2);
+	glVertex3f(1.72, 0.65, 0.2);
+	glVertex3f(1.82, 0.5, 0.2);
+	glVertex3f(1.8, 0.5, 0.2);
+
+	// 2. RIGHT SIDE FRAMES (Z = 0.6)
+	// A-Pillar
+	glVertex3f(0.6, 0.5, 0.6);
+	glVertex3f(0.62, 0.5, 0.6);
+	glVertex3f(0.82, 0.65, 0.6);
+	glVertex3f(0.7, 0.65, 0.6);
+
+	// B-Pillar
+	glVertex3f(1.2, 0.5, 0.6);
+	glVertex3f(1.25, 0.5, 0.6);
+	glVertex3f(1.25, 0.65, 0.6);
+	glVertex3f(1.2, 0.65, 0.6);
+
+	// C-Pillar
+	glVertex3f(1.7, 0.65, 0.6);
+	glVertex3f(1.72, 0.65, 0.6);
+	glVertex3f(1.82, 0.5, 0.6);
+	glVertex3f(1.8, 0.5, 0.6);
 	glEnd();
+	// --- SOLID BORDERS AROUND WINDOWS (CAR BODY COLOR) ---
+	glBegin(GL_QUADS);
+	glColor3f(r, g, b); // Matches your car color
+
+	// LEFT SIDE WINDOW FRAME (Z = 0.2)
+	// Bottom bar
+	glVertex3f(0.7, 0.5, 0.2); glVertex3f(1.7, 0.5, 0.2);
+	glVertex3f(1.7, 0.48, 0.2); glVertex3f(0.7, 0.48, 0.2);
+
+	// Top bar (Roof line)
+	glVertex3f(0.7, 0.65, 0.2); glVertex3f(1.7, 0.65, 0.2);
+	glVertex3f(1.7, 0.67, 0.2); glVertex3f(0.7, 0.67, 0.2);
+
+	// RIGHT SIDE WINDOW FRAME (Z = 0.6)
+	// Bottom bar
+	glVertex3f(0.7, 0.5, 0.6); glVertex3f(1.7, 0.5, 0.6);
+	glVertex3f(1.7, 0.48, 0.6); glVertex3f(0.7, 0.48, 0.6);
+
+	// Top bar
+	glVertex3f(0.7, 0.65, 0.6); glVertex3f(1.7, 0.65, 0.6);
+	glVertex3f(1.7, 0.67, 0.6); glVertex3f(0.7, 0.67, 0.6);
+	glEnd();
+
+
+	// --- SEALING THE CORNER GAPS (A-PILLAR & C-PILLAR AREAS) ---
+	glBegin(GL_TRIANGLES);
+	glColor3f(r, g, b); // Car body color
+
+	// 1. FRONT LEFT CORNER (Windshield to Front Window)
+	glVertex3f(0.6, 0.5, 0.2);   // Bottom of windshield
+	glVertex3f(0.7, 0.67, 0.2);  // Top corner of roof
+	glVertex3f(0.77, 0.67, 0.2); // Start of front window
+
+	// 2. FRONT RIGHT CORNER (Windshield to Front Window)
+	glVertex3f(0.6, 0.5, 0.6);
+	glVertex3f(0.7, 0.67, 0.6);
+	glVertex3f(0.77, 0.67, 0.6);
+
+	// 3. BACK LEFT CORNER (Rear Window to Back Side Window)
+	glVertex3f(1.8, 0.5, 0.2);   // Bottom of rear glass
+	glVertex3f(1.7, 0.67, 0.2);  // Top corner of roof
+	glVertex3f(1.65, 0.67, 0.2); // End of back window
+
+	// 4. BACK RIGHT CORNER (Rear Window to Back Side Window)
+	glVertex3f(1.8, 0.5, 0.6);
+	glVertex3f(1.7, 0.67, 0.6);
+	glVertex3f(1.65, 0.67, 0.6);
+	glEnd();
+
+	drawMirrors(); // Call the function to draw side mirrors
+
 	//************IGNITION SYSTEM
 	glPushMatrix();
 	glColor3f(0.3, 0.3, 0.7);
