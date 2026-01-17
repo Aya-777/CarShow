@@ -135,8 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bugatti.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="fsportcar.cpp" />
+    <ClCompile Include="mercedes.cpp" />
+    <ClCompile Include="steeringWheel.cpp" />
     <ClCompile Include="testcar.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
@@ -147,19 +151,25 @@
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bugatti.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="fsportcar.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="Mercedes.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
+    <ClInclude Include="steeringWheel.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Wheel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
