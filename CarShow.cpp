@@ -4,6 +4,7 @@
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Building.h"
+#include "FamilyCar.h"
 
 using namespace std;
 
@@ -47,10 +48,12 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
+FamilyCar fcar;
 
 
 void drawGround()
 {
+	glPushMatrix();
 	glDisable(GL_TEXTURE_2D);
 	glColor3f(0.7f, 0.7f, 0.7f);
 	glBegin(GL_QUADS);
@@ -59,6 +62,7 @@ void drawGround()
 	glVertex3f(2000.0f, -3.0f, 2000.0f);
 	glVertex3f(-2000.0f, -3.0f, 2000.0f);
 	glEnd();
+	glPopMatrix();
 }
 
 
@@ -98,8 +102,11 @@ void display()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);
 
 	drawGround();
+	//glScalef(5.0, 5.0, 5.0);
+	fcar.draw();
 
 	buildingStructure.draw();
 

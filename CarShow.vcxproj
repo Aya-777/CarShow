@@ -145,11 +145,13 @@
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="FamilyCar.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
+    <ClCompile Include="testcar.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
@@ -160,6 +162,7 @@
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="FamilyCar.h" />
     <ClInclude Include="fsportcar.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Mercedes.h" />
