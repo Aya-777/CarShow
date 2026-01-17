@@ -4,7 +4,7 @@
 //#include "Model_3DS.h"
 #include "Texture.h"
 #include "Window.h"
-
+extern std::vector<Door*> globalDoors;
 
 //Model_3DS armChair;
 //GlTexture
@@ -13,11 +13,12 @@
 Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.2f) {
     this->position = position;
 
-	doorAngle = 0.0f;
-    doorsOpen = false;
     wheelSpin = 0.0f;
     steerAngle = 0.0f;
     isMovable = false;
+
+    globalDoors.push_back(&this->driverDoor);
+    globalDoors.push_back(&this->backDoors);
 
     // Calculate wheel
     float zOffset = width / 2.0f;
@@ -40,10 +41,30 @@ void load() {
 	//armChairTexture.
 }
 void Truck::update() {
+
+    float rad = rotationAngle * (3.14159f / 180.0f);
+
+    // --- DRIVER DOOR POSITION ---
+    // In your draw(), the cabin is at cabXOffset (Forward X) 
+    // and the door is at -cabW/2 (Z side)
+    float drvLocalX = length * 0.35f;
+    float drvLocalZ = -width * 0.5f;
+
+    // Standard Rotation Formula (No flipping!)
+    driverDoor.center.x = position.x + (drvLocalX * cos(rad) - drvLocalZ * sin(rad));
+    driverDoor.center.y = position.y + (height * 0.5f);
+    driverDoor.center.z = position.z + (drvLocalX * sin(rad) + drvLocalZ * cos(rad));
+
+    // --- BACK DOORS POSITION ---
+    float backLocalX = -length * 0.5f;
+    float backLocalZ = 0.0f;
+
+    backDoors.center.x = position.x + (backLocalX * cos(rad) - backLocalZ * sin(rad));
+    backDoors.center.y = position.y + (height * 0.5f);
+    backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
+
+
     if (isMovable) {
-        // "Forward" direction math (Assuming X is forward)
-        // Convert degrees to radians for cos/sin
-        float rad = rotationAngle * (3.14159f / 180.0f);
 
         // Move position based on current heading
         position.x += cos(rad) * 0.5f;
@@ -51,23 +72,20 @@ void Truck::update() {
 
         // Roll the wheels based on movement
         wheelSpin -= 5.0f;
-
-        // Update truck heading based on steering (The truck turns while moving)
-        // If steerAngle is positive, truck turns left; negative, truck turns right.
         rotationAngle += (steerAngle * 0.1f);
     }
-    if (driverDoorOpen) {
-        if (driverDoorAngle < 80.0f) driverDoorAngle += 0.2f; // Adjust speed here
+    if (driverDoor.open) {
+		if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
     }
     else {
-        if (driverDoorAngle > 0.0f) driverDoorAngle -= 0.2f;
+        if (driverDoor.OpenRate > 0.0f) driverDoor.OpenRate -= 0.2f;
     }
 
-    if (doorsOpen) {
-        if (doorAngle < 90.0f) doorAngle += 0.2f;
+    if (backDoors.open) {
+        if (backDoors.OpenRate < 90.0f) backDoors.OpenRate += 0.2f;
     }
     else {
-        if (doorAngle > 0.0f) doorAngle -= 0.2f;
+        if (backDoors.OpenRate > 0.0f) backDoors.OpenRate -= 0.2f;
     }
 
     
@@ -122,27 +140,17 @@ void Truck::draw() {
         glPushMatrix();
         Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
         leftWall.draw(0.8, 0.1, 0.1);
-        // --- Inside Truck::draw() ---
-
-// Driver Door Section
+        // driver door
         glPushMatrix();
-        // 1. Move to the hinge position (Front edge of the door)
-        // We adjust X by adding half the door length to find the front edge
         float doorLen = cabL - cabL / 3;
         glTranslatef(doorLen / 2, cabH / 3, -cabW / 2);
 
-        // 2. Rotate around the Y-axis (the hinge)
-        // We use negative angle so it swings "out" towards the left
-        glRotatef(-driverDoorAngle, 0, 1, 0);
+        glRotatef(-driverDoor.OpenRate, 0, 1, 0);
 
-        // 3. Translate back so the door's center aligns with the hinge
-        // Since Cuboid/Window is drawn centered on X, we move it back by half its length
         glTranslatef(-doorLen / 2, 0, 0);
 
-        // 4. Draw the door at local (0,0,0)
-        Window driverDoor(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2,
-            cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
-        driverDoor.draw(0.1, 0.8, 0.1);
+        Window driverDoorWindow(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2,cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
+        driverDoorWindow.draw(0.1, 0.8, 0.1);
         glPopMatrix();
         glPopMatrix();
 
@@ -168,14 +176,14 @@ void Truck::draw() {
 
     glPushMatrix(); // Left
     glTranslatef(-length * 0.5f, 0, -width * 0.5f);
-    glRotatef(-doorAngle, 0, 1, 0);
+    glRotatef(-backDoors.OpenRate, 0, 1, 0);
     Cuboid leftDoor(Point(0, 0, doorWidth / 2.0f), height, doorWidth, 0.1f);
     leftDoor.draw();
     glPopMatrix();
 
     glPushMatrix(); // Right
         glTranslatef(-length * 0.5f, 0, width * 0.5f);
-        glRotatef(doorAngle, 0, 1, 0);
+        glRotatef(backDoors.OpenRate, 0, 1, 0);
         Cuboid rightDoor(Point(0, 0, -doorWidth / 2.0f), height, doorWidth, 0.1f);
         rightDoor.draw();
     glPopMatrix();
@@ -187,5 +195,16 @@ void Truck::draw() {
         wheelUnit.draw(wheelPositions[i], (i < 2));
     }
 
+    glPopMatrix();
+
+    // DEBUG: Draw a sphere where the "Distance Sensor" is
+    glPopMatrix();
+
+    // 2. We are now in WORLD SPACE. Draw the sensor sphere where the math says it is.
+    glPushMatrix();
+    // REMOVE glLoadIdentity(); <--- This was the bug!
+    glTranslatef(driverDoor.center.x, driverDoor.center.y, driverDoor.center.z);
+    glColor3f(1, 0, 0);
+    glutSolidSphere(2.0, 10, 10); // Made it bigger to see easily
     glPopMatrix();
 }

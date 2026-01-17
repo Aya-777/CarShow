@@ -1,5 +1,6 @@
 ﻿#include <Windows.h>
 #include <GL/freeglut.h>
+#include<vector>
 #include "Point.h"
 #include "Cuboid.h"
 #include "Camera.h"
@@ -9,6 +10,8 @@
 //#include "Building.h"
 
 using namespace std;
+vector<Door*> globalDoors;
+
 
 struct color3f
 {
@@ -16,8 +19,6 @@ struct color3f
 	color3f() { r = 0; g = 0; b = 0; }
 	color3f(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
 };
-
-//definition of all functions
 
 void display();
 void updateScene();
@@ -30,6 +31,7 @@ static void keyboardCallback(unsigned char key, int x, int y);
 static void specialKeysCallback(int key, int x, int y);
 static void mouseMove(int x, int y);
 static void mouseButton(int button, int state, int x, int y);
+
 
 
 
@@ -52,7 +54,7 @@ int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 //Building buildingStructure;
 bool isInsideView = false;
-Truck t(Point(110, 3.5, 0));
+Truck t(Point(100, 3.5, 0));
 Cuboid c(Point (300, 0, 0),30,30,30);
 Window myWindow(Point(0, 0, 0), 100.0f, 200.0f, 200.0f, 5.15f, 5.15f, 5.15f, 5.15f, true);
 //Window leftWindow(Point(0, 0,0), 1, 100.0, 100, 20, 20, 0.5, 0.5, true);
@@ -68,7 +70,6 @@ void drawGround()
 	glVertex3f(-2000.0f, -3.0f, 2000.0f);
 	glEnd();
 }
-
 
 int main(int argc, char** argv)
 {
@@ -111,7 +112,7 @@ void display()
 	drawGround();
 	glPushMatrix();
 
-	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+	glRotatef(180.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	c.draw();
 	t.draw();
@@ -177,33 +178,20 @@ void updateScene() {
 	t.update();
 
 	if (isInsideView) {
-		// 1. Define the LOCAL position of the driver's head relative to truck center
-		float localX = t.length * 0.2f;   // Inside the cabin area
-		float localY = t.height * 0.35f;  // Eye level
-		float localZ = t.width * 0.0001f;  // Driver side seat
-
-		// 2. Convert truck's logical rotation to Radians
 		float rad = t.rotationAngle * (M_PI / 180.0f);
 
-		// 3. Calculate Logical World Position
-		float logicX = t.position.x + (localX * cos(rad) + localZ * sin(rad));
-		float logicZ = t.position.z - (localX * sin(rad) - localZ * cos(rad));
-		float logicY = t.position.y + localY;
+		float localX = (t.length * 0.4f) - 14.0f;
+		float localY = t.height * 0.6f;
+		float localZ = t.width * 0.2f;
 
-		// 4. ACCOUNT FOR THE 180° FLIP in display()
-		// Since display() does glRotatef(180, 0, 1, 0), the actual visual 
-		// position is the negative of the logical X and Z.
-		float finalX = -logicX;
-		float finalZ = -logicZ;
+		float finalX = t.position.x + (localX * cos(rad) - localZ * sin(rad));
+		float finalZ = t.position.z - (localX * sin(rad) + localZ * cos(rad));
+		float finalY = t.position.y + localY;
 
-		camera.SetPos(finalX, logicY, finalZ);
+		camera.SetPos(finalX, finalY-2, finalZ);
 
-		// 5. SET THE DIRECTION (Yaw)
-		float finalYaw = -rad + M_PI;
-		camera.SetYaw(finalYaw);
+		camera.SetYaw(-rad);
 	}
-
-	glutPostRedisplay();
 }
 static void specialKeysCallback(int key, int x, int y)
 {
@@ -244,11 +232,12 @@ static void keyboardCallback(unsigned char key, int x, int y)
 		break; // Move Down
 	case 'o': // 'O' for Open
 	case 'O':
-		t.doorsOpen = !t.doorsOpen;
+		t.backDoors.open = !t.backDoors.open;
 		break;
 		glutPostRedisplay();
 	case 'p':
-		t.driverDoorOpen = !t.driverDoorOpen;
+		t.driverDoor.open = !t.driverDoor.open;
+
 		break;
 	case '1': // FORWARD
 		t.position.x += cos(rad) * step;
@@ -281,9 +270,12 @@ static void keyboardCallback(unsigned char key, int x, int y)
 			camera.Strafe(20);
 		}
 		break;
+	case 'n':
+		float cx, cy, cz;
+		camera.GetPos(cx, cy, cz);
+		camera.openNearestDoor();
+		break;
 	}
-	//Camera Position : x = 96.5 y = 17.25z = -6.25
-	//	Camera Position : x = -0.994844 y = 0z = 0.101421
 }
 void specialKeysUp(int key, int x, int y)
 {
