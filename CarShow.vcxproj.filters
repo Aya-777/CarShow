@@ -48,6 +48,24 @@
     <ClCompile Include="Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testcar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bugatti.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fsportcar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mercedes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="steeringWheel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wheel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">
@@ -81,6 +99,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bugatti.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fsportcar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mercedes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="steeringWheel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wheel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
