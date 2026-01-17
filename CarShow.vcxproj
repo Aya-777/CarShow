@@ -145,6 +145,7 @@
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
+    <ClCompile Include="SteeringWheel.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Truck.cpp" />
     <ClCompile Include="Wheel.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
+    <ClInclude Include="SteeringWheel.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Truck.h" />
     <ClInclude Include="Wheel.h" />

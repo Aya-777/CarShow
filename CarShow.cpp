@@ -112,7 +112,7 @@ void display()
 	drawGround();
 	glPushMatrix();
 
-	glRotatef(180.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	c.draw();
 	t.draw();
@@ -131,6 +131,7 @@ void display()
 void idle()
 {
 	t.update();
+	//t.load();
 	updateScene();
 	display();
 }

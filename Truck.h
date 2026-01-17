@@ -3,6 +3,7 @@
 
 #include "Wheel.h"
 #include "Door.h"
+#include "SteeringWheel.h"
 #include <vector>
 extern std::vector<Door*> globalDoors;
 
@@ -21,12 +22,13 @@ public:
     bool isMovable;
     float rotationAngle;
     float speed;
+    SteeringWheel driverSteeringWheel;
 
 
     Truck(Point position);
     void update();
-    void draw();
-    //void load();
+    void draw(float r = 0.9f, float g = 0.9f, float b = 0.85f);
+    void load();
 };
 
 #endif

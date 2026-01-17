@@ -1,14 +1,10 @@
 ﻿#include "Truck.h"
 #include "Cuboid.h"
 #include "Glass.h"
-//#include "Model_3DS.h"
 #include "Texture.h"
 #include "Window.h"
 extern std::vector<Door*> globalDoors;
 
-//Model_3DS armChair;
-//GlTexture
-//GLTexture armChairTexture;
 
 Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.2f) {
     this->position = position;
@@ -35,10 +31,18 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
     wheelPositions[5] = Point(-length * 0.35f, groundY, -zOffset);
 }
 
-void load() {
-	//armChair = Model_3DS();
-	//armChair.Load("Models / ArmChair / Armchair car N220417.3DS");
-	//armChairTexture.
+void Truck::load() {
+    // Fixed the spelling: steering instead of steerig
+    bool success = driverSteeringWheel.Load("debug/resources/models/steeringWheel/steering_wheel.obj", 15.0f);
+
+    if (success) {
+        driverSteeringWheel.SetPosition(0.5f, 2.5f, 1.2f);
+        driverSteeringWheel.SetRotationY(180.0f);
+        driverSteeringWheel.SetRotationZ(-15.0f);
+    }
+    else {
+        printf("Truck failed to load Steering Wheel OBJ!\n");
+    }
 }
 void Truck::update() {
 
@@ -92,7 +96,7 @@ void Truck::update() {
 }
 
 
-void Truck::draw() {
+void Truck::draw(float r, float g, float b) {
     glPushMatrix();
     glTranslatef(position.x, position.y, position.z);
     glRotatef(rotationAngle, 0, 1, 0);
@@ -131,6 +135,12 @@ void Truck::draw() {
         seat2.draw();
         Cuboid back2(Point(-cabL / 4 - seatSize / 2, thickness, cabW * 0.25f), seatSize * 1.5, seatSize, thickness);
         back2.draw();
+
+        glPushMatrix();
+            glTranslatef(cabL / 2.3, 20, 0);
+            glRotatef(rotationAngle, 0, 1, 0);
+            driverSteeringWheel.Draw();
+        glPopMatrix();
 
 
         glColor3f(0.1f, 0.6f, 0.1f);
@@ -197,14 +207,4 @@ void Truck::draw() {
 
     glPopMatrix();
 
-    // DEBUG: Draw a sphere where the "Distance Sensor" is
-    glPopMatrix();
-
-    // 2. We are now in WORLD SPACE. Draw the sensor sphere where the math says it is.
-    glPushMatrix();
-    // REMOVE glLoadIdentity(); <--- This was the bug!
-    glTranslatef(driverDoor.center.x, driverDoor.center.y, driverDoor.center.z);
-    glColor3f(1, 0, 0);
-    glutSolidSphere(2.0, 10, 10); // Made it bigger to see easily
-    glPopMatrix();
 }
