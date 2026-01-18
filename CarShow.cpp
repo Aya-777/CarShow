@@ -36,7 +36,7 @@ const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
 //Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
-Truck t(Point(-500, 3.5, 0));
+Truck t(Point(0, 3.5, 0));
 bool isInsideView = false;
 Camera camera;
 bool g_mouseCaptured = false;
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(g_iHeight, g_iWidth);
 	glutCreateWindow("weee");
-	glutFullScreen();
+	//glutFullScreen();
 	init();
 
 	Controller::init(camera, t, isInsideView);
@@ -105,10 +105,10 @@ void display()
 	//setupShadow();
 	drawGround();
 
-	buildingStructure.draw();
-	mainRoad.draw(); //salma
-	sideRoad.draw(); //salma
-	parking.draw(); //salma
+	//buildingStructure.draw();
+	//mainRoad.draw(); //salma
+	//sideRoad.draw(); //salma
+	//parking.draw(); //salma
 
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
@@ -151,7 +151,7 @@ void init()
 	glNewList(displayListID, GL_COMPILE);
 	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
 	glColor3f(0.2f, 0.3f, 0.8f);
-	buildingStructure.draw();
+	//buildingStructure.draw();
 	glEndList();
 
 

@@ -32,7 +32,6 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
 }
 
 void Truck::load() {
-    // Fixed the spelling: steering instead of steerig
     bool success = driverSteeringWheel.Load("debug/resources/models/steeringWheel/steering_wheel.obj", 15.0f);
 
     if (success) {
@@ -105,6 +104,22 @@ void Truck::draw(float r, float g, float b) {
     float containerLengthX = length * 0.7f;
     Cuboid container(Point(-length * 0.15f, 0, 0), height, width, containerLengthX);
     container.draw();
+    Window leftFramec(Point(-length * 0.15f, 0, width/2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+    leftFramec.draw(0.2, 0.2, 0.2);
+    Window rightFramec(Point(-length * 0.15f, 0, -width / 2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+    rightFramec.draw(0.2, 0.2, 0.2);
+    glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        Window topFramec(Point(-length/6.8, -width/2, -height), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+        topFramec.draw(0.2, 0.2, 0.2);
+    glPopMatrix();
+
+
+    glColor3f(0.2, 0.2, 0.2);
+    Cuboid floorb(Point(0, -1, 0), 1, width, length+1);
+    floorb.draw();
+    Cuboid ending(Point(-length/1.9, -1, 0), height/6, width, length/20);
+    ending.draw();
 
     // --- 2. CABIN SETUP ---
     float cabL = length * 0.3f;
@@ -146,10 +161,17 @@ void Truck::draw(float r, float g, float b) {
         glColor3f(0.2f, 0.2f, 0.2f);
         Cuboid tablwo(Point(cabL / 2.3, 0, 0), cabH / 3, cabW, thickness * 5);
         tablwo.draw();
+        glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        Window topFrame(Point(0, -cabW / 2-0.75, -cabH-0.5), 1, cabL+1, cabW+1.5, 0.75, 0.75, 0.75, 0.75, false);
+        topFrame.draw(0.2, 0.2, 0.2);
+        glPopMatrix();
 
         glPushMatrix();
         Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
         leftWall.draw(r, g, b);
+        Window leftFrame(Point(0, 0, -cabW / 2-0.5), thickness, cabL+1, cabH, 0, cabH/18, cabL/18, cabL/18, false);
+        leftFrame.draw(0.2, 0.2, 0.2);
         // driver door
         glPushMatrix();
         float doorLen = cabL - cabL / 3;
@@ -166,8 +188,10 @@ void Truck::draw(float r, float g, float b) {
 
 
         glPushMatrix();
-        Window righttWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
-        righttWall.draw(r,g,b);
+        Window rightWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
+        rightWall.draw(r,g,b);
+        Window rightFrame(Point(0, 0, cabW / 2 + 0.5), thickness, cabL+1, cabH, 0, cabH / 18, cabL / 18, cabL / 18, false);
+        rightFrame.draw(0.2, 0.2, 0.2);
         Window door2(Point(0, cabH / 3, cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
         door2.draw(r - 0.1, g - 0.1, b - 0.1);
         glPopMatrix();
@@ -176,25 +200,27 @@ void Truck::draw(float r, float g, float b) {
         glRotatef(90, 0, 90, 0);
         Window frontWall(Point(0, 0, cabL / 2), thickness, cabW, cabH, cabH/3, cabH / 6, cabL / 6, cabL / 6, true);
         frontWall.draw(r,g,b);
+        Window frontFrame(Point(0, 0, cabL/2+ 0.5), thickness, cabL+2, cabH, 0, cabH / 20, cabL / 20, cabL / 20, false);
+        frontFrame.draw(0.2, 0.2, 0.2);
         glPopMatrix();
 
     glPopMatrix();
 
     // --- 3. BACK DOORS ---
-    glColor3f(0.1f, 0.1f, 0.1f);
-    float doorWidth = width * 0.5f-0.1;
+    glColor3f(0.2f, 0.2f, 0.2f);
+    float doorWidth = width * 0.5f-0.6;
 
     glPushMatrix(); // Left
     glTranslatef(-length * 0.5f, 0, -width * 0.5f);
     glRotatef(-backDoors.OpenRate, 0, 1, 0);
-    Cuboid leftDoor(Point(0, 0, doorWidth / 2.0f), height, doorWidth, 0.1f);
+    Cuboid leftDoor(Point(0, height / 7, doorWidth / 2.0f+0.4), height-height/5, doorWidth, 0.1f);
     leftDoor.draw();
     glPopMatrix();
 
     glPushMatrix(); // Right
         glTranslatef(-length * 0.5f, 0, width * 0.5f);
         glRotatef(backDoors.OpenRate, 0, 1, 0);
-        Cuboid rightDoor(Point(0, 0, -doorWidth / 2.0f), height, doorWidth, 0.1f);
+        Cuboid rightDoor(Point(0, height / 7, -doorWidth / 2.0f-0.4), height - height / 5, doorWidth, 0.1f);
         rightDoor.draw();
     glPopMatrix();
 
