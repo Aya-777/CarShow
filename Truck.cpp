@@ -33,7 +33,7 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
 
 void Truck::load() {
     // Fixed the spelling: steering instead of steerig
-    bool success = driverSteeringWheel.Load("debug/resources/models/steeringWheel/steering_wheel.obj", 15.0f);
+    bool success = driverSteeringWheel.Load("resources/models/steeringWheel/steering_wheel.obj", 15.0f);
 
     if (success) {
         driverSteeringWheel.SetPosition(0.5f, 2.5f, 1.2f);
