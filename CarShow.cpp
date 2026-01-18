@@ -11,32 +11,19 @@
 #include "FamilyCar.h"
 #include "Road.h"  //salma
 #include "ParkingRoad.h" //salma
+#include "Color.h"
+#include "Controller.h"
 
 using namespace std;
 vector<Door*> globalDoors;
 
-
-struct color3f
-{
-	float r, g, b;
-	color3f() { r = 0; g = 0; b = 0; }
-	color3f(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
-};
-
+//Global functions
 void display();
 void updateScene();
 void reshape(int w, int h);
 void init();
 void timer(int value);
 void idle();
-void specialKeysUp(int key, int x, int y);
-static void keyboardCallback(unsigned char key, int x, int y);
-static void specialKeysCallback(int key, int x, int y);
-static void mouseMove(int x, int y);
-static void mouseButton(int button, int state, int x, int y);
-
-
-
 
 // Global variables
 Point center = Point(0, -3, 0);
@@ -84,11 +71,14 @@ int main(int argc, char** argv)
 	glutCreateWindow("weee");
 	glutFullScreen();
 	init();
-	glutSpecialUpFunc(specialKeysUp);
-	glutSpecialFunc(specialKeysCallback);
-	glutKeyboardFunc(keyboardCallback);
-	glutPassiveMotionFunc(mouseMove);
-	glutMouseFunc(mouseButton);
+
+	Controller::init(camera, t, isInsideView);
+	// 2. Register the controller's static methods
+	glutKeyboardFunc(Controller::keyboard);
+	glutSpecialFunc(Controller::specialKeys);
+	glutPassiveMotionFunc(Controller::mouseMove);
+	glutMouseFunc(Controller::mouseButton);
+
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
@@ -115,16 +105,16 @@ void display()
 	//setupShadow();
 	drawGround();
 
-	glPushMatrix();
-	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
-	glColor3f(0.8, 0.1, 0.1);
-	t.draw(0.8, 0.8, 0.7);
-	glPopMatrix();
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
 	sideRoad.draw(); //salma
 	parking.draw(); //salma
 
+	glPushMatrix();
+	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	glColor3f(0.8, 0.1, 0.1);
+	t.draw(0.8, 0.8, 0.7);
+	glPopMatrix();
 	glCallList(displayListID);
 
 	glutSwapBuffers();
@@ -196,128 +186,5 @@ void updateScene() {
 		camera.SetPos(finalX, finalY-2, finalZ);
 
 		camera.SetYaw(-rad);
-	}
-}
-static void specialKeysCallback(int key, int x, int y)
-{
-	switch (key)
-	{
-	case GLUT_KEY_UP:
-		camera.Move(20.0);
-		break;
-	case GLUT_KEY_DOWN:
-		camera.Move(-10.0);
-		break;
-	case GLUT_KEY_LEFT:
-		camera.Strafe(10.0);
-		break;
-	case GLUT_KEY_RIGHT:
-		camera.Strafe(-10.0);
-		break;
-	}
-	glutPostRedisplay();
-}
-static void keyboardCallback(unsigned char key, int x, int y)
-{
-	float rad = t.rotationAngle * (M_PI / 180.0f);
-	float step = 2.0f;
-	switch (key)
-	{
-	case 'a':
-		camera.RotateYaw(-0.02);
-		break; // Rotate Left
-	case 'd':
-		camera.RotateYaw(0.02);
-		break; // Rotate Right
-	case 'w':
-		camera.Fly(2.0);
-		break; // Move Up
-	case 's':
-		camera.Fly(-2.0);
-		break; // Move Down
-	case 'o': // 'O' for Open
-	case 'O':
-		t.backDoors.open = !t.backDoors.open;
-		break;
-		glutPostRedisplay();
-	case 'p':
-		t.driverDoor.open = !t.driverDoor.open;
-
-		break;
-	case '1': // FORWARD
-		t.position.x += cos(rad) * step;
-		t.position.z -= sin(rad) * step;
-		t.wheelSpin -= 10.0f; // Spin wheels when moving
-		break;
-
-	case '2': // BACKWARD
-		t.position.x -= cos(rad) * step;
-		t.position.z += sin(rad) * step;
-		t.wheelSpin += 10.0f;
-		break;
-
-	case '3': // ROTATE LEFT (Turn truck)
-		t.rotationAngle += 5.0f;
-		t.steerAngle = 20.0f; // Visual steering effect
-		break;
-
-	case '4': // ROTATE RIGHT (Turn truck)
-		t.rotationAngle -= 5.0f;
-		t.steerAngle = -20.0f;
-		break;
-
-	case ' ': // SPACE KEY
-		isInsideView = !isInsideView;
-		if (isInsideView) {
-			cout << "Entered Driver View" << endl;
-		}
-		else {
-			camera.Strafe(20);
-		}
-		break;
-	case 'n':
-		float cx, cy, cz;
-		camera.GetPos(cx, cy, cz);
-		camera.openNearestDoor();
-		break;
-	}
-}
-void specialKeysUp(int key, int x, int y)
-{
-	if (key == GLUT_KEY_UP)
-		cout << "up released" << endl;
-	if (key == GLUT_KEY_DOWN)
-		cout << "down released" << endl;
-	if (key == GLUT_KEY_RIGHT)
-		cout << "right released" << endl;
-	if (key == GLUT_KEY_LEFT)
-		cout << "left released" << endl;
-}
-static void mouseMove(int x, int y)
-{
-	if (!g_mouseCaptured)
-		return;
-
-	int dx = x - g_lastMouseX;
-	int dy = y - g_lastMouseY;
-
-	g_lastMouseX = x;
-	g_lastMouseY = y;
-
-	camera.RotateYaw(dx * g_mouseSensitivity);
-	camera.RotatePitch(-dy * g_mouseSensitivity);
-
-	glutPostRedisplay();
-}
-
-static void mouseButton(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		g_mouseCaptured = true;
-		g_lastMouseX = x;
-		g_lastMouseY = y;
-
-		glutSetCursor(GLUT_CURSOR_NONE);
 	}
 }

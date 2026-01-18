@@ -138,6 +138,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="bugatti.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="fsportcar.cpp" />
     <ClCompile Include="mercedes.cpp" />
     <ClCompile Include="ParkingRoad.cpp" />
@@ -163,6 +164,8 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="bugatti.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="fsportcar.h" />
     <ClInclude Include="Mercedes.h" />
     <ClInclude Include="Cuboid.h" />
