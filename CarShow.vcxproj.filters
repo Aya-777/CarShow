@@ -44,8 +44,6 @@
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
       <Filter>Source Files</Filter>
-    <ClCompile Include="SteeringWheel.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Wheel.cpp">
       <Filter>Source Files</Filter>
@@ -71,8 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sofa.h">
-      <Filter>Header Files</Filter>
-    <ClInclude Include="SteeringWheel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
