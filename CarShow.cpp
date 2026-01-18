@@ -4,6 +4,9 @@
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Building.h"
+#include <GL/stb_image.h>
+#define _CRT_SECURE_NO_WARNINGS
+#define STB_IMAGE_IMPLEMENTATION
 
 using namespace std;
 
@@ -34,13 +37,13 @@ static void mouseButton(int button, int state, int x, int y);
 Point center = Point(0, -3, 0);
 Texture texture;
 Texture up, left, Right, down, front, back;
+Texture wallTexture;
 int g_iWidth = 800;
 int g_iHeight = 600;
 const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
 Camera camera;
 bool g_mouseCaptured = false;
 int g_lastMouseX = 0;
@@ -52,7 +55,7 @@ Building buildingStructure;
 void drawGround()
 {
 	glDisable(GL_TEXTURE_2D);
-	glColor3f(0.7f, 0.7f, 0.7f);
+	glColor3f(0.2f, 0.2f, 0.2f);
 	glBegin(GL_QUADS);
 	glVertex3f(-2000.0f, -3.0f, -2000.0f);
 	glVertex3f(2000.0f, -3.0f, -2000.0f);
@@ -60,7 +63,6 @@ void drawGround()
 	glVertex3f(-2000.0f, -3.0f, 2000.0f);
 	glEnd();
 }
-
 
 int main(int argc, char** argv)
 {
@@ -127,7 +129,11 @@ void init()
 	g_background.g = 255;
 	g_background.b = 255;
 
+
+	glEnable(GL_DEPTH_TEST);
 	//load textures here
+	wallTexture.loadTexture("textures/w2.jpg");
+	buildingStructure.wallTex = wallTexture.textureID;
 
 	//display list
 	displayListID = glGenLists(1);

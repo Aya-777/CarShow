@@ -4,6 +4,8 @@
 #include "Cuboid.h"
 #include "Texture.h"
 #include <iostream> 
+#include <direct.h> // for _getcwd
+    // ... inside loadTexture ...
 
 void Texture::Use()
 {
@@ -37,6 +39,12 @@ void Texture::loadTexture(const char* filename) {
         stbi_image_free(image);
     }
     else {
-        std::cout << "Failed to load texture" << std::endl;
+        char buff[FILENAME_MAX];
+        _getcwd(buff, FILENAME_MAX);
+        std::cout << "Failed to load texture!" << std::endl;
+        std::cout << "Looking for: " << filename << std::endl;
+        std::cout << "Current Working Directory: " << buff << std::endl;
+        std::cout << "stb error: " << stbi_failure_reason() << std::endl;
+
     }
 }

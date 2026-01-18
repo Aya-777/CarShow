@@ -11,6 +11,7 @@ public:
 	Building(double x, double y, double z, double w, double h, double l);
 	void draw();
 	double width, height, length, x, y, z;
+	GLuint wallTex;
 private: 
 	/*Cuboid building;
 	Cuboid wall1;*/
