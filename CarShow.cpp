@@ -48,7 +48,7 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
 Truck t(Point(-500, 3.5, 0));
 bool isInsideView = false;
 Camera camera;
