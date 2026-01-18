@@ -112,10 +112,10 @@ void display()
 	drawGround();
 	glPushMatrix();
 
-	glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	c.draw();
-	t.draw();
+	t.draw(0.8,0.8,0.7);
 	//myWindow.draw(0.8f, 0.3f, 0.3f);
 	//leftWindow.draw(0.8f, 0.1f, 0.1f);
 	

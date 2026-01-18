@@ -101,7 +101,7 @@ void Truck::draw(float r, float g, float b) {
     glTranslatef(position.x, position.y, position.z);
     glRotatef(rotationAngle, 0, 1, 0);
     // --- 1. MAIN CONTAINER ---
-    glColor3f(0.2f, 0.4f, 0.8f);
+    glColor3f(r - 0.1, g - 0.1, b - 0.1);
     float containerLengthX = length * 0.7f;
     Cuboid container(Point(-length * 0.15f, 0, 0), height, width, containerLengthX);
     container.draw();
@@ -116,7 +116,7 @@ void Truck::draw(float r, float g, float b) {
     glPushMatrix();
         glTranslatef(cabXOffset, 0, 0);
 
-        glColor3f(0.7f, 0.0f, 0.0f);
+        glColor3f(r, g, b);
         Cuboid cabFloor(Point(0, 0, 0), thickness, cabW, cabL);
         cabFloor.draw();
 
@@ -143,13 +143,13 @@ void Truck::draw(float r, float g, float b) {
         glPopMatrix();
 
 
-        glColor3f(0.1f, 0.6f, 0.1f);
+        glColor3f(0.2f, 0.2f, 0.2f);
         Cuboid tablwo(Point(cabL / 2.3, 0, 0), cabH / 3, cabW, thickness * 5);
         tablwo.draw();
 
         glPushMatrix();
         Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
-        leftWall.draw(0.8, 0.1, 0.1);
+        leftWall.draw(r, g, b);
         // driver door
         glPushMatrix();
         float doorLen = cabL - cabL / 3;
@@ -160,29 +160,29 @@ void Truck::draw(float r, float g, float b) {
         glTranslatef(-doorLen / 2, 0, 0);
 
         Window driverDoorWindow(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2,cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
-        driverDoorWindow.draw(0.1, 0.8, 0.1);
+        driverDoorWindow.draw(r-0.1,g-0.1,b-0.1);
         glPopMatrix();
         glPopMatrix();
 
 
         glPushMatrix();
         Window righttWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
-        righttWall.draw(0.8, 0.1, 0.1);
+        righttWall.draw(r,g,b);
         Window door2(Point(0, cabH / 3, cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
-        door2.draw(0.1, 0.8, 0.1);
+        door2.draw(r - 0.1, g - 0.1, b - 0.1);
         glPopMatrix();
 
         glPushMatrix();
         glRotatef(90, 0, 90, 0);
         Window frontWall(Point(0, 0, cabL / 2), thickness, cabW, cabH, cabH/3, cabH / 6, cabL / 6, cabL / 6, true);
-        frontWall.draw(0.8, 0.1, 0.1);
+        frontWall.draw(r,g,b);
         glPopMatrix();
 
     glPopMatrix();
 
     // --- 3. BACK DOORS ---
     glColor3f(0.1f, 0.1f, 0.1f);
-    float doorWidth = width * 0.5f;
+    float doorWidth = width * 0.5f-0.1;
 
     glPushMatrix(); // Left
     glTranslatef(-length * 0.5f, 0, -width * 0.5f);
