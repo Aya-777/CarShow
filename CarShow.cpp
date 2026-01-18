@@ -3,39 +3,37 @@
 #include <Windows.h>
 #include <GL/stb_image.h>
 #include <GL/freeglut.h>
+#include<vector>
 #include "Point.h"
 #include "Cuboid.h"
 #include "Camera.h"
+#include "Truck.h"
+#include "Sofa.h"
+#include "Window.h"
 #include "Building.h"
+<<<<<<< HEAD
 #include "Skybox.h"
 #include "ModelTree.h"
 #include "StreetLamp.h"
 #include "Sidewalk.h"
+=======
+#include "FamilyCar.h"
+#include "Road.h"  //salma
+#include "ParkingRoad.h" //salma
+#include "Color.h"
+#include "Controller.h"
+>>>>>>> origin/master
 
 using namespace std;
+vector<Door*> globalDoors;
 
-struct color3f
-{
-	float r, g, b;
-	color3f() { r = 0; g = 0; b = 0; }
-	color3f(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
-};
-
-//definition of all functions
-
+//Global functions
 void display();
+void updateScene();
 void reshape(int w, int h);
 void init();
 void timer(int value);
 void idle();
-void specialKeysUp(int key, int x, int y);
-static void keyboardCallback(unsigned char key, int x, int y);
-static void specialKeysCallback(int key, int x, int y);
-static void mouseMove(int x, int y);
-static void mouseButton(int button, int state, int x, int y);
-
-
-
 
 // Global variables
 Point center = Point(0, -3, 0);
@@ -48,12 +46,15 @@ const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
 //Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+Truck t(Point(-500, 3.5, 0));
+bool isInsideView = false;
 Camera camera;
 bool g_mouseCaptured = false;
 int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
+<<<<<<< HEAD
 //Sky:
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
 Texture texRoad, texGrass;
@@ -65,9 +66,16 @@ GLuint texTrunk, texLeaves;
 Sidewalk mySidewalk;
 GLuint texSidewalk;
 StreetLamp myLamp;
+=======
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
+Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
+ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
+
+>>>>>>> origin/master
 
 void drawGround()
 {
+	glPushMatrix();
 	glDisable(GL_TEXTURE_2D);
 	glColor3f(0.7f, 0.7f, 0.7f);
 	glBegin(GL_QUADS);
@@ -76,8 +84,10 @@ void drawGround()
 	glVertex3f(2000.0f, -3.0f, 2000.0f);
 	glVertex3f(-2000.0f, -3.0f, 2000.0f);
 	glEnd();
+	glPopMatrix();
 }
 
+<<<<<<< HEAD
 GLuint loadTextureSTB(const char* filename) {
 	int width, height, channels;
 	unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
@@ -139,6 +149,8 @@ GLuint loadBMP_custom(const char* imagepath) {
 	delete[] data;
 	return textureID;
 }
+=======
+>>>>>>> origin/master
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -147,16 +159,20 @@ int main(int argc, char** argv)
 	glutCreateWindow("weee");
 	glutFullScreen();
 	init();
-	glutSpecialUpFunc(specialKeysUp);
-	glutSpecialFunc(specialKeysCallback);
-	glutKeyboardFunc(keyboardCallback);
-	glutPassiveMotionFunc(mouseMove);
-	glutMouseFunc(mouseButton);
+
+	Controller::init(camera, t, isInsideView);
+	// 2. Register the controller's static methods
+	glutKeyboardFunc(Controller::keyboard);
+	glutSpecialFunc(Controller::specialKeys);
+	glutPassiveMotionFunc(Controller::mouseMove);
+	glutMouseFunc(Controller::mouseButton);
+
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	camera.SetPos(-500.0f, 10.0f, 800.0f);
 	camera.RotateYaw(-1.0);
+	camera.SetPitch(0);
 
 
 	glutTimerFunc(1, timer, 0);
@@ -173,13 +189,20 @@ void display()
 
 	camera.Refresh();
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	//setupLighting();
+	//setupShadow();
 	drawGround();
 
 	buildingStructure.draw();
+	mainRoad.draw(); //salma
+	sideRoad.draw(); //salma
+	parking.draw(); //salma
 
+	glPushMatrix();
+	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	glColor3f(0.8, 0.1, 0.1);
+	t.draw(0.8, 0.8, 0.7);
+	glPopMatrix();
 	glCallList(displayListID);
 	float pivotX = -600.0f;
 	float pivotZ = -380.0f;
@@ -219,6 +242,9 @@ void display()
 
 void idle()
 {
+	t.update();
+	//t.load();
+	updateScene();
 	display();
 }
 
@@ -231,10 +257,19 @@ void timer(int value)
 //initialize some variables
 void init()
 {
+<<<<<<< HEAD
 	g_background.r =1;
 	g_background.g = 1;
 	g_background.b =1;
 	glEnable(GL_DEPTH_TEST);
+=======
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	g_background.r = 1.0f;
+	g_background.g = 1.0f;
+	g_background.b = 1.0f;
+
+>>>>>>> origin/master
 	//load textures here
 	texFront.loadTexture("Textures/Sky_Clouds.jpg");
 	texBack.loadTexture("Textures/Sky_Clouds.jpg");
@@ -259,7 +294,13 @@ void init()
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
+<<<<<<< HEAD
 	mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
+=======
+	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+	glColor3f(0.2f, 0.3f, 0.8f);
+	buildingStructure.draw();
+>>>>>>> origin/master
 	glEndList();
 
 
@@ -277,82 +318,22 @@ void reshape(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-static void specialKeysCallback(int key, int x, int y)
-{
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        camera.Move(10.0);
-        break;
-    case GLUT_KEY_DOWN:
-        camera.Move(-2.0);
-        break;
-    case GLUT_KEY_LEFT:
-        camera.Strafe(-2.0);
-        break;
-    case GLUT_KEY_RIGHT:
-        camera.Strafe(2.0);
-        break;
-    }
-    glutPostRedisplay();
-}
-static void keyboardCallback(unsigned char key, int x, int y)
-{
-	switch (key)
-	{
-	case 'a':
-		camera.RotateYaw(-0.02);
-		break; // Rotate Left
-	case 'd':
-		camera.RotateYaw(0.02);
-		break; // Rotate Right
-	case 'w':
-		camera.Fly(2.0);
-		break; // Move Up
-	case 's':
-		camera.Fly(-2.0);
-		break; // Move Down
-		glutPostRedisplay();
+void updateScene() {
+	t.update();
+
+	if (isInsideView) {
+		float rad = t.rotationAngle * (M_PI / 180.0f);
+
+		float localX = (t.length * 0.4f) - 14.0f;
+		float localY = t.height * 0.6f;
+		float localZ = t.width * 0.2f;
+
+		float finalX = t.position.x + (localX * cos(rad) - localZ * sin(rad));
+		float finalZ = t.position.z - (localX * sin(rad) + localZ * cos(rad));
+		float finalY = t.position.y + localY;
+
+		camera.SetPos(finalX, finalY-2, finalZ);
+
+		camera.SetYaw(-rad);
 	}
 }
-void specialKeysUp(int key, int x, int y)
-{
-	if (key == GLUT_KEY_UP)
-		cout << "up released" << endl;
-	if (key == GLUT_KEY_DOWN)
-		cout << "down released" << endl;
-	if (key == GLUT_KEY_RIGHT)
-		cout << "right released" << endl;
-	if (key == GLUT_KEY_LEFT)
-		cout << "left released" << endl;
-}
-static void mouseMove(int x, int y)
-{
-	if (!g_mouseCaptured)
-		return;
-
-	int dx = x - g_lastMouseX;
-	int dy = y - g_lastMouseY;
-
-	g_lastMouseX = x;
-	g_lastMouseY = y;
-
-	camera.RotateYaw(dx * g_mouseSensitivity);
-	camera.RotatePitch(-dy * g_mouseSensitivity);
-
-	glutPostRedisplay();
-}
-
-static void mouseButton(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		g_mouseCaptured = true;
-		g_lastMouseX = x;
-		g_lastMouseY = y;
-
-		glutSetCursor(GLUT_CURSOR_NONE); 
-	}
-}
-
-

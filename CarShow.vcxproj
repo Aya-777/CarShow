@@ -76,12 +76,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -93,12 +93,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -125,47 +125,79 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ghina\OneDrive\Documents\libraries\freeglut-MSVC-3.0.0-2.mp\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="bugatti.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="fsportcar.cpp" />
+    <ClCompile Include="mercedes.cpp" />
+    <ClCompile Include="ParkingRoad.cpp" />
+    <ClCompile Include="Road.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="FamilyCar.cpp" />
+    <ClCompile Include="Glass.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
+    <ClCompile Include="testcar.cpp" />
+    <ClCompile Include="SteeringWheel.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Truck.cpp" />
+    <ClCompile Include="Wheel.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
+    <ClInclude Include="bugatti.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="fsportcar.h" />
+    <ClInclude Include="Mercedes.h" />
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="FamilyCar.h" />
+    <ClInclude Include="Glass.h" />
     <ClInclude Include="Lighting.h" />
-    <ClInclude Include="ModelTree.h" />
+    <ClInclude Include="ParkingRoad.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
-    <ClInclude Include="Sidewalk.h" />
+    <ClInclude Include="Road.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
-    <ClInclude Include="StreetLamp.h" />
+    <ClInclude Include="SteeringWheel.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Truck.h" />
+    <ClInclude Include="Wheel.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Models\ArmChair\Armchair car N220417.3DS" />
+    <None Include="Models\ArmChair\Armchair car N220417.gsm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Models\ArmChair\archibase.net.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Models\ArmChair\BLeather.bmp" />
+    <Image Include="Models\ArmChair\d 2222.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
