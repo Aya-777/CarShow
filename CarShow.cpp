@@ -9,6 +9,8 @@
 #include "Building.h"
 #include "Skybox.h"
 #include "ModelTree.h"
+#include "StreetLamp.h"
+#include "Sidewalk.h"
 
 using namespace std;
 
@@ -59,6 +61,10 @@ SkyBox mySky;
 //tree:
 SmartTreeModel myTree;
 GLuint texTrunk, texLeaves;
+//street lamp & side walk:
+Sidewalk mySidewalk;
+GLuint texSidewalk;
+StreetLamp myLamp;
 
 void drawGround()
 {
@@ -175,17 +181,36 @@ void display()
 	buildingStructure.draw();
 
 	glCallList(displayListID);
+	float pivotX = -600.0f;
+	float pivotZ = -380.0f;
+
+	glPushMatrix();
+	glTranslatef(pivotX + 500.0f, -2.9f, pivotZ);
+	mySidewalk.draw(1000.0f, 5.0f, 80.0f, texSidewalk);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(pivotX, -3.9f, pivotZ - 250.0f);
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	mySidewalk.draw(500.0f, 5.0f, 80.0f, texSidewalk);
+	glPopMatrix();
 
 	for (int i = 0; i < 3; i++)
 	{
+		float xBase = -600.0f + (i * 200.0f); // مسافة 200 بين الشجر
+		float zPos = -450.0f;
 		glPushMatrix();
-		float xPos = -500.0f + (i * 150.0f);
-		float zPos = -400.0f; 
-		glTranslatef(xPos, -3.0f, zPos);
-
-		glScalef(5.0f, 5.0f, 5.0f);
+		glTranslatef(xBase, -3.0f, zPos);
+		glScalef(10.0f, 10.0f, 10.0f);
 		myTree.draw(1.0f, texTrunk, texLeaves);
 		glPopMatrix();
+		if (i < 3) {
+			glPushMatrix();
+			glTranslatef(xBase + 100.0f, -3.0f, zPos);
+			glScalef(2.5f, 2.5f, 2.5f);
+			myLamp.draw();
+			glPopMatrix();
+		}
 	}
 	glutSwapBuffers();
 
@@ -223,11 +248,14 @@ void init()
 	mySky.SKYRIGHT = texRight.textureID;
 	mySky.SKYUP = texUp.textureID;
 	mySky.SKYDOWN = texDown.textureID;
+	//side walk texture:
+	texSidewalk = loadTextureSTB("Textures/sidewalk2.jpg");
 	//load tree model
 
 	myTree.loadOBJ("models/Tree-Model/Tree1.obj");
 	texTrunk = loadTextureSTB("models/Tree-Model/bark_loo.bmp");
 	texLeaves = loadTextureSTB("models/Tree-Model/bat.bmp");
+	
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);

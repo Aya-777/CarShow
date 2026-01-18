@@ -157,8 +157,10 @@
     <ClInclude Include="ModelTree.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
+    <ClInclude Include="Sidewalk.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
+    <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
