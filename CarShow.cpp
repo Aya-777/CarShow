@@ -11,6 +11,7 @@
 #include "FamilyCar.h"
 #include "Road.h"  //salma
 #include "ParkingRoad.h" //salma
+#include "Controller.h"
 
 using namespace std;
 vector<Door*> globalDoors;
