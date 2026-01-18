@@ -32,7 +32,7 @@ void Wheel::draw(Point p, bool canSteer) {
         glPushMatrix();
         glRotatef((float)i, 0, 0, 1);
         glTranslatef(radius * 0.4f, 0, 0.1f);
-        glutSolidSphere(0.08f, 10, 10);
+        glutSolidSphere(radius/5, 10, 10);
         glPopMatrix();
     }
 
