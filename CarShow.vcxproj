@@ -143,6 +143,8 @@
     <ClCompile Include="mercedes.cpp" />
     <ClCompile Include="ParkingRoad.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="Bureau.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
@@ -170,6 +172,7 @@
     <ClInclude Include="Mercedes.h" />
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
+    <ClInclude Include="Bureau.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="FamilyCar.h" />
     <ClInclude Include="Glass.h" />

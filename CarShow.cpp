@@ -131,7 +131,7 @@ void idle()
 }
 
 void timer(int value)
-{
+{	
 	glutTimerFunc(1000 / 30, timer, 0);	//call the timer again each 1 millisecond
 
 }

@@ -1,84 +1,227 @@
-#include <gl/glut.h>
+
 #include "Sofa.h"
-#include "Point.h"
+
 #include "Cuboid.h"
 
-void Sofa::draw(Point center) {
+#include <GL/glut.h>
 
-	// sofa base
-	glColor3ub(22, 22, 22);
-	Cuboid(Point(center.x, center.y, center.z), 1, 7, 10).draw();
 
-	//left hand
-	glColor3ub(55, 55, 55);
-	Cuboid(Point(center.x - 5.25, center.y, center.z), 5, 7, 0.5).draw();
 
-	//right hand
-	glColor3ub(88, 88, 88);
-	Cuboid(Point(center.x + 5.25, center.y, center.z), 5, 7, 0.5).draw();
+Sofa::Sofa(Point c) : center(c), rotation(0.0f) {}
 
-	//back 
-	glColor3ub(136, 0, 21);
-	Cuboid(Point(center.x, center.y, center.z - 3.75), 5, 0.5, 11).draw();
 
-	glColor3ub(55, 55, 55);
-	//leg front right
-	Cuboid(Point(center.x + 5.25, center.y - 2, center.z + 3.2), 2, 0.6, 0.5).draw();
 
-	//leg front left
-	Cuboid(Point(center.x - 5.25, center.y - 2, center.z + 3.2), 2, 0.6, 0.5).draw();
+// move sofa
 
-	//leg back left
-	Cuboid(Point(center.x + 5.25, center.y - 2, center.z - 3.7), 2, 0.6, 0.5).draw();
+void Sofa::setPosition(Point c) { center = c; }
 
-	//leg back right
-	Cuboid(Point(center.x - 5.25, center.y - 2, center.z - 3.7), 2, 0.6, 0.5).draw();
+
+
+// rotate sofa
+
+void Sofa::setRotation(float angle) { rotation = angle; }
+
+
+
+// draw single sofa
+
+void Sofa::draw() {
+
+    glPushMatrix();
+
+
+
+    // move to sofa position
+
+    glTranslatef(center.x, center.y, center.z);
+
+
+
+    // rotate around Y-axis
+
+    glRotatef(rotation, 0, 1, 0);
+
+
+
+    // sofa base
+
+    glColor3ub(22, 22, 22);
+
+    Cuboid(Point(0, 0, 0), 1, 7, 10).draw();
+
+
+
+    // left hand
+
+    glColor3ub(55, 55, 55);
+
+    Cuboid(Point(-5.25, 0, 0), 5, 7, 0.5).draw();
+
+
+
+    // right hand
+
+    glColor3ub(88, 88, 88);
+
+    Cuboid(Point(5.25, 0, 0), 5, 7, 0.5).draw();
+
+
+
+    // back
+
+    glColor3ub(136, 0, 21);
+
+    Cuboid(Point(0, 0, -3.75), 5, 0.5, 11).draw();
+
+
+
+    // legs
+
+    glColor3ub(55, 55, 55);
+
+    Cuboid(Point(5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+
+
+
+    glPopMatrix();
 
 }
-void Sofa::drawTriple(Point center) {
-	//first base
-	glColor3ub(22, 22, 22);
-	Cuboid(Point(center.x, center.y, center.z), 0.5, 7, 10).draw();
 
-	//second base
-	glColor3ub(22, 22, 22);
-	Cuboid(Point(center.x - 8.5, center.y, center.z + 4), 0.5, 15, 7).draw();
 
-	//right hand 
-	glColor3ub(88, 88, 88);
-	Cuboid(Point(center.x + 4.75, center.y + 0.5, center.z), 4.5, 7, 0.5).draw();
 
-	//first back
-	glColor3ub(136, 0, 21);
-	Cuboid(Point(center.x - 3.75, center.y + 0.5, center.z - 3.25), 4.5, 0.5, 16.5).draw();
+// triple sofa (same rotation)
 
-	//second back
-	glColor3ub(136, 0, 21);
-	Cuboid(Point(center.x - 11.75, center.y + 0.5, center.z + 4), 4.5, 14, 0.5).draw();
+void Sofa::drawTriple() {
 
-	//left hand
-	glColor3ub(55, 55, 55);
-	Cuboid(Point(center.x - 8.5, center.y + 0.5, center.z + 11.25), 4.5, 0.5, 7).draw();
+    glPushMatrix();
 
-	glColor3ub(55, 55, 55);
-	//first front leg
-	Cuboid(Point(center.x + 4.75, center.y - 2, center.z + 3.2), 2, 0.6, 0.5).draw();
+    glTranslatef(center.x, center.y, center.z);
 
-	//first back leg
-	Cuboid(Point(center.x + 4.75, center.y - 2, center.z - 3.2), 2, 0.6, 0.5).draw();
+    glRotatef(rotation, 0, 1, 0);
 
-	//second front leg
-	Cuboid(Point(center.x - 5.25, center.y - 2, center.z + 3.2), 2, 0.6, 0.5).draw();
 
-	//second back leg
-	Cuboid(Point(center.x - 5.25, center.y - 2, center.z - 3.2), 2, 0.6, 0.5).draw();
 
-	//third front leg
-	Cuboid(Point(center.x - 5.25, center.y - 2, center.z + 11.2), 2, 0.6, 0.5).draw();
+    // first base
 
-	//third back leg
-	Cuboid(Point(center.x - 11.75, center.y - 2, center.z + 11.2), 2, 0.6, 0.5).draw();
+    glColor3ub(22, 22, 22);
 
-	//fourth back leg
-	Cuboid(Point(center.x - 11.75, center.y - 2, center.z - 3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(0, 0, 0), 0.5, 7, 10).draw();
+
+
+
+    // second base
+
+    glColor3ub(22, 22, 22);
+
+    Cuboid(Point(-8.5, 0, 4), 0.5, 15, 7).draw();
+
+
+
+    // right hand
+
+    glColor3ub(88, 88, 88);
+
+    Cuboid(Point(4.75, 0.5, 0), 4.5, 7, 0.5).draw();
+
+
+
+    // first back
+
+    glColor3ub(136, 0, 21);
+
+    Cuboid(Point(-3.75, 0.5, -3.25), 4.5, 0.5, 16.5).draw();
+
+
+
+    // second back
+
+    glColor3ub(136, 0, 21);
+
+    Cuboid(Point(-11.75, 0.5, 4), 4.5, 14, 0.5).draw();
+
+
+
+    // left hand
+
+    glColor3ub(55, 55, 55);
+
+    Cuboid(Point(-8.5, 0.5, 11.25), 4.5, 0.5, 7).draw();
+
+
+
+    // legs
+
+    glColor3ub(55, 55, 55);
+
+    Cuboid(Point(4.75, -2, 3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(4.75, -2, -3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-5.25, -2, -3.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-5.25, -2, 11.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-11.75, -2, 11.2), 2, 0.6, 0.5).draw();
+
+    Cuboid(Point(-11.75, -2, -3.2), 2, 0.6, 0.5).draw();
+
+
+
+    glPopMatrix();
+
 }
+
+/*
+* after fixing the building:
+* #include "Sofa.h" //salma
+#include "Door.h" //salma
+#include "Desk.h" //salma
+
+
+//Sofa sofa; //salma
+Sofa sofa(Point(-100, 0, 365)); // slightly in front of desk
+Sofa sofa2(Point(-100, 0, 300)); // slightly in front of desk
+//Sofa sofa(Point(-60, 0, 350)); // slightly in front of desk
+Door door(Point(-120, 0, 305)); //salma
+//Door door(Point(-60, 0, 300)); //salma
+Desk desk(Point(-30, 0, 365));  // slightly above floor
+//Desk desk(Point(-60, 0, 380));  // slightly above floor
+door.update(); //salma
+    sofa.setRotation(180);
+    sofa2.setRotation(-90);
+
+    door.draw(); //salma
+    // draw sofa
+    //sofa.draw(Point(0.0f, -1.5f, 0.0f)); //salma
+    sofa.draw();
+    sofa2.draw();
+    desk.draw(); //salma
+    door.update();   // ? animate door
+
+
+
+            //salma
+    case 'o':
+        door.toggle();
+        break;
+        
+
+
+    }
+    //salma
+    // Call this outside the switch so ANY key press refreshes the screen
+    glutPostRedisplay();
+    // *** //
+
+
+
+*/
+

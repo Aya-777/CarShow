@@ -66,6 +66,12 @@
     <ClCompile Include="ParkingRoad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bureau.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h"><Filter>Header Files</Filter></ClInclude>
@@ -87,6 +93,9 @@
     <ClInclude Include="Truck.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="Glass.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="Window.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="Bureau.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
