@@ -35,8 +35,7 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
-Truck t(Point(0, 3.5, 0));
+Truck t(Point(-300, 3.5, 450));
 bool isInsideView = false;
 Camera camera;
 bool g_mouseCaptured = false;
@@ -73,7 +72,6 @@ int main(int argc, char** argv)
 	init();
 
 	Controller::init(camera, t, isInsideView);
-	// 2. Register the controller's static methods
 	glutKeyboardFunc(Controller::keyboard);
 	glutSpecialFunc(Controller::specialKeys);
 	glutPassiveMotionFunc(Controller::mouseMove);
@@ -105,15 +103,18 @@ void display()
 	//setupShadow();
 	drawGround();
 
-	//buildingStructure.draw();
-	//mainRoad.draw(); //salma
-	//sideRoad.draw(); //salma
-	//parking.draw(); //salma
+	buildingStructure.draw();
+	mainRoad.draw(); //salma
+	sideRoad.draw(); //salma
+	parking.draw(); //salma
 
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	t.draw(0.8, 0.8, 0.7);
+	float x, y, z;
+	camera.GetPos(x, y, z);
+	cout << "x: " << x << " z: " << z << endl;
 	glPopMatrix();
 	glCallList(displayListID);
 
@@ -151,7 +152,7 @@ void init()
 	glNewList(displayListID, GL_COMPILE);
 	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
 	glColor3f(0.2f, 0.3f, 0.8f);
-	//buildingStructure.draw();
+	buildingStructure.draw();
 	glEndList();
 
 

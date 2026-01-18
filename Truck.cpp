@@ -83,8 +83,8 @@ void Truck::update() {
     if (isMovable) {
 
         // Move position based on current heading
-        position.x += cos(rad) * 0.5f;
-        position.z -= sin(rad) * 0.5f;
+        position.x += cos(rad) * 0.8f;
+        position.z -= sin(rad) * 0.8f;
 
         // Roll the wheels based on movement
         wheelSpin -= 5.0f;
