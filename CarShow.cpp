@@ -7,7 +7,6 @@
 #include "Truck.h"
 #include "Sofa.h"
 #include "Window.h"
-//#include "Building.h"
 #include "Building.h"
 #include "FamilyCar.h"
 
@@ -47,8 +46,14 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+Truck t(Point(-500, 3.5, 0));
+bool isInsideView = false;
 Camera camera;
+bool g_mouseCaptured = false;
+int g_lastMouseX = 0;
+int g_lastMouseY = 0;
+float g_mouseSensitivity = 0.0025f;
 
 
 void drawGround()
@@ -103,6 +108,12 @@ void display()
 	//setupLighting();
 	//setupShadow();
 	drawGround();
+
+	glPushMatrix();
+	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	glColor3f(0.8, 0.1, 0.1);
+	t.draw(0.8, 0.8, 0.7);
+	glPopMatrix();
 	glCallList(displayListID);
 
 	glutSwapBuffers();
@@ -270,4 +281,32 @@ void specialKeysUp(int key, int x, int y)
 		cout << "right released" << endl;
 	if (key == GLUT_KEY_LEFT)
 		cout << "left released" << endl;
+}
+static void mouseMove(int x, int y)
+{
+	if (!g_mouseCaptured)
+		return;
+
+	int dx = x - g_lastMouseX;
+	int dy = y - g_lastMouseY;
+
+	g_lastMouseX = x;
+	g_lastMouseY = y;
+
+	camera.RotateYaw(dx * g_mouseSensitivity);
+	camera.RotatePitch(-dy * g_mouseSensitivity);
+
+	glutPostRedisplay();
+}
+
+static void mouseButton(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		g_mouseCaptured = true;
+		g_lastMouseX = x;
+		g_lastMouseY = y;
+
+		glutSetCursor(GLUT_CURSOR_NONE);
+	}
 }
