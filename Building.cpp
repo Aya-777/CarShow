@@ -3,6 +3,7 @@
 #include "Point.h"
 #include <GL/glut.h>
 
+
 void Building::draw() {
 	Cuboid building(Point(0, 0, 0), 100, 650, 300);
 	glColor3f(0.8, 0.8, 0.8);
@@ -17,6 +18,8 @@ void Building::draw() {
 
 	Cuboid administrationBuilding(Point(-75,0,365), 100, 80, 150);
 	administrationBuilding.draw();
+
+	
 
 }
 

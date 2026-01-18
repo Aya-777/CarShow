@@ -141,6 +141,8 @@
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="Lighting.cpp" />
+    <ClCompile Include="MountainCar.cpp" />
+    <ClCompile Include="MountainHall.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -154,6 +156,8 @@
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="MountainCar.h" />
+    <ClInclude Include="MountainHall.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Skybox.h" />

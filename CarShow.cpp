@@ -4,6 +4,8 @@
 #include "Cuboid.h"
 #include "Camera.h"
 #include "Building.h"
+#include "MountainHall.h"
+
 
 using namespace std;
 
@@ -47,6 +49,7 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
+MountainHall mountainHall;
 
 
 void drawGround()
@@ -70,6 +73,9 @@ int main(int argc, char** argv)
 	glutCreateWindow("weee");
 	glutFullScreen();
 	init();
+	
+
+	
 	glutSpecialUpFunc(specialKeysUp);
 	glutSpecialFunc(specialKeysCallback);
 	glutKeyboardFunc(keyboardCallback);
@@ -79,6 +85,7 @@ int main(int argc, char** argv)
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	camera.SetPos(-500.0f, 10.0f, 800.0f);
+	//camera.SetPos(0.0f, -30.0f, -20.0f);
 	camera.RotateYaw(-1.0);
 
 
@@ -89,12 +96,14 @@ int main(int argc, char** argv)
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(g_background.r, g_background.g, g_background.b, 1.0);
+
+	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	camera.Refresh();
+	
+	 camera.Refresh();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -102,6 +111,7 @@ void display()
 	drawGround();
 
 	buildingStructure.draw();
+	mountainHall.draw();
 
 	glCallList(displayListID);
 
@@ -123,9 +133,12 @@ void timer(int value)
 //initialize some variables
 void init()
 {
+	glEnable(GL_DEPTH_TEST); // <<< أضيفي هذا السطر. سيمنع رؤية الأشياء عبر بعضها
+	
 	g_background.r = 255;
 	g_background.g = 255;
 	g_background.b = 255;
+
 
 	//load textures here
 
