@@ -12,7 +12,7 @@
 #include <cmath>
 
 // stb_image (SINGLE IMPLEMENTATION IN THIS FILE)
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #include <GL/stb_image.h>
 
 // ------------------ DATA STRUCTURES ------------------

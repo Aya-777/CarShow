@@ -11,18 +11,18 @@
 #include "Sofa.h"
 #include "Window.h"
 #include "Building.h"
-<<<<<<< HEAD
 #include "Skybox.h"
 #include "ModelTree.h"
 #include "StreetLamp.h"
 #include "Sidewalk.h"
-=======
 #include "FamilyCar.h"
 #include "Road.h"  //salma
 #include "ParkingRoad.h" //salma
 #include "Color.h"
 #include "Controller.h"
->>>>>>> origin/master
+#include "frontOfBuilding.h"
+#include "OutSide.h"
+
 
 using namespace std;
 vector<Door*> globalDoors;
@@ -39,6 +39,11 @@ void idle();
 Point center = Point(0, -3, 0);
 Texture texture;
 Texture up, left, Right, down, front, back;
+Texture texSidewalk;
+Texture texSidewalk2;
+Texture texPlaza;
+Texture texGrass;
+Texture texResturant;
 int g_iWidth = 800;
 int g_iHeight = 600;
 const float g_fNear = 1;
@@ -46,6 +51,7 @@ const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
 //Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
+Cuboid resturant(Point(100, -3, 0), 200, 150, 150);
 Truck t(Point(-500, 3.5, 0));
 bool isInsideView = false;
 Camera camera;
@@ -54,60 +60,45 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
-<<<<<<< HEAD
 //Sky:
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
-Texture texRoad, texGrass;
+Texture texRoad;
 SkyBox mySky;
 //tree:
 SmartTreeModel myTree;
-GLuint texTrunk, texLeaves;
+Texture texTrunk, texLeaves;
 //street lamp & side walk:
 Sidewalk mySidewalk;
-GLuint texSidewalk;
 StreetLamp myLamp;
-=======
+//road:
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
 Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
 ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
-
->>>>>>> origin/master
+// 
+Plaza buildingPlaza;
+CityLayout myCity;
 
 void drawGround()
 {
 	glPushMatrix();
-	glDisable(GL_TEXTURE_2D);
-	glColor3f(0.7f, 0.7f, 0.7f);
+	texGrass.Use();
+
+	// ضبط التكرار ليكون العشب واقعياً
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glColor3f(1.0f, 1.0f, 1.0f); 
+
 	glBegin(GL_QUADS);
-	glVertex3f(-2000.0f, -3.0f, -2000.0f);
-	glVertex3f(2000.0f, -3.0f, -2000.0f);
-	glVertex3f(2000.0f, -3.0f, 2000.0f);
-	glVertex3f(-2000.0f, -3.0f, 2000.0f);
+
+	glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);
+	glTexCoord2f(50.0f, 0.0f);  glVertex3f(2000.0f, -3.01f, -2000.0f);
+	glTexCoord2f(50.0f, 50.0f); glVertex3f(2000.0f, -3.01f, 2000.0f);
+	glTexCoord2f(0.0f, 50.0f);  glVertex3f(-2000.0f, -3.01f, 2000.0f);
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
-}
-
-<<<<<<< HEAD
-GLuint loadTextureSTB(const char* filename) {
-	int width, height, channels;
-	unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
-	if (!data) {
-		printf("❌ فشل تحميل الصورة: %s\n", filename);
-		return 0;
-	}
-
-	GLuint texID;
-	glGenTextures(1, &texID);
-	glBindTexture(GL_TEXTURE_2D, texID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-	stbi_image_free(data);
-	printf("✅ تم تحميل الصورة بنجاح: %s\n", filename);
-	return texID;
 }
 
 GLuint loadBMP_custom(const char* imagepath) {
@@ -149,8 +140,7 @@ GLuint loadBMP_custom(const char* imagepath) {
 	delete[] data;
 	return textureID;
 }
-=======
->>>>>>> origin/master
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -193,10 +183,14 @@ void display()
 	//setupShadow();
 	drawGround();
 
-	buildingStructure.draw();
+	buildingStructure.draw();	
 	mainRoad.draw(); //salma
 	sideRoad.draw(); //salma
 	parking.draw(); //salma
+	
+	buildingPlaza.draw(-550.0f, -350.0f,0.0f,400.0f, texPlaza.textureID, 20.0f); // tile of out side
+	myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
+	myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
 
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
@@ -204,36 +198,16 @@ void display()
 	t.draw(0.8, 0.8, 0.7);
 	glPopMatrix();
 	glCallList(displayListID);
-	float pivotX = -600.0f;
-	float pivotZ = -380.0f;
 
-	glPushMatrix();
-	glTranslatef(pivotX + 500.0f, -2.9f, pivotZ);
-	mySidewalk.draw(1000.0f, 5.0f, 80.0f, texSidewalk);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(pivotX, -3.9f, pivotZ - 250.0f);
-	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-	mySidewalk.draw(500.0f, 5.0f, 80.0f, texSidewalk);
-	glPopMatrix();
-
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
-		float xBase = -600.0f + (i * 200.0f); // مسافة 200 بين الشجر
+		float xBase = -500.0f + (i * 200.0f); // مسافة 200 بين الشجر
 		float zPos = -450.0f;
 		glPushMatrix();
 		glTranslatef(xBase, -3.0f, zPos);
 		glScalef(10.0f, 10.0f, 10.0f);
-		myTree.draw(1.0f, texTrunk, texLeaves);
+		myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
 		glPopMatrix();
-		if (i < 3) {
-			glPushMatrix();
-			glTranslatef(xBase + 100.0f, -3.0f, zPos);
-			glScalef(2.5f, 2.5f, 2.5f);
-			myLamp.draw();
-			glPopMatrix();
-		}
 	}
 	glutSwapBuffers();
 
@@ -257,19 +231,11 @@ void timer(int value)
 //initialize some variables
 void init()
 {
-<<<<<<< HEAD
 	g_background.r =1;
 	g_background.g = 1;
 	g_background.b =1;
 	glEnable(GL_DEPTH_TEST);
-=======
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	g_background.r = 1.0f;
-	g_background.g = 1.0f;
-	g_background.b = 1.0f;
 
->>>>>>> origin/master
 	//load textures here
 	texFront.loadTexture("Textures/Sky_Clouds.jpg");
 	texBack.loadTexture("Textures/Sky_Clouds.jpg");
@@ -284,23 +250,24 @@ void init()
 	mySky.SKYUP = texUp.textureID;
 	mySky.SKYDOWN = texDown.textureID;
 	//side walk texture:
-	texSidewalk = loadTextureSTB("Textures/sidewalk2.jpg");
+	texSidewalk.loadTexture("Textures/sidewalk.jpg");
+	texSidewalk2.loadTexture("Textures/sidewalk.jpg");
+	texPlaza.loadTexture("Textures/tile2.jpg");
+	texGrass.loadTexture("Textures/grass5.jpg");
+	texResturant.loadTexture("Textures/building.jpg");
 	//load tree model
 
 	myTree.loadOBJ("models/Tree-Model/Tree1.obj");
-	texTrunk = loadTextureSTB("models/Tree-Model/bark_loo.bmp");
-	texLeaves = loadTextureSTB("models/Tree-Model/bat.bmp");
+	texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
+	texLeaves.loadTexture("models/Tree-Model/bat.bmp");
 	
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-<<<<<<< HEAD
 	mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
-=======
 	//glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
 	glColor3f(0.2f, 0.3f, 0.8f);
 	buildingStructure.draw();
->>>>>>> origin/master
 	glEndList();
 
 
