@@ -138,6 +138,7 @@
     <ClCompile Include="bugatti.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="drawSportCar.cpp" />
     <ClCompile Include="fsportcar.cpp" />
     <ClCompile Include="mercedes.cpp" />
     <ClCompile Include="steeringWheel.cpp" />
