@@ -14,6 +14,7 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
     isMovable = false;
 
     globalDoors.push_back(&this->driverDoor);
+    globalDoors.push_back(&this->passengerDoor);
     globalDoors.push_back(&this->backDoors);
 
     // Calculate wheel
@@ -32,8 +33,7 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
 }
 
 void Truck::load() {
-    // Fixed the spelling: steering instead of steerig
-    bool success = driverSteeringWheel.Load("resources/models/steeringWheel/steering_wheel.obj", 15.0f);
+    bool success = driverSteeringWheel.Load("debug/resources/models/steeringWheel/steering_wheel.obj", 15.0f);
 
     if (success) {
         driverSteeringWheel.SetPosition(0.5f, 2.5f, 1.2f);
@@ -49,8 +49,6 @@ void Truck::update() {
     float rad = rotationAngle * (3.14159f / 180.0f);
 
     // --- DRIVER DOOR POSITION ---
-    // In your draw(), the cabin is at cabXOffset (Forward X) 
-    // and the door is at -cabW/2 (Z side)
     float drvLocalX = length * 0.35f;
     float drvLocalZ = -width * 0.5f;
 
@@ -59,6 +57,20 @@ void Truck::update() {
     driverDoor.center.y = position.y + (height * 0.5f);
     driverDoor.center.z = position.z + (drvLocalX * sin(rad) + drvLocalZ * cos(rad));
 
+    // --- PASSENGER DOOR POSITION ---
+    float psgLocalX = length * 0.35f;
+    float psgLocalZ = width * 0.5f; // Positive Z for right side
+    passengerDoor.center.x = position.x + (psgLocalX * cos(rad) - psgLocalZ * sin(rad));
+    passengerDoor.center.y = position.y + (height * 0.5f);
+    passengerDoor.center.z = position.z + (psgLocalX * sin(rad) + psgLocalZ * cos(rad));
+
+    // --- PASSENGER DOOR ANIMATION ---
+    if (passengerDoor.open) {
+        if (passengerDoor.OpenRate < 80.0f) passengerDoor.OpenRate += 0.2f;
+    }
+    else {
+        if (passengerDoor.OpenRate > 0.0f) passengerDoor.OpenRate -= 0.2f;
+    }
     // --- BACK DOORS POSITION ---
     float backLocalX = -length * 0.5f;
     float backLocalZ = 0.0f;
@@ -71,8 +83,8 @@ void Truck::update() {
     if (isMovable) {
 
         // Move position based on current heading
-        position.x += cos(rad) * 0.5f;
-        position.z -= sin(rad) * 0.5f;
+        position.x += cos(rad) * 0.8f;
+        position.z -= sin(rad) * 0.8f;
 
         // Roll the wheels based on movement
         wheelSpin -= 5.0f;
@@ -95,6 +107,30 @@ void Truck::update() {
     
 }
 
+void drawLightCircle(float radius, int segments, float r, float g, float b) {
+    glColor3f(r, g, b);
+    glBegin(GL_TRIANGLE_FAN);
+    // The center point of the circle
+    glVertex3f(0.0f, 0.0f, 0.0f);
+
+    for (int i = 0; i <= segments; i++) {
+        float angle = i * 2.0f * 3.14159f / segments;
+        float x = cos(angle) * radius;
+        float y = sin(angle) * radius;
+        glVertex3f(x, y, 0.0f);
+    }
+    glEnd();
+
+    //Add a small white "glow" dot in the center
+    glColor3f(1.0f, 0.9f, 0.9f);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex3f(0.0f, 0.0f, 0.01f);
+    for (int i = 0; i <= segments; i++) {
+        float angle = i * 2.0f * 3.14159f / segments;
+        glVertex3f(cos(angle) * radius * 0.3f, sin(angle) * radius * 0.3f, 0.01f);
+    }
+    glEnd();
+}
 
 void Truck::draw(float r, float g, float b) {
     glPushMatrix();
@@ -105,6 +141,22 @@ void Truck::draw(float r, float g, float b) {
     float containerLengthX = length * 0.7f;
     Cuboid container(Point(-length * 0.15f, 0, 0), height, width, containerLengthX);
     container.draw();
+    Window leftFramec(Point(-length * 0.15f, 0, width/2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+    leftFramec.draw(0.2, 0.2, 0.2);
+    Window rightFramec(Point(-length * 0.15f, 0, -width / 2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+    rightFramec.draw(0.2, 0.2, 0.2);
+    glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        Window topFramec(Point(-length/6.8, -width/2, -height), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
+        topFramec.draw(0.2, 0.2, 0.2);
+    glPopMatrix();
+
+
+    glColor3f(0.2, 0.2, 0.2);
+    Cuboid floorb(Point(0, -1, 0), 1, width, length+1);
+    floorb.draw();
+    Cuboid ending(Point(-length/1.9, -1, 0), height/6, width, length/20);
+    ending.draw();
 
     // --- 2. CABIN SETUP ---
     float cabL = length * 0.3f;
@@ -146,10 +198,17 @@ void Truck::draw(float r, float g, float b) {
         glColor3f(0.2f, 0.2f, 0.2f);
         Cuboid tablwo(Point(cabL / 2.3, 0, 0), cabH / 3, cabW, thickness * 5);
         tablwo.draw();
+        glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        Window topFrame(Point(0, -cabW / 2-0.75, -cabH-0.5), 1, cabL+1, cabW+1.5, 0.75, 0.75, 0.75, 0.75, false);
+        topFrame.draw(0.2, 0.2, 0.2);
+        glPopMatrix();
 
         glPushMatrix();
         Window leftWall(Point(0, 0, -cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
         leftWall.draw(r, g, b);
+        Window leftFrame(Point(0, 0, -cabW / 2-0.5), thickness, cabL+1, cabH, 0, cabH/18, cabL/18, cabL/18, false);
+        leftFrame.draw(0.2, 0.2, 0.2);
         // driver door
         glPushMatrix();
         float doorLen = cabL - cabL / 3;
@@ -158,7 +217,14 @@ void Truck::draw(float r, float g, float b) {
         glRotatef(-driverDoor.OpenRate, 0, 1, 0);
 
         glTranslatef(-doorLen / 2, 0, 0);
-
+        glPushMatrix();
+        glTranslatef(doorLen / 3.5, cabH / 4, -doorLen / 5);
+        glRotatef(50+90, 0, 1, 0);
+        Window leftMirror(Point(0,0,0), thickness, doorLen / 5, cabH / 8, 0.1, 0.1, 0.5, 0.1, true);
+        leftMirror.draw(0.2, 0.2, 0.2);
+        Window leftMirrorb(Point(0, 0, 0.5), thickness, doorLen / 5, cabH / 8, 2, 2, 2, 2, true);
+        leftMirrorb.draw(0.2, 0.2, 0.2);
+        glPopMatrix();
         Window driverDoorWindow(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2,cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
         driverDoorWindow.draw(r-0.1,g-0.1,b-0.1);
         glPopMatrix();
@@ -166,35 +232,58 @@ void Truck::draw(float r, float g, float b) {
 
 
         glPushMatrix();
-        Window righttWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
-        righttWall.draw(r,g,b);
-        Window door2(Point(0, cabH / 3, cabW / 2), thickness, cabL - cabL / 3, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
-        door2.draw(r - 0.1, g - 0.1, b - 0.1);
+        Window rightWall(Point(0, 0, cabW / 2), thickness, cabL, cabH, cabH / 3, cabH / 6, cabL / 6, cabL / 6, false);
+        rightWall.draw(r,g,b);
+        Window rightFrame(Point(0, 0, cabW / 2 + 0.5), thickness, cabL+1, cabH, 0, cabH / 18, cabL / 18, cabL / 18, false);
+        rightFrame.draw(0.2, 0.2, 0.2);
+
+        // --- PASSENGER DOOR (RIGHT SIDE) ---
+        glPushMatrix();
+        glTranslatef(doorLen / 2, cabH / 3, cabW / 2);
+        glRotatef(passengerDoor.OpenRate, 0, 1, 0);
+        glTranslatef(-doorLen / 2, 0, 0);
+        glPushMatrix();
+        glTranslatef(doorLen / 4, cabH / 4, doorLen / 5);
+        glRotatef(50, 0, 1, 0);
+        Window rightMirror(Point(0, 0, 0), thickness, doorLen / 5, cabH / 8, 0.1, 0.1, 0.5, 0.1, true);
+        rightMirror.draw(0.2, 0.2, 0.2);
+        Window rightMirrorb(Point(0, 0, 0.5), thickness, doorLen / 5, cabH / 8, 2, 2, 2, 2, true);
+        rightMirrorb.draw(0.2, 0.2, 0.2);
+        glPopMatrix();
+
+        Window passengerDoorWindow(Point(0, 0, 0), thickness, doorLen, cabH - cabH / 2, cabH / 6, cabH / 20, cabL / 6, cabL / 20, true);
+        passengerDoorWindow.draw(r - 0.1, g - 0.1, b - 0.1);
+        glPopMatrix();
+
         glPopMatrix();
 
         glPushMatrix();
         glRotatef(90, 0, 90, 0);
         Window frontWall(Point(0, 0, cabL / 2), thickness, cabW, cabH, cabH/3, cabH / 6, cabL / 6, cabL / 6, true);
         frontWall.draw(r,g,b);
+        Cuboid nmra(Point(0, 1, cabL / 2), height / 8, 1, width * 0.5);
+        nmra.draw();
+        Window frontFrame(Point(0, 0, cabL/2+ 0.5), thickness, cabL+2, cabH, 0, cabH / 20, cabL / 20, cabL / 20, false);
+        frontFrame.draw(0.2, 0.2, 0.2);
         glPopMatrix();
 
     glPopMatrix();
 
     // --- 3. BACK DOORS ---
-    glColor3f(0.1f, 0.1f, 0.1f);
-    float doorWidth = width * 0.5f-0.1;
+    glColor3f(0.2f, 0.2f, 0.2f);
+    float doorWidth = width * 0.5f-0.6;
 
     glPushMatrix(); // Left
     glTranslatef(-length * 0.5f, 0, -width * 0.5f);
     glRotatef(-backDoors.OpenRate, 0, 1, 0);
-    Cuboid leftDoor(Point(0, 0, doorWidth / 2.0f), height, doorWidth, 0.1f);
+    Cuboid leftDoor(Point(0, height / 7, doorWidth / 2.0f+0.4), height-height/5, doorWidth, 0.1f);
     leftDoor.draw();
     glPopMatrix();
 
     glPushMatrix(); // Right
         glTranslatef(-length * 0.5f, 0, width * 0.5f);
         glRotatef(backDoors.OpenRate, 0, 1, 0);
-        Cuboid rightDoor(Point(0, 0, -doorWidth / 2.0f), height, doorWidth, 0.1f);
+        Cuboid rightDoor(Point(0, height / 7, -doorWidth / 2.0f-0.4), height - height / 5, doorWidth, 0.1f);
         rightDoor.draw();
     glPopMatrix();
 
@@ -204,6 +293,43 @@ void Truck::draw(float r, float g, float b) {
     for (int i = 0; i < 6; i++) {
         wheelUnit.draw(wheelPositions[i], (i < 2));
     }
+
+    // --- REAR CIRCLE LIGHTS --- back
+    glPushMatrix();
+    glTranslatef(-length / 1.88f, -0.5f, 0.0f);
+    glRotatef(90, 0, 1, 0);
+
+    // Left Red Light
+    glPushMatrix();
+    glTranslatef(-width / 3.0f, 1.5, -1.5);
+    drawLightCircle(1.2f, 20, 1.0f, 0.0f, 0.0f);
+    glPopMatrix();
+
+    // Right Red Light
+    glPushMatrix();
+    glTranslatef(width / 3.0f, 1.5, -1.5f);
+    drawLightCircle(1.2f, 20, 1.0f, 0.0f, 0.0f);
+    glPopMatrix();
+    glPopMatrix();
+
+
+    // --- REAR CIRCLE LIGHTS --- front
+    glPushMatrix();
+    glTranslatef(-length / 1.88f, -0.5f, 0.0f);
+    glRotatef(90, 0, 1, 0);
+
+    // Left Red Light
+    glPushMatrix();
+    glTranslatef(-width / 3.0f, 3, length+3);
+    drawLightCircle(1.0f, 20, 1.0f, 0.0f, 0.0f);
+    glPopMatrix();
+
+    // Right Red Light
+    glPushMatrix();
+    glTranslatef(width / 3.0f, 3, length + 3);
+    drawLightCircle(1, 20, 1.0f, 0.0f, 0.0f);
+    glPopMatrix();
+    glPopMatrix();
 
     glPopMatrix();
 

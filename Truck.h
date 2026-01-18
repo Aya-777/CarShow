@@ -17,6 +17,7 @@ public:
     Point position;
     Door backDoors;
 	Door driverDoor;
+    Door passengerDoor;
     float wheelSpin;
     float steerAngle;
     bool isMovable;
@@ -29,6 +30,7 @@ public:
     void update();
     void draw(float r = 0.9f, float g = 0.9f, float b = 0.85f);
     void load();
+
 };
 
 #endif

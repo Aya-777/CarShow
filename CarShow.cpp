@@ -48,8 +48,7 @@ const float g_fNear = 1;
 const float g_fFar = 1000000000.0f;
 color3f g_background;
 GLuint displayListID;
-//Cuboid buildingStructure(Point(0, 0, 0), 100, 630, 300);
-Truck t(Point(-500, 3.5, 0));
+Truck t(Point(-300, 3.5, 450));
 bool isInsideView = false;
 Camera camera;
 bool g_mouseCaptured = false;
@@ -82,13 +81,15 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(g_iHeight, g_iWidth);
 	glutCreateWindow("weee");
-	glutFullScreen();
+	//glutFullScreen();
 	init();
-	glutSpecialUpFunc(specialKeysUp);
-	glutSpecialFunc(specialKeysCallback);
-	glutKeyboardFunc(keyboardCallback);
-	glutPassiveMotionFunc(mouseMove);
-	glutMouseFunc(mouseButton);
+
+	Controller::init(camera, t, isInsideView);
+	glutKeyboardFunc(Controller::keyboard);
+	glutSpecialFunc(Controller::specialKeys);
+	glutPassiveMotionFunc(Controller::mouseMove);
+	glutMouseFunc(Controller::mouseButton);
+
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
@@ -119,6 +120,9 @@ void display()
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	t.draw(0.8, 0.8, 0.7);
+	float x, y, z;
+	camera.GetPos(x, y, z);
+	cout << "x: " << x << " z: " << z << endl;
 	glPopMatrix();
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
@@ -140,7 +144,7 @@ void idle()
 }
 
 void timer(int value)
-{
+{	
 	glutTimerFunc(1000 / 30, timer, 0);	//call the timer again each 1 millisecond
 
 }
