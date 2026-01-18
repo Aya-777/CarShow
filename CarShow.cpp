@@ -9,6 +9,8 @@
 #include "Window.h"
 #include "Building.h"
 #include "FamilyCar.h"
+#include "Road.h"  //salma
+#include "ParkingRoad.h" //salma
 
 using namespace std;
 vector<Door*> globalDoors;
@@ -54,6 +56,10 @@ bool g_mouseCaptured = false;
 int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
+Building buildingStructure;
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
+Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
+ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
 
 
 void drawGround()
@@ -114,6 +120,11 @@ void display()
 	glColor3f(0.8, 0.1, 0.1);
 	t.draw(0.8, 0.8, 0.7);
 	glPopMatrix();
+	buildingStructure.draw();
+	mainRoad.draw(); //salma
+	sideRoad.draw(); //salma
+	parking.draw(); //salma
+
 	glCallList(displayListID);
 
 	glutSwapBuffers();

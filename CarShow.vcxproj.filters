@@ -15,18 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CarShow.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Point.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Cuboid.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Texture.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Sofa.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Camera.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Cylinder.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Lighting.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Pyramid.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="SkyBox.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Building.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="testcar.cpp"><Filter>Source Files</Filter></ClCompile>
+
     <ClCompile Include="bugatti.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="fsportcar.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="mercedes.cpp"><Filter>Source Files</Filter></ClCompile>
@@ -35,6 +24,48 @@
     <ClCompile Include="Truck.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="Glass.cpp"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="Window.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="CarShow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuboid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sofa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pyramid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testcar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Road.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParkingRoad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h"><Filter>Header Files</Filter></ClInclude>
