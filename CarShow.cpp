@@ -65,6 +65,7 @@ static void mouseButton(int button, int state, int x, int y);
 Point center = Point(0, -3, 0);
 Texture texture;
 Texture up, left, Right, down, front, back;
+Texture wallTexture;
 Texture texSidewalk;
 Texture texSidewalk2;
 Texture texPlaza;
@@ -285,6 +286,15 @@ void init()
 
 
 	//load textures here
+	wallTexture.loadTexture("textures/outside.jpg");
+	buildingStructure.wallTex = wallTexture.textureID;
+	wallTexture.loadTexture("textures/insideWall.jpg");
+	buildingStructure.wallTex2 = wallTexture.textureID;
+
+	//display list
+	displayListID = glGenLists(1);
+	glNewList(displayListID, GL_COMPILE);
+		
 	texFront.loadTexture("Textures/Sky_Clouds.jpg");
 	texBack.loadTexture("Textures/Sky_Clouds.jpg");
 	texLeft.loadTexture("Textures/Sky_Clouds.jpg");
@@ -389,6 +399,8 @@ static void keyboardCallback(unsigned char key, int x, int y)
 	case 's':
 		camera.Fly(-2.0);
 		break; // Move Down
+	case 'e' :
+		buildingStructure.toggleDoor();
 	case 'o': // 'O' for Open
 	case 'O':
 		t.backDoors.open = !t.backDoors.open;
@@ -435,6 +447,7 @@ static void keyboardCallback(unsigned char key, int x, int y)
 		camera.openNearestDoor();
 		break;
 	}
+	glutPostRedisplay();
 }
 void specialKeysUp(int key, int x, int y)
 {

@@ -150,11 +150,11 @@
     <ClCompile Include="Road.cpp" />
     <ClCompile Include="Bureau.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Glass.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="FamilyCar.cpp" />
-    <ClCompile Include="Glass.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="MountainCar.cpp" />
     <ClCompile Include="MountainHall.cpp" />
@@ -219,6 +219,21 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="freeglut.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\building.jpg" />
+    <Image Include="Textures\grass10.jpg" />
+    <Image Include="Textures\grass2.jpg" />
+    <Image Include="Textures\grass5.jpg" />
+    <Image Include="Textures\insideWall.jpg" />
+    <Image Include="Textures\outside.jpg" />
+    <Image Include="Textures\sidewalk.jpg" />
+    <Image Include="Textures\sidewalk22.jpg" />
+    <Image Include="Textures\sky.jpg" />
+    <Image Include="Textures\Sky_Clouds.jpg" />
+    <Image Include="Textures\tile2.jpg" />
+    <Image Include="Textures\tile3.jpg" />
+    <Image Include="textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
