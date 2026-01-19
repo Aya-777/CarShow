@@ -2,12 +2,11 @@
 #include "Cuboid.h"
 #include "Point.h"
 #include "Door.h"
+#include "Window.h"
 #include <GL/glut.h>
 
 void Building::draw() {
 
-	//glDisable(GL_LIGHTING);
-	glPushMatrix();
 	Cuboid wall1(Point(-215, -2, -279), 150, 255, 15); // front wide
 	Cuboid wall12(Point(-215, -2, 278), 150, 455, 15); // front door side left
 	Cuboid wall13(Point(-215, 89, -52), 60, 205, 15); // front door side right
@@ -25,6 +24,7 @@ void Building::draw() {
 	float repeatX2 = 900 / 150.0;
 
 	// outer walls
+	glPushMatrix();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	wall1.drawWithTexture(wallTex,repeatX1,repeatY);
 	wall12.drawWithTexture(wallTex, repeatX1, repeatY);
@@ -58,21 +58,25 @@ void Building::draw() {
 
 	// Door
 	glPushMatrix();
-	glColor3f(1.0, 0.0, 0.0);
-	glTranslatef(-224.0f, -2.0f, 51.0);
-	door.openDoor();
-	door.drawDoor();
+	glRotatef(90, 0, 1, 0);
+	door.openWindow();
+	door.drawMovingWindow(0.7, 0.7, 0.7);
 	glPopMatrix();
 }
 
 void Building::toggleDoor()
 {
-	door.open = !door.open;
+	door.isOpen = !door.isOpen;
 }
 
-Building::Building(){}
+Building::Building()
+	: door(Point(50, -2, -220), 10, 202, 92, 0, 0, 0, 0, 1)
+{
 
-Building::Building(double x2, double y2, double z2, double w, double h, double l) {
+}
+
+Building::Building(double x2, double y2, double z2, double w, double h, double l,Window door)
+: door(door){
 	width = w;
 	height = h;
 	length = l;

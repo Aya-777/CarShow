@@ -150,6 +150,7 @@
     <ClCompile Include="Sofa.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Wheel.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Sofa.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Wheel.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

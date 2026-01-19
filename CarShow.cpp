@@ -140,7 +140,6 @@ void init()
 	//display list
 	displayListID = glGenLists(1);
 	glNewList(displayListID, GL_COMPILE);
-		//glColor3f(0.2f, 0.3f, 0.8f);
 		
 	glEndList();
 
