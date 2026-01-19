@@ -36,20 +36,9 @@ bool SteeringWheel::Load(const std::string& objPath, float scale)
     m_displayList = glGenLists(1);
     glNewList(m_displayList, GL_COMPILE);
 
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
+    glDisable(GL_LIGHTING);
 
-    // Set default material for the steering wheel (dark black)
-    float diffuse[4] = { 0.05f, 0.05f, 0.05f, 1.0f }; // dark black
-    float ambient[4] = { 0.02f, 0.02f, 0.02f, 1.0f };
-    float specular[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
-    float shininess = 15.0f;
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+    glColor3f(0.1f, 0.1f, 0.1f);
 
     glBegin(GL_TRIANGLES);
 
@@ -103,11 +92,14 @@ bool SteeringWheel::Load(const std::string& objPath, float scale)
     }
 
     glEnd();
+
     glEndList();
 
     file.close();
+
     return true;
 }
+
 
 void SteeringWheel::Draw()
 {
@@ -123,6 +115,7 @@ void SteeringWheel::Draw()
 
     glPopMatrix();
 }
+
 
 void SteeringWheel::SetPosition(float x, float y, float z)
 {
