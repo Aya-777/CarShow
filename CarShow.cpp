@@ -134,6 +134,8 @@ void init()
 	//load textures here
 	wallTexture.loadTexture("textures/outside.jpg");
 	buildingStructure.wallTex = wallTexture.textureID;
+	wallTexture.loadTexture("textures/insideWall.jpg");
+	buildingStructure.wallTex2 = wallTexture.textureID;
 
 	//display list
 	displayListID = glGenLists(1);

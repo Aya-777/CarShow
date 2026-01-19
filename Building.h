@@ -13,7 +13,7 @@ public:
 	void draw();
 	void toggleDoor();
 	double width, height, length, x, y, z;
-	GLuint wallTex;
+	GLuint wallTex, wallTex2;
 	Door door;
 private: 
 	/*Cuboid building;
