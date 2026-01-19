@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\freeglut.3.0.0.v140.1.0.2\build\freeglut.3.0.0.v140.props" Condition="Exists('packages\freeglut.3.0.0.v140.1.0.2\build\freeglut.3.0.0.v140.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -74,14 +75,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLUT_DISABLE_ATEXIT_HACK;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -91,14 +94,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLUT_DISABLE_ATEXIT_HACK;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -180,14 +185,17 @@
     <ClInclude Include="FamilyCar.h" />
     <ClInclude Include="Glass.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="ModelTree.h" />
     <ClInclude Include="OutSide.h" />
     <ClInclude Include="ParkingRoad.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Road.h" />
+    <ClInclude Include="Sidewalk.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sofa.h" />
     <ClInclude Include="SteeringWheel.h" />
+    <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Truck.h" />
     <ClInclude Include="Wheel.h" />
@@ -198,6 +206,7 @@
     <None Include=".gitignore" />
     <None Include="Models\ArmChair\Armchair car N220417.3DS" />
     <None Include="Models\ArmChair\Armchair car N220417.gsm" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Models\ArmChair\archibase.net.txt" />
@@ -206,7 +215,20 @@
     <Image Include="Models\ArmChair\BLeather.bmp" />
     <Image Include="Models\ArmChair\d 2222.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="freeglut.lib" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets" Condition="Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" />
+    <Import Project="packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets" Condition="Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
+    <Error Condition="!Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />
+    <Error Condition="!Exists('packages\freeglut.3.0.0.v140.1.0.2\build\freeglut.3.0.0.v140.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\freeglut.3.0.0.v140.1.0.2\build\freeglut.3.0.0.v140.props'))" />
+  </Target>
 </Project>
