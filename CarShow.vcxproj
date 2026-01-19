@@ -138,6 +138,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Glass.cpp" />
     <ClCompile Include="testcar.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Glass.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Pyramid.h" />
