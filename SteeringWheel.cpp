@@ -34,11 +34,17 @@ bool SteeringWheel::Load(const std::string& objPath, float scale)
     std::vector<Vec2> texcoords;
 
     m_displayList = glGenLists(1);
+    if (m_displayList == 0)
+    {
+        std::cout << "Failed to create display list for steering wheel\n";
+        return false;  // Fail if the display list creation fails
+    }
+
     glNewList(m_displayList, GL_COMPILE);
 
-    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING); // Disable lighting for the steering wheel
 
-    glColor3f(0.1f, 0.1f, 0.1f);
+    glColor3f(0.1f, 0.1f, 0.1f);  // Set the color for the steering wheel
 
     glBegin(GL_TRIANGLES);
 
@@ -101,6 +107,7 @@ bool SteeringWheel::Load(const std::string& objPath, float scale)
 }
 
 
+
 void SteeringWheel::Draw()
 {
     if (!m_displayList) return;
@@ -132,4 +139,19 @@ void SteeringWheel::SetRotationY(float angle)
 void SteeringWheel::SetRotationZ(float angle)
 {
     m_rotZ = angle;
+}
+
+SteeringWheel::Vec3 SteeringWheel::GetPosition() const
+{
+    return Vec3{ m_x, m_y, m_z };
+}
+
+float SteeringWheel::GetRotationY() const
+{
+    return m_rotY;
+}
+
+float SteeringWheel::GetRotationZ() const
+{
+    return m_rotZ;
 }

@@ -212,7 +212,7 @@ void display()
 	t.draw(0.8, 0.8, 0.7);
 	float x, y, z;
 	camera.GetPos(x, y, z);
-	cout << "x: " << x << " z: " << z << endl;
+	cout << "CameraPos: " << x << " " << y << " "<< z << endl;
 	glPopMatrix();
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
