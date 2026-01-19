@@ -1,6 +1,8 @@
 #include "SkyBox.h"
 void SkyBox::Draw_Skybox(float x, float y, float z, float width, float height, float length)
 {
+	glDisable(GL_LIGHTING);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	// Center the Skybox around the given x,y,z position
 	x = x - width / 2;
 	y = y - height / 2;
@@ -12,10 +14,10 @@ void SkyBox::Draw_Skybox(float x, float y, float z, float width, float height, f
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, 0x812F);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, 0x812F);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y , z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x , y + height, z + length);
 	glEnd();
 
 	// Draw Back side

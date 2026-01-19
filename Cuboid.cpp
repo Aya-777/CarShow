@@ -1,4 +1,4 @@
-#include "Cuboid.h"
+﻿#include "Cuboid.h"
 #include <GL/glut.h>
 
 Cuboid::Cuboid(Point center, double height, double length, double width)
@@ -255,5 +255,56 @@ void Cuboid::drawWithTextureOnOneFace(GLuint textureID, const std::string& face,
     glVertex3d(center.x - width / 2, center.y, center.z - length / 2);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+}
+void Cuboid::drawWithStretchTexture(GLuint textureID) {
+    // 1. تفعيل الإكساء وضبط الإعدادات لعدم التكرار (Stretch)
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // ضبط التكستشر ليتمدد بدلاً من أن يتكرر عند الحواف
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+    // 2. رسم الأوجه مع تثبيت إحداثيات التكستشر بين (0 و 1)
+    glBegin(GL_QUADS);
+
+    // الوجه الأمامي (Front)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x - width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x + width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x + width / 2, center.y + height, center.z + length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x - width / 2, center.y + height, center.z + length / 2);
+
+    // الوجه الخلفي (Back)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x - width / 2, center.y, center.z - length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x + width / 2, center.y, center.z - length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x + width / 2, center.y + height, center.z - length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x - width / 2, center.y + height, center.z - length / 2);
+
+    // الوجه الأيسر (Left)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x - width / 2, center.y, center.z - length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x - width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x - width / 2, center.y + height, center.z + length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x - width / 2, center.y + height, center.z - length / 2);
+
+    // الوجه الأيمن (Right)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x + width / 2, center.y, center.z - length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x + width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x + width / 2, center.y + height, center.z + length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x + width / 2, center.y + height, center.z - length / 2);
+
+    // الوجه العلوي (Top)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x - width / 2, center.y + height, center.z + length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x + width / 2, center.y + height, center.z + length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x + width / 2, center.y + height, center.z - length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x - width / 2, center.y + height, center.z - length / 2);
+
+    // الوجه السفلي (Bottom)
+    glTexCoord2f(0.0f, 0.0f); glVertex3d(center.x - width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 0.0f); glVertex3d(center.x + width / 2, center.y, center.z + length / 2);
+    glTexCoord2f(1.0f, 1.0f); glVertex3d(center.x + width / 2, center.y, center.z - length / 2);
+    glTexCoord2f(0.0f, 1.0f); glVertex3d(center.x - width / 2, center.y, center.z - length / 2);
+
+    glEnd();
     glDisable(GL_TEXTURE_2D);
 }
