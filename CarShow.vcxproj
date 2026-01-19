@@ -143,7 +143,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="frontOfBuilding.cpp" />
-    <ClCompile Include="drawSportCar.cpp" />
     <ClCompile Include="fsportcar.cpp" />
     <ClCompile Include="mercedes.cpp" />
     <ClCompile Include="OutSide.cpp" />

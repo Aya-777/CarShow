@@ -87,6 +87,7 @@ int g_lastMouseX = 0;
 int g_lastMouseY = 0;
 float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
+MountainHall mountainHall;
 //Sky:
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
 Texture texRoad;
