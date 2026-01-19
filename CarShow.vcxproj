@@ -153,6 +153,8 @@
     <ClCompile Include="Road.cpp" />
     <ClCompile Include="Bureau.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Glass.cpp" />
+    <ClCompile Include="testcar.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
@@ -218,6 +220,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="freeglut.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

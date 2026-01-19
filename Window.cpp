@@ -50,3 +50,57 @@ void Window::draw(float r, float g, float b) {
 
     glPopMatrix();
 }
+void Window::drawMovingWindow(float r, float g, float b)
+{
+    glPushMatrix();
+
+    // 1. Move to window position
+    glTranslatef(pos.x, pos.y, pos.z);
+
+    // 2. Move pivot to left edge (hinge)
+    glTranslatef(-w / 2.0f, 0.0f, 0.0f);
+
+    // 3. Rotate around Y axis
+    glRotatef(-90.0f * OpenRate, 0, 1, 0);
+
+    // 4. Move back from pivot
+    glTranslatef(w / 2.0f, 0.0f, 0.0f);
+
+    // Draw everything relative to (0,0,0)
+    glColor3f(r, g, b);
+
+    Cuboid bottom(Point(0, 0, 0), gapBottom, l, w);
+    bottom.draw();
+
+    Cuboid top(Point(0, h - gapTop, 0), gapTop, l, w);
+    top.draw();
+
+    Cuboid left(Point(-w / 2 + gapLeft / 2, gapBottom, 0),
+        h - gapBottom - gapTop, l, gapLeft);
+    left.draw();
+
+    Cuboid right(Point(w / 2 - gapRight / 2, gapBottom, 0),
+        h - gapBottom - gapTop, l, gapRight);
+    right.draw();
+
+    if (hasGlass) {
+        float innerH = h - gapBottom - gapTop;
+        float innerW = w - gapLeft - gapRight;
+
+        Glass glassPane(
+            Point((gapLeft - gapRight) / 2.0f, gapBottom, 0),
+            innerH, l * 0.1f, innerW
+        );
+        glassPane.draw(glassR, glassG, glassB, 0.4f);
+    }
+
+    glPopMatrix();
+}
+
+void Window::openWindow()
+{
+    if (this->isOpen && this->OpenRate < 1.0)
+        this->OpenRate += 0.01;  // opening
+    else if (!this->isOpen && this->OpenRate > 0.0)
+        this->OpenRate -= 0.01;  // closing
+}
