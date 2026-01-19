@@ -145,7 +145,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="frontOfBuilding.cpp" />
-    <ClCompile Include="drawSportCar.cpp" />
     <ClCompile Include="fsportcar.cpp" />
     <ClCompile Include="mercedes.cpp" />
     <ClCompile Include="OutSide.cpp" />
@@ -220,6 +219,18 @@
     <Library Include="freeglut.lib" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\building.jpg" />
+    <Image Include="Textures\grass10.jpg" />
+    <Image Include="Textures\grass2.jpg" />
+    <Image Include="Textures\grass5.jpg" />
+    <Image Include="Textures\insideWall.jpg" />
+    <Image Include="Textures\outside.jpg" />
+    <Image Include="Textures\sidewalk.jpg" />
+    <Image Include="Textures\sidewalk22.jpg" />
+    <Image Include="Textures\sky.jpg" />
+    <Image Include="Textures\Sky_Clouds.jpg" />
+    <Image Include="Textures\tile2.jpg" />
+    <Image Include="Textures\tile3.jpg" />
     <Image Include="textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
