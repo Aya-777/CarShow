@@ -154,12 +154,10 @@
     <ClCompile Include="Bureau.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Glass.cpp" />
-    <ClCompile Include="testcar.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="FamilyCar.cpp" />
-    <ClCompile Include="Glass.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
