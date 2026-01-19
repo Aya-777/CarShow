@@ -137,6 +137,14 @@
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="frontOfBuilding.cpp" />
+    <ClCompile Include="fsportcar.cpp" />
+    <ClCompile Include="mercedes.cpp" />
+    <ClCompile Include="OutSide.cpp" />
+    <ClCompile Include="ParkingRoad.cpp" />
+    <ClCompile Include="Road.cpp" />
+    <ClCompile Include="Bureau.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Glass.cpp" />
     <ClCompile Include="testcar.cpp" />
