@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="testcar.cpp" />
     <ClCompile Include="CarShow.cpp" />
     <ClCompile Include="Cuboid.cpp" />

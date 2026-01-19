@@ -132,7 +132,7 @@ void init()
 
 	glEnable(GL_DEPTH_TEST);
 	//load textures here
-	wallTexture.loadTexture("textures/w2.jpg");
+	wallTexture.loadTexture("textures/outside.jpg");
 	buildingStructure.wallTex = wallTexture.textureID;
 
 	//display list
@@ -192,8 +192,11 @@ static void keyboardCallback(unsigned char key, int x, int y)
 	case 's':
 		camera.Fly(-2.0);
 		break; // Move Down
-		glutPostRedisplay();
+	case 'e' :
+		buildingStructure.toggleDoor();
+		break;
 	}
+	glutPostRedisplay();
 }
 void specialKeysUp(int key, int x, int y)
 {

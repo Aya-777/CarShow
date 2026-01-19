@@ -51,6 +51,12 @@
     <ClCompile Include="testcar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Wheel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">
@@ -86,9 +92,17 @@
     <ClInclude Include="Building.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Wheel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\wall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

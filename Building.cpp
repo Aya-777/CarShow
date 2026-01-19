@@ -1,55 +1,73 @@
 #include "Building.h"
 #include "Cuboid.h"
 #include "Point.h"
+#include "Door.h"
 #include <GL/glut.h>
 
 void Building::draw() {
 
 	//glDisable(GL_LIGHTING);
 	glPushMatrix();
-	Cuboid wall1(Point(-215, 0, 50), 150, 914, 15); // front wide
-	Cuboid wall2(Point(200, 0, 50), 150, 914, 15); // back wide
-	Cuboid wall3(Point(-500, 0, 0), 150, 415 , 15); // right short
-	Cuboid wall4(Point(400, 0, 0), 150, 415, 15); // left 
+	Cuboid wall1(Point(-215, -2, -279), 150, 255, 15); // front wide
+	Cuboid wall12(Point(-215, -2, 278), 150, 455, 15); // front door side left)
+	Cuboid wall13(Point(-215, 89, -52), 60, 205, 15); // front door side right
+	Cuboid wall2(Point(200, -2, 50), 150, 914, 15); // back wide
+	Cuboid wall3(Point(-500, -2, 0), 150, 415 , 15); // right short
+	Cuboid wall4(Point(400, -2, 0), 150, 415, 15); // left 
+	Cuboid roof(Point(50, -200, -152), 422, 10, 915); // roof
+	Cuboid insideWall1(Point(87, -2, -50), 150, 10, 250); // insideWall1
+	Cuboid insideWall2(Point(87, -2, 140), 150, 10, 200); // insideWall2
+	Cuboid insideWall3(Point(87, -2, 320), 150, 10, 200); // insideWall3
+	Cuboid administrationBuilding(Point(-140, -2, 548), 100, 150, 150); // administration building
 	
 	float repeatX1 = 400 / 150.0;
-	float repeatY1 = 150 / 150;
-
+	float repeatY = 150 / 150;
 	float repeatX2 = 900 / 150.0;
-	float repeatY2 = 150 / 150;
 
+	// outer walls
 	glColor3f(1.0f, 1.0f, 1.0f);
-	wall1.drawWithTexture(wallTex,repeatX1,repeatY1);
-	wall2.drawWithTexture(wallTex, repeatX1, repeatY1);
+	wall1.drawWithTexture(wallTex,repeatX1,repeatY);
+	wall12.drawWithTexture(wallTex, repeatX1, repeatY);
+	wall13.drawWithTexture(wallTex, repeatX1, repeatY);
+	wall2.drawWithTexture(wallTex, repeatX1, repeatY);
 	glRotatef(90, 0, 1, 0);
-	wall3.drawWithTexture(wallTex, repeatX2, repeatY2);
-	wall4.drawWithTexture(wallTex, repeatX2, repeatY2);
+	wall3.drawWithTexture(wallTex, repeatX2, repeatY);
+	wall4.drawWithTexture(wallTex, repeatX2, repeatY);
 	glPopMatrix();
 
 	// roof
 	glPushMatrix();
-	Cuboid roof(Point(50, -200, -155), 422, 10, 915);
 	glRotatef(90, 1, 0, 0);
 	glRotatef(90, 0, 0, 1);
-	roof.drawWithTexture(wallTex,repeatX1,repeatY1);
+	roof.drawWithTexture(wallTex,repeatX1,repeatY);
 	glPopMatrix();
 
+	// inside walls
 	glPushMatrix();
 	glColor3f(0.3, 0.3, 0.3);
-	Cuboid insideWall1(Point(87, 0, -50), 150, 10, 250);
-	Cuboid insideWall2(Point(87, 0, 140), 150, 10, 200);
-	Cuboid insideWall3(Point(87, 0, 320), 150, 10, 200);
 	insideWall1.draw();	
 	insideWall2.draw();
 	insideWall3.draw();
 	glPopMatrix();
 
+	// administration building
+	glPushMatrix();
+	glColor3f(0.7, 0.7, 0.7);
+	administrationBuilding.drawWithTexture(wallTex, repeatX1, repeatY);
+	glPopMatrix();
 
-	//building.draw();
+	// Door
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 0.0);
+	glTranslatef(-224.0f, -2.0f, 51.0);
+	door.openDoor();
+	door.drawDoor();
+	glPopMatrix();
+}
 
-	//Cuboid administrationBuilding(Point(-75,0,365), 100, 80, 150);
-	//administrationBuilding.draw();
-	//glEnable(GL_LIGHTING);
+void Building::toggleDoor()
+{
+	door.open = !door.open;
 }
 
 Building::Building(){}
