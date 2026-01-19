@@ -5,6 +5,7 @@
 
 
 void Building::draw() {
+	glPushMatrix();
 	Cuboid building(Point(0, 0, 0), 100, 650, 300);
 	glColor3f(0.8, 0.8, 0.8);
 	Cuboid wall1(Point(45, 0, -120), 100, 10, 210);
@@ -18,9 +19,7 @@ void Building::draw() {
 
 	Cuboid administrationBuilding(Point(-75,0,365), 100, 80, 150);
 	administrationBuilding.draw();
-
-	
-
+	glPopMatrix();
 }
 
 Building::Building(){}
