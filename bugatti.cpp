@@ -37,35 +37,35 @@ struct Material
 
 // ------------------ TEXTURE LOADING ------------------
 
-static GLuint LoadTextureFromFile(const std::string& filename, bool& ok)
-{
-    ok = false;
-
-    int w, h, c;
-    unsigned char* data = stbi_load(filename.c_str(), &w, &h, &c, 0);
-    if (!data)
-    {
-        std::cout << "Texture load failed: " << filename << std::endl;
-        return 0;
-    }
-
-    GLenum format = (c == 4) ? GL_RGBA : GL_RGB;
-
-    GLuint tex;
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
-
-    stbi_image_free(data);
-    ok = true;
-    return tex;
-}
+//static GLuint LoadTextureFromFile(const std::string& filename, bool& ok)
+//{
+//    ok = false;
+//
+//    int w, h, c;
+//    unsigned char* data = stbi_load(filename.c_str(), &w, &h, &c, 0);
+//    if (!data)
+//    {
+//        std::cout << "Texture load failed: " << filename << std::endl;
+//        return 0;
+//    }
+//
+//    GLenum format = (c == 4) ? GL_RGBA : GL_RGB;
+//
+//    GLuint tex;
+//    glGenTextures(1, &tex);
+//    glBindTexture(GL_TEXTURE_2D, tex);
+//
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//
+//    glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
+//
+//    stbi_image_free(data);
+//    ok = true;
+//    return tex;
+//}
 
 // ------------------ MTL PARSER ------------------
 
@@ -231,8 +231,8 @@ GLuint LoadOBJToDisplayList(const std::string& objPath, float scale)
         if (!m.second.map_Kd.empty())
         {
             bool ok;
-            m.second.texID = LoadTextureFromFile(baseDir + m.second.map_Kd, ok);
-            m.second.hasTexture = ok;
+            //m.second.texID = LoadTextureFromFile(baseDir + m.second.map_Kd, ok);
+            //m.second.hasTexture = ok;
         }
     }
 

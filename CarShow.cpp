@@ -1,7 +1,5 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#define STB_IMAGE_IMPLEMENTATION
 #include <Windows.h>
-#include <GL/stb_image.h>
 #include <GL/freeglut.h>
 #include<vector>
 #include "Point.h"
@@ -213,7 +211,7 @@ void display()
 	t.draw(0.8, 0.8, 0.7);
 	float x, y, z;
 	camera.GetPos(x, y, z);
-	cout << "CameraPos: " << x << " " << y << " "<< z << endl;
+	//cout << "CameraPos: " << x << " " << y << " "<< z << endl;
 	glPopMatrix();
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
@@ -240,7 +238,7 @@ void display()
 void idle()
 {
 	t.update();
-	//t.load();
+	t.load();
 	updateScene();
 	display();
 }
@@ -267,9 +265,6 @@ void init()
 	wallTexture.loadTexture("textures/insideWall.jpg");
 	buildingStructure.wallTex2 = wallTexture.textureID;
 
-	//display list
-	displayListID = glGenLists(1);
-	glNewList(displayListID, GL_COMPILE);
 		
 	texFront.loadTexture("Textures/Sky_Clouds.jpg");
 	texBack.loadTexture("Textures/Sky_Clouds.jpg");

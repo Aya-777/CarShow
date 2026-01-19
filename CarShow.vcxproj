@@ -221,10 +221,14 @@
   <ItemGroup>
     <Image Include="Textures\building.jpg" />
     <Image Include="Textures\grass10.jpg" />
-    <Image Include="Textures\grass2.jpg" />
+    <Image Include="Textures\grass2.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
     <Image Include="Textures\grass5.jpg" />
     <Image Include="Textures\insideWall.jpg" />
-    <Image Include="Textures\outside.jpg" />
+    <Image Include="Textures\outside.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
     <Image Include="Textures\sidewalk.jpg" />
     <Image Include="Textures\sidewalk22.jpg" />
     <Image Include="Textures\sky.jpg" />
