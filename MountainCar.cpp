@@ -1,59 +1,88 @@
 ﻿#include "MountainCar.h"
 #include <GL/freeglut.h>
 
-// --- دالة مساعدة لرسم عجلة كاملة بتفاصيل (إطار + جنط) ---
+// -----------------------------------------------------------------------------
+// - دالة مساعدة لرسم عجلة كاملة (إطار أسود + جنط فضي)
+// - يتم استدعاؤها 5 مرات لتجنب تكرار الكود.
+// -----------------------------------------------------------------------------
 void drawWheelWithRim(GLUquadric* quadric) {
-    // 1. رسم الإطار الخارجي باللون الأسود
-    glColor3f(0.05f, 0.05f, 0.05f);
+    // --- 1. رسم الإطار الخارجي باللون الأسود ---
+    glColor3f(0.05f, 0.05f, 0.05f); // لون أسود داكن للإطارات
+    glPushMatrix(); // نبدأ مجموعة الإطار
+
+    // الغطاء الخلفي للعجلة (لجعلها تبدو صلبة وغير مفرغة)
     glPushMatrix();
-    // الغطاء الخلفي (غير مرئي لكنه يجعل الشكل صلباً)
-    glPushMatrix();
-    glRotatef(180, 0, 1, 0);
-    gluDisk(quadric, 0, 12, 20, 1);
-    glPopMatrix();
-    // جسم الإطار
-    gluCylinder(quadric, 12, 12, 8, 20, 1);
-    // الغطاء الأمامي
-    glPushMatrix();
-    glTranslatef(0, 0, 8);
-    gluDisk(quadric, 0, 12, 20, 1);
-    glPopMatrix();
+    glRotatef(180, 0, 1, 0); // نديره 180 درجة ليواجه الداخل
+    gluDisk(quadric, 0, 12, 20, 1); // (الأداة، نصف القطر الداخلي، الخارجي، الدقة، الحلقات)
     glPopMatrix();
 
-    // 2. رسم الجنط المعدني الفضي في المنتصف
-    glColor3f(0.7f, 0.7f, 0.7f);
+    // جسم الإطار الأسطواني
+    gluCylinder(quadric, 12, 12, 8, 20, 1); // (الأداة، نصف القطر، نصف القطر، العرض، الدقة، الدقة)
+
+    // الغطاء الأمامي للعجلة
     glPushMatrix();
-    glTranslatef(0, 0, 8.1); // نبرزه قليلاً جداً للأمام
-    gluDisk(quadric, 0, 8, 20, 1); // بنصف قطر أصغر (8)
+    glTranslatef(0, 0, 8); // ننتقل إلى نهاية الأسطوانة (بمقدار عرضها)
+    gluDisk(quadric, 0, 12, 20, 1);
+    glPopMatrix();
+
+    glPopMatrix(); // ننهي مجموعة الإطار
+
+    // --- 2. رسم الجنط المعدني الفضي في المنتصف ---
+    glColor3f(0.7f, 0.7f, 0.7f); // لون فضي لامع
+    glPushMatrix();
+    glTranslatef(0, 0, 8.1); // نبرزه قليلاً جداً للأمام (0.1) ليكون فوق سطح الإطار
+    gluDisk(quadric, 0, 8, 20, 1); // نرسمه بنصف قطر أصغر (8)
     glPopMatrix();
 }
 
+
+// -----------------------------------------------------------------------------
+// - Constructor: دالة البناء التي يتم استدعاؤها عند إنشاء كائن من هذا الكلاس
+// -----------------------------------------------------------------------------
 MountainCar::MountainCar(Point position) {
-    this->pos = position;
+    this->pos = position; // نخزن موقع السيارة الذي تم تمريره
 }
 
-void MountainCar::draw() {
-    GLUquadric* quadric = gluNewQuadric();
 
-    glPushMatrix(); //  --- بداية مجموعة السيارة ---
+// -----------------------------------------------------------------------------
+// - دالة الرسم الرئيسية للسيارة
+// - تحتوي على كل أوامر رسم أجزاء السيارة وتفاصيلها.
+// -----------------------------------------------------------------------------
+void MountainCar::draw() {
+    // --- 1. تعريف الأدوات والمواد مرة واحدة فقط في بداية الدالة ---
+    GLUquadric* quadric = gluNewQuadric();
+    // مواد الإضاءة الذاتية (Emission)
+    float whiteEmission[] = { 1.0, 1.0, 1.0, 1.0 };
+    float redEmission[] = { 1.0, 0.0, 0.0, 1.0 };
+    float yellowEmission[] = { 1.0, 1.0, 0.0, 1.0 };
+    float noEmission[] = { 0.0, 0.0, 0.0, 1.0 };
+    // مواد الزجاج اللامع
+    float glass_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    float glass_shininess[] = { 128.0 };
+    float default_specular[] = { 0.0, 0.0, 0.0, 1.0 };
+    float default_shininess[] = { 0.0 };
+
+    // --- 2. التحويلات الأساسية للسيارة (الموقع والدوران) ---
+    glPushMatrix(); // نبدأ مجموعة تحويلات السيارة (مهم جداً)
+    // أولاً: ننقل السيارة بالكامل إلى موقعها في العالم
     glTranslatef(this->pos.x, this->pos.y, this->pos.z);
 
-    // --- 1. الهيكل الرئيسي ---
-    // الجسم الأساسي
+    // ثانياً: ندور السيارة بالكامل لتواجه المدخل
+    glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+
+    // --- 3. الهيكل الرئيسي ---
+    // الجسم الأساسي (الشاسيه)
     glColor3f(0.1f, 0.1f, 0.1f);
     glPushMatrix();
-    glScalef(50, 20, 90);
-    glutSolidCube(1);
+    glScalef(50, 20, 90); glutSolidCube(1);
     glPopMatrix();
     // مقصورة الركاب
     glColor3f(0.15f, 0.15f, 0.15f);
     glPushMatrix();
-    glTranslatef(0, 18, -10);
-    glScalef(48, 16, 60);
-    glutSolidCube(1);
+    glTranslatef(0, 18, -10); glScalef(48, 16, 60); glutSolidCube(1);
     glPopMatrix();
 
-    // --- 2. العجلات ---
+    // --- 4. العجلات ---
     glPushMatrix();
     glTranslatef(25, -8, 35); glRotatef(90, 0, 1, 0); drawWheelWithRim(quadric);
     glPopMatrix();
@@ -66,59 +95,55 @@ void MountainCar::draw() {
     glPushMatrix();
     glTranslatef(-25, -8, -35); glRotatef(-90, 0, 1, 0); drawWheelWithRim(quadric);
     glPopMatrix();
+    // الإطار الاحتياطي (تم تصحيح موقعه ليبرز للخارج)
     glPushMatrix();
-    glTranslatef(0, 5, -45.1); drawWheelWithRim(quadric);
+    glTranslatef(0, 5, -50.0f); drawWheelWithRim(quadric);
     glPopMatrix();
 
-    // --- 3. المصد الأمامي ---
+    // --- 5. المصد الأمامي ---
     glColor3f(0.2f, 0.2f, 0.2f);
     glPushMatrix();
     glTranslatef(0, -12, 46); glScalef(52, 4, 4); glutSolidCube(1);
     glPopMatrix();
 
-    // --- 4. الزجاج الأمامي الشفاف ---
-    glEnable(GL_BLEND);
+    // --- 6. الزجاج الأمامي (باستخدام GL_QUADS لتجنب الاختراق وبميلان صحيح) ---
+    glEnable(GL_BLEND); // تفعيل الشفافية
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(0.6f, 0.8f, 1.0f, 0.4f);
-    glPushMatrix();
-    glTranslatef(0, 18, 20); glRotatef(25, -1, 0, 0); glScalef(48, 15, 1); glutSolidCube(1);
-    glPopMatrix();
-    glDisable(GL_BLEND);
+    glColor4f(0.6f, 0.8f, 1.0f, 0.4f); // لون زجاجي مع شفافية
+    glBegin(GL_QUADS);
+    glVertex3f(-24.0f, 26.0f, 20.0f); // الركن العلوي الأيسر (متصل بالمقصورة)
+    glVertex3f(24.0f, 26.0f, 20.0f); // الركن العلوي الأيمن (متصل بالمقصورة)
+    glVertex3f(24.0f, 10.0f, 22.0f); // الركن السفلي الأيمن (متصل بالجسم، تم تصحيح ميله)
+    glVertex3f(-24.0f, 10.0f, 22.0f); // الركن السفلي الأيسر (متصل بالجسم، تم تصحيح ميله)
+    glEnd();
+    glDisable(GL_BLEND); // تعطيل الشفافية
 
-    // --- 5. الأضواء المضيئة ---
+    // --- 7. الأضواء الرئيسية (باستخدام Emission) ---
     glEnable(GL_LIGHTING);
-    float whiteEmission[] = { 1.0, 1.0, 1.0, 1.0 };
-    float redEmission[] = { 1.0, 0.0, 0.0, 1.0 };
-    float noEmission[] = { 0.0, 0.0, 0.0, 1.0 };
-    glMaterialfv(GL_FRONT, GL_EMISSION, whiteEmission);
+    glMaterialfv(GL_FRONT, GL_EMISSION, whiteEmission); // تفعيل الإضاءة البيضاء
     glPushMatrix();
     glTranslatef(20, 0, 45.1); glScalef(6, 4, 1); glutSolidCube(1);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-20, 0, 45.1); glScalef(6, 4, 1); glutSolidCube(1);
     glPopMatrix();
-    glMaterialfv(GL_FRONT, GL_EMISSION, redEmission);
+    glMaterialfv(GL_FRONT, GL_EMISSION, redEmission); // تفعيل الإضاءة الحمراء
     glPushMatrix();
     glTranslatef(22, 0, -45.1); glScalef(4, 3, 1); glutSolidCube(1);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-22, 0, -45.1); glScalef(4, 3, 1); glutSolidCube(1);
     glPopMatrix();
-    glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
+    glMaterialfv(GL_FRONT, GL_EMISSION, noEmission); // إطفاء الإضاءة
     glDisable(GL_LIGHTING);
 
-    // --- 6. النوافذ الجانبية اللامعة ---
+    // --- 8. النوافذ الجانبية اللامعة (باستخدام Specular Material) ---
     glEnable(GL_LIGHTING);
-    float glass_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    float glass_shininess[] = { 128.0 };
-    // اللون الأسود للزجاج سيأتي من glColorMaterial, لذا نضبط اللون هنا
     glColor3f(0.0f, 0.0f, 0.0f);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
     glMaterialfv(GL_FRONT, GL_SPECULAR, glass_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, glass_shininess);
-
-    // رسم النوافذ
     glPushMatrix();
     glTranslatef(24.1, 18, 5);  glScalef(1, 12, 25); glutSolidCube(1);
     glPopMatrix();
@@ -131,16 +156,12 @@ void MountainCar::draw() {
     glPushMatrix();
     glTranslatef(-24.1, 18, -25); glScalef(1, 12, 20); glutSolidCube(1);
     glPopMatrix();
-
-    // إعادة ضبط خصائص المادة
-    float default_specular[] = { 0.0, 0.0, 0.0, 1.0 };
-    float default_shininess[] = { 0.0 };
     glMaterialfv(GL_FRONT, GL_SPECULAR, default_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, default_shininess);
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
 
-    // --- 7. مقابض الأبواب والفواصل ---
+    // --- 9. مقابض الأبواب والفواصل ---
     glColor3f(0.0f, 0.0f, 0.0f);
     // المقابض
     glPushMatrix();
@@ -155,7 +176,6 @@ void MountainCar::draw() {
     glPushMatrix();
     glTranslatef(-25.1, 8, -20); glScalef(1, 1.5, 5); glutSolidCube(1);
     glPopMatrix();
-
     // الخط الفاصل
     glLineWidth(2);
     glBegin(GL_LINES);
@@ -163,6 +183,43 @@ void MountainCar::draw() {
     glVertex3f(-25.1, 26, -8); glVertex3f(-25.1, -10, -8);
     glEnd();
 
-    glPopMatrix(); // --- نهاية مجموعة السيارة ---
-    gluDeleteQuadric(quadric);
+    // --- 10. التفاصيل النهائية (مرايا، شبك، قضبان، مصابيح ضباب) ---
+    // المرايا
+    glColor3f(0.15f, 0.15f, 0.15f);
+    glPushMatrix();
+    glTranslatef(26, 15, 15); glScalef(4, 8, 4); glutSolidCube(1);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-26, 15, 15); glScalef(4, 8, 4); glutSolidCube(1);
+    glPopMatrix();
+    // الشبك الأمامي
+    glColor3f(0.05f, 0.05f, 0.05f);
+    glPushMatrix();
+    glTranslatef(0, 0, 45.2); glScalef(40, 12, 1); glutSolidCube(1);
+    glPopMatrix();
+    // قضبان السقف
+    glColor3f(0.2f, 0.2f, 0.2f);
+    glPushMatrix();
+    glTranslatef(20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
+    glPopMatrix();
+    // مصابيح الضباب (تم تصحيح موقعها واستخدام كرة لإظهارها)
+    glEnable(GL_LIGHTING);
+    glMaterialfv(GL_FRONT, GL_EMISSION, yellowEmission);
+    glPushMatrix();
+    glTranslatef(15, -12, 48.5f); // تم إبرازها للأمام
+    glutSolidSphere(2.5, 20, 20); // استخدام كرة لضمان ظهورها
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-15, -12, 48.5f);
+    glutSolidSphere(2.5, 20, 20);
+    glPopMatrix();
+    glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
+    glDisable(GL_LIGHTING);
+
+    // --- 11. نهاية الرسم ---
+    glPopMatrix(); // ننهي مجموعة تحويلات السيارة
+    gluDeleteQuadric(quadric); // نحذف أداة الرسم
 }
