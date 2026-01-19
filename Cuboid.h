@@ -14,4 +14,5 @@ public:
 	double height, length, width;
 	void drawWithTextureNoTopBottom(GLuint textureID, int repeatX, int repeatY);
 	void drawWithTextureOnOneFace(GLuint textureID, const std::string& face, int repeatX, int repeatY);
+	void drawWithStretchTexture(GLuint textureID);
 };
