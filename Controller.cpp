@@ -14,6 +14,9 @@ bool Controller::mouseCaptured = false;
 int Controller::lastMouseX = 0;
 int Controller::lastMouseY = 0;
 float Controller::mouseSensitivity = 0.0025f;
+//salma
+extern bool g_darkMode;
+
 
 void Controller::init(Camera& cam, Truck& trk, bool& viewFlag) {
     cameraRef = &cam;
@@ -60,6 +63,12 @@ void Controller::keyboard(unsigned char key, int x, int y) {
     case 'n':
         cameraRef->openNearestDoor();
         break;
+        //salma
+    case 'm':
+        g_darkMode = !g_darkMode;
+        break;
+        //*****//
+
     }
     glutPostRedisplay();
 }
