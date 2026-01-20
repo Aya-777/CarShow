@@ -11,14 +11,14 @@ void Building::draw() {
 	Cuboid wall1(Point(-215, 2, -279), 150, 255, 15); // front wide
 	Cuboid wall12(Point(-215, 2, 278), 150, 455, 15); // front door side left
 	Cuboid wall13(Point(-215, 89, -52), 60, 205, 15); // front door side right
-	Cuboid wall2(Point(200, 2, 50), 150, 914, 15); // back wide
-	Cuboid wall3(Point(-500, 2, 0), 150, 415 , 15); // right short
-	Cuboid wall4(Point(400, 2, 0), 150, 415, 15); // left short
-	Cuboid roof(Point(50, -208, -152), 430, 10, 915); // roof
-	Cuboid ground(Point(50, -208, 0), 430, 1, 915); // ground
-	Cuboid insideWall1(Point(87, 2, -50), 150, 10, 250); // insideWall1
-	Cuboid insideWall2(Point(87, 2, 140), 150, 10, 200); // insideWall2
-	Cuboid insideWall3(Point(87, 2, 320), 150, 10, 200); // insideWall3
+	Cuboid wall2(Point(350, 2, 50), 150, 914, 15); // back wide
+	Cuboid wall3(Point(-500, 2, 70), 150, 565 , 15); // right short
+	Cuboid wall4(Point(400, 2, 70), 150, 565, 15); // left short
+	Cuboid roof(Point(50, -358, -152), 580, 10, 915); // roof
+	Cuboid ground(Point(50, -358, 0), 580, 1, 915); // ground
+	Cuboid insideWall1(Point(237, 2, -50), 150, 10, 250); // insideWall1
+	Cuboid insideWall2(Point(237, 2, 140), 150, 10, 200); // insideWall2
+	Cuboid insideWall3(Point(237, 2, 320), 150, 10, 200); // insideWall3
 	Cuboid administrationBuilding(Point(-140, 2, 570), 100, 150, 150); // administration building
 	
 	float repeatX1 = 400 / 150.0;
