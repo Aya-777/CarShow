@@ -1,17 +1,18 @@
-﻿#pragma once //  للتأكد من أن هذا الملف يتم تضمينه مرة واحدة فقط
-#include "Texture.h"
+﻿#pragma once
 #include "MountainCar.h"
 
+//
+// MountainHall Class
+// This class is responsible for drawing your specific section of the showroom.
+// It creates and manages the main car and the platform it sits on.
+//
 class MountainHall {
 public:
-    // Constructor: دالة البناء التي يتم استدعاؤها عند إنشاء كائن من هذا الكلاس
+    // Constructor
     MountainHall();
-
-    // دالة الرسم الرئيسية التي ستحتوي على كل كود رسم الصالة
+    // Main draw function for the hall
     void draw();
-
 private:
-    Texture rockWallTexture;
-    Texture floorTexture;
+    // The hall "owns" an instance of the MountainCar
     MountainCar mainCar;
 };

@@ -145,6 +145,7 @@
     <ClCompile Include="frontOfBuilding.cpp" />
     <ClCompile Include="fsportcar.cpp" />
     <ClCompile Include="mercedes.cpp" />
+    <ClCompile Include="MountainCar.cpp" />
     <ClCompile Include="OutSide.cpp" />
     <ClCompile Include="ParkingRoad.cpp" />
     <ClCompile Include="Road.cpp" />
@@ -156,7 +157,6 @@
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="FamilyCar.cpp" />
     <ClCompile Include="Lighting.cpp" />
-    <ClCompile Include="MountainCar.cpp" />
     <ClCompile Include="MountainHall.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />

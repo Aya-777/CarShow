@@ -1,15 +1,23 @@
 ﻿#pragma once
-#include "Point.h" //  السيارة لها موقع، لذلك نحتاج لكلاس النقطة
+#include "Point.h"
 
+//
+// MountainCar Class
+// This class defines the structure and behavior of the main G-Wagon style car.
+// It handles its own drawing, details, and position.
+//
 class MountainCar {
 public:
-    // Constructor: عند إنشاء سيارة، يجب أن نحدد أين ستوضع
+    // Constructor: Initializes the car at a specific position.
     MountainCar(Point position);
 
-    // دالة الرسم الرئيسية للسيارة
+    // draw: The main function that renders all parts of the car.
     void draw();
 
+    // setPosition: A public "setter" function to safely update the car's private position.
+    void setPosition(Point newPosition);
+
 private:
-    Point pos; //  متغير لتخزين موقع السيارة
-    // لاحقاً سنضيف هنا متغيرات أخرى مثل زاوية دوران العجلات
+    // The car's current position in the 3D world.
+    Point pos;
 };
