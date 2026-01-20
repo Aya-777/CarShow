@@ -3,6 +3,10 @@
 #include "Glass.h"
 #include "Texture.h"
 #include "Window.h"
+#include <mmsystem.h>
+#include <iostream>
+#pragma comment(lib, "winmm.lib")
+using namespace std;
 extern std::vector<Door*> globalDoors;
 
 
@@ -107,7 +111,6 @@ void Truck::update() {
 
     
 }
-
 void drawLightCircle(float radius, int segments, float r, float g, float b) {
     glColor3f(r, g, b);
     glBegin(GL_TRIANGLE_FAN);
@@ -132,6 +135,35 @@ void drawLightCircle(float radius, int segments, float r, float g, float b) {
     }
     glEnd();
 }
+void Truck::playMusic(Point cameraPos) {
+    cout << "in play sound" << endl;
+    // 1. Calculate distance between camera and truck
+    float dx = position.x - cameraPos.x;
+    float dy = position.y - cameraPos.y;
+    float dz = position.z - cameraPos.z;
+    float distance = sqrt(dx * dx + dy * dy + dz * dz);
+    cout << "to play music: " << distance << endl;
+    // 2. Only play if the camera is close enough (500 units)
+    if (distance < 500.0f) {
+        // Play sound (SND_ASYNC prevents the game from freezing)
+        PlaySoundA(this->musicSoundPath, NULL, SND_FILENAME | SND_ASYNC);
+
+        // 3. Visual Flash Effect
+        // We draw extra bright white circles over the lights for one frame
+        glPushMatrix();
+        glTranslatef(position.x, position.y, position.z);
+        glRotatef(rotationAngle, 0, 1, 0);
+
+        // Front position offset (same as your front lights)
+        glTranslatef(length * 0.5f + 0.1f, -0.5f, 0.0f);
+        glRotatef(-90, 0, 1, 0);
+
+        // Draw bright white "flash" circles
+        drawLightCircle(1.3f, 20, 1.0f, 1.0f, 1.0f); // Slightly larger than normal
+        glPopMatrix();
+    }
+}
+
 
 void Truck::draw(float r, float g, float b) {
     glPushMatrix();

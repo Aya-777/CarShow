@@ -77,13 +77,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLUT_DISABLE_ATEXIT_HACK;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -95,13 +95,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLUT_DISABLE_ATEXIT_HACK;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Libraries\freeglut\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\libraries\freeglut\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;freeglut.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -223,10 +223,14 @@
   <ItemGroup>
     <Image Include="Textures\building.jpg" />
     <Image Include="Textures\grass10.jpg" />
-    <Image Include="Textures\grass2.jpg" />
+    <Image Include="Textures\grass2.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
     <Image Include="Textures\grass5.jpg" />
     <Image Include="Textures\insideWall.jpg" />
-    <Image Include="Textures\outside.jpg" />
+    <Image Include="Textures\outside.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
     <Image Include="Textures\sidewalk.jpg" />
     <Image Include="Textures\sidewalk22.jpg" />
     <Image Include="Textures\sky.jpg" />
