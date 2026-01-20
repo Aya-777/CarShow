@@ -90,9 +90,6 @@
     <ClCompile Include="Wheel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="drawSportCar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Door.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,6 +100,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OutSide.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bureau.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,12 +191,28 @@
     <ClInclude Include="OutSide.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bureau.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sidewalk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreetLamp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="Models\ArmChair\Armchair car N220417.3DS" />
     <None Include="Models\ArmChair\Armchair car N220417.gsm" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Models\ArmChair\archibase.net.txt" />
@@ -205,10 +224,49 @@
     <Image Include="Models\ArmChair\d 2222.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\building.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grass10.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grass2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\grass5.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\insideWall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\outside.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\sidewalk.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\sidewalk22.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\sky.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Sky_Clouds.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\tile2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\tile3.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\wall.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="freeglut.lib" />
   </ItemGroup>
 </Project>

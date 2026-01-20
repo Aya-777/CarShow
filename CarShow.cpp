@@ -20,6 +20,7 @@
 #include "Controller.h"
 #include "frontOfBuilding.h"
 #include "OutSide.h"
+#include "Mercedes.h"
 
 
 using namespace std;
@@ -39,11 +40,11 @@ void reshape(int w, int h);
 void init();
 void timer(int value);
 void idle();
-void specialKeysUp(int key, int x, int y);
-static void keyboardCallback(unsigned char key, int x, int y);
-static void specialKeysCallback(int key, int x, int y);
-static void mouseMove(int x, int y);
-static void mouseButton(int button, int state, int x, int y);
+//void specialKeysUp(int key, int x, int y);
+//static void keyboardCallback(unsigned char key, int x, int y);
+//static void specialKeysCallback(int key, int x, int y);
+//static void mouseMove(int x, int y);
+//static void mouseButton(int button, int state, int x, int y);
 
 
 
@@ -67,10 +68,10 @@ GLuint displayListID;
 Truck t(Point(-300, 3.5, 450));
 bool isInsideView = false;
 Camera camera;
-bool g_mouseCaptured = false;
-int g_lastMouseX = 0;
-int g_lastMouseY = 0;
-float g_mouseSensitivity = 0.0025f;
+//bool g_mouseCaptured = false;
+//int g_lastMouseX = 0;
+//int g_lastMouseY = 0;
+//float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
 //Sky:
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
@@ -90,6 +91,7 @@ ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //s
 Plaza buildingPlaza;
 CityLayout myCity;
 bool g_darkMode = false; //salma
+Mercedes mercedes;
 
 //salma
 void setupLighting()
@@ -214,7 +216,13 @@ int main(int argc, char** argv)
     //glutFullScreen();
     init();
 
-    Controller::init(camera, t, isInsideView);
+    Controller::init(camera, isInsideView);
+
+    // Add vehicles to controller
+    Controller::addVehicle(&t);
+    Controller::addVehicle(&mercedes);
+
+    // Set GLUT callbacks
     glutKeyboardFunc(Controller::keyboard);
     glutSpecialFunc(Controller::specialKeys);
     glutPassiveMotionFunc(Controller::mouseMove);
@@ -259,19 +267,22 @@ void display()
     mainRoad.draw(); //salma
     sideRoad.draw(); //salma
     parking.draw(); //salma
-
+    mercedes.Draw();
     buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
     myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
 
-	glPushMatrix();
-	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
-	glColor3f(0.8, 0.1, 0.1);
-	t.draw(0.8, 0.8, 0.7);
+	//glPushMatrix();
+	////glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	//glColor3f(0.8, 0.1, 0.1);
+	//t.draw(0.8, 0.8, 0.7);
 	float x, y, z;
 	camera.GetPos(x, y, z);
-	//cout << "CameraPos: " << x << " " << y << " "<< z << endl;
-	glPopMatrix();
+	cout << "CameraPos: " << x << " " << y << " "<< z << endl;
+	//glPopMatrix();
+    for (Vehicle* vehicle : Controller::vehicles) {
+        vehicle->Draw();
+    }
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
 	sideRoad.draw(); //salma
@@ -296,8 +307,8 @@ void display()
 
 void idle()
 {
-	t.update();
-	t.load();
+	/*t.Update();
+	t.load();*/
 	updateScene();
 	display();
 }
@@ -372,6 +383,14 @@ void init()
     mySky.SKYRIGHT = texRight.textureID;
     mySky.SKYUP = texUp.textureID;
     mySky.SKYDOWN = texDown.textureID;
+    
+
+    // Cars Model //
+    mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
+    mercedes.SetPosition(-432.036 ,0.3087 ,441.793);
+    mercedes.SetRotationY(90.0f);
+
+    t.load();
 
     // ==========================================
     // 2. COMPILE DISPLAY LISTS
@@ -403,155 +422,20 @@ void reshape(int w, int h)
 }
 
 void updateScene() {
-    t.update();
-
-    if (isInsideView) {
-        float rad = t.rotationAngle * (M_PI / 180.0f);
-
-        float localX = (t.length * 0.4f) - 14.0f;
-        float localY = t.height * 0.6f;
-        float localZ = t.width * 0.2f;
-
-        float finalX = t.position.x + (localX * cos(rad) - localZ * sin(rad));
-        float finalZ = t.position.z - (localX * sin(rad) + localZ * cos(rad));
-        float finalY = t.position.y + localY;
-
-        camera.SetPos(finalX, finalY - 2, finalZ);
-
-        camera.SetYaw(-rad);
+    // UPDATE ALL VEHICLES through Controller
+    for (Vehicle* vehicle : Controller::vehicles) {
+        vehicle->Update();
     }
-}
-static void specialKeysCallback(int key, int x, int y)
-{
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        camera.Move(20.0);
-        break;
-    case GLUT_KEY_DOWN:
-        camera.Move(-10.0);
-        break;
-    case GLUT_KEY_LEFT:
-        camera.Strafe(10.0);
-        break;
-    case GLUT_KEY_RIGHT:
-        camera.Strafe(-10.0);
-        break;
-    }
-    glutPostRedisplay();
-}
-static void keyboardCallback(unsigned char key, int x, int y)
-{
-    float rad = t.rotationAngle * (M_PI / 180.0f);
-    float step = 2.0f;
-    switch (key)
-    {
-        //salma
-    case 'm':
-    case 'M':
-        g_darkMode = !g_darkMode;
-        cout << (g_darkMode ? "Dark Mode ON" : "Dark Mode OFF") << endl;
-        break;
-     //*****//
-    case 'a':
-        camera.RotateYaw(-0.02);
-        break; // Rotate Left
-    case 'd':
-        camera.RotateYaw(0.02);
-        break; // Rotate Right
-    case 'w':
-        camera.Fly(2.0);
-        break; // Move Up
-    case 's':
-        camera.Fly(-2.0);
-        break; // Move Down
-    case 'e':
-        buildingStructure.toggleDoor();
-    case 'o': // 'O' for Open
-    case 'O':
-        t.backDoors.open = !t.backDoors.open;
-        break;
-        glutPostRedisplay();
-    case 'p':
-        t.driverDoor.open = !t.driverDoor.open;
 
-        break;
-    case '1': // FORWARD
-        t.position.x += cos(rad) * step;
-        t.position.z -= sin(rad) * step;
-        t.wheelSpin -= 10.0f; // Spin wheels when moving
-        break;
+    // Update camera if inside a vehicle
+    if (isInsideView && Controller::currentVehicle) {
+        Point driverPos = Controller::currentVehicle->GetDriverSeatPosition();
+        float driverYaw = Controller::currentVehicle->GetDriverViewYaw();
 
-    case '2': // BACKWARD
-        t.position.x -= cos(rad) * step;
-        t.position.z += sin(rad) * step;
-        t.wheelSpin += 10.0f;
-        break;
-
-    case '3': // ROTATE LEFT (Turn truck)
-        t.rotationAngle += 5.0f;
-        t.steerAngle = 20.0f; // Visual steering effect
-        break;
-
-    case '4': // ROTATE RIGHT (Turn truck)
-        t.rotationAngle -= 5.0f;
-        t.steerAngle = -20.0f;
-        break;
-
-    case ' ': // SPACE KEY
-        isInsideView = !isInsideView;
-        if (isInsideView) {
-            cout << "Entered Driver View" << endl;
-        }
-        else {
-            camera.Strafe(20);
-        }
-        break;
-    case 'n':
-        float cx, cy, cz;
-        camera.GetPos(cx, cy, cz);
-        camera.openNearestDoor();
-        break;
-    }
-    glutPostRedisplay();
-}
-void specialKeysUp(int key, int x, int y)
-{
-    if (key == GLUT_KEY_UP)
-        cout << "up released" << endl;
-    if (key == GLUT_KEY_DOWN)
-        cout << "down released" << endl;
-    if (key == GLUT_KEY_RIGHT)
-        cout << "right released" << endl;
-    if (key == GLUT_KEY_LEFT)
-        cout << "left released" << endl;
-}
-static void mouseMove(int x, int y)
-{
-    if (!g_mouseCaptured)
-        return;
-
-    int dx = x - g_lastMouseX;
-    int dy = y - g_lastMouseY;
-
-    g_lastMouseX = x;
-    g_lastMouseY = y;
-
-    camera.RotateYaw(dx * g_mouseSensitivity);
-    camera.RotatePitch(-dy * g_mouseSensitivity);
-
-    glutPostRedisplay();
-}
-
-static void mouseButton(int button, int state, int x, int y)
-{
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {
-        g_mouseCaptured = true;
-        g_lastMouseX = x;
-        g_lastMouseY = y;
-
-        glutSetCursor(GLUT_CURSOR_NONE);
+        // Directly set camera to driver position
+        camera.SetPos(driverPos.x, driverPos.y, driverPos.z);
+        camera.SetYaw(driverYaw);
+        camera.SetPitch(0); // Look straight ahead
     }
 }
 
