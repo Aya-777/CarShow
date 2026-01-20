@@ -227,7 +227,7 @@ void display()
 		glPushMatrix();
 		glTranslatef(xBase, -3.0f, zPos);
 		glScalef(10.0f, 10.0f, 10.0f);
-		myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
+		//myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
 		glPopMatrix();
 	}
 	glutSwapBuffers();
@@ -238,7 +238,7 @@ void display()
 void idle()
 {
 	t.update();
-	t.load();
+	//t.load();
 	updateScene();
 	display();
 }
@@ -370,7 +370,7 @@ static void keyboardCallback(unsigned char key, int x, int y)
 	case 's':
 		camera.Fly(-2.0);
 		break; // Move Down
-	case 'e' :
+	case 'e':
 		buildingStructure.toggleDoor();
 	case 'o': // 'O' for Open
 	case 'O':
@@ -413,10 +413,20 @@ static void keyboardCallback(unsigned char key, int x, int y)
 		}
 		break;
 	case 'n':
+		cout << "hi" << endl;
 		float cx, cy, cz;
 		camera.GetPos(cx, cy, cz);
 		camera.openNearestDoor();
+		t.playMusic(Point(0, 0, 0));
 		break;
+	case 'c':
+	case 'C':
+		cout << "Assume 'camPos' is the Point/Vector of your current camera";
+			float x, y, z;
+			camera.GetPos(x, y, z);
+			t.playMusic(Point(x, y, z));
+			break;
+
 	}
 	glutPostRedisplay();
 }
