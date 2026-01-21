@@ -2,19 +2,20 @@
 #define CONTROLLER_H
 
 #include <GL/freeglut.h>
-#include <vector>
 #include "Camera.h"
-#include "Vehicle.h"  // Add this
+#include "Truck.h"
+#include "Building.h"
+#include "Mercedes.h"
 
 class Controller {
 public:
-    // References
+    // References to the objects the controller needs to manipulate
     static Camera* cameraRef;
+    static Truck* truckRef;
+    static Mercedes* mercedesRef;
+    static Building* buldingRef;
     static bool* isInsideViewRef;
-
-    // Vehicle system
-    static std::vector<Vehicle*> vehicles;
-    static Vehicle* currentVehicle;
+    static int activeVehicle;
 
     // Mouse state
     static bool mouseCaptured;
@@ -22,17 +23,14 @@ public:
     static int lastMouseY;
     static float mouseSensitivity;
 
-    // Static callback functions
+    // Static callback functions (GLUT requires static functions)
     static void keyboard(unsigned char key, int x, int y);
     static void specialKeys(int key, int x, int y);
     static void mouseMove(int x, int y);
     static void mouseButton(int button, int state, int x, int y);
 
     // Initialization
-    static void init(Camera& cam, bool& viewFlag);
-
-    // Vehicle management
-    static void addVehicle(Vehicle* vehicle);
+    static void init(Camera& cam, Truck& trk, Building& bld, bool& viewFlag , Mercedes& m);
 };
 
 #endif

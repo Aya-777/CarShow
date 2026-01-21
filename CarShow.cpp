@@ -1,8 +1,11 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
+#define STB_IMAGE_IMPLEMENTATION
 #include <Windows.h>
+#include <GL/stb_image.h>
 #include <GL/freeglut.h>
 #include <vector>
 #include <cmath>
+#include <iostream>
 #include "Point.h"
 #include "Cuboid.h"
 #include "Camera.h"
@@ -15,405 +18,171 @@
 #include "StreetLamp.h"
 #include "Sidewalk.h"
 #include "FamilyCar.h"
-#include "Road.h"  //salma
-#include "ParkingRoad.h" //salma
+#include "Road.h"
+#include "ParkingRoad.h"
 #include "Controller.h"
 #include "frontOfBuilding.h"
 #include "OutSide.h"
-#include "Mercedes.h"
-
+#include "Mercedes.h";
 
 using namespace std;
+
+// THIS LINE WAS NEEDED. The error "unresolved external" means it was missing.
 vector<Door*> globalDoors;
 
-
-struct color3f
-{
-    float r, g, b;
-    color3f() { r = 0; g = 0; b = 0; }
-    color3f(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
-};
-
-void display();
-void updateScene();
-void reshape(int w, int h);
-void init();
-void timer(int value);
-void idle();
-//void specialKeysUp(int key, int x, int y);
-//static void keyboardCallback(unsigned char key, int x, int y);
-//static void specialKeysCallback(int key, int x, int y);
-//static void mouseMove(int x, int y);
-//static void mouseButton(int button, int state, int x, int y);
-
-
-
-
-// Global variables
-Point center = Point(0, -3, 0);
-Texture texture;
-Texture up, left, Right, down, front, back;
-Texture wallTexture;
-Texture texSidewalk;
-Texture texSidewalk2;
-Texture texPlaza;
-Texture texGrass;
-Texture texResturant;
-int g_iWidth = 800;
-int g_iHeight = 600;
-const float g_fNear = 1;
-const float g_fFar = 1000000000.0f;
-color3f g_background;
-GLuint displayListID;
-Truck t(Point(-300, 3.5, 450));
-bool isInsideView = false;
+// --- 1. Global Variables ---
 Camera camera;
-//bool g_mouseCaptured = false;
-//int g_lastMouseX = 0;
-//int g_lastMouseY = 0;
-//float g_mouseSensitivity = 0.0025f;
 Building buildingStructure;
-//Sky:
-Texture texFront, texBack, texLeft, texRight, texUp, texDown;
-Texture texRoad;
+//MountainHall mountainHall;
+Truck t(Point(-300, 3.5, 450));
+Mercedes mercedes;
+bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
+int g_lastMouseX = 0, g_lastMouseY = 0;
+int g_iWidth = 1200, g_iHeight = 800;
+float g_mouseSensitivity = 0.0025f;
+const float g_fNear = 1, g_fFar = 1000000000.0f;
+
+// Environment Objects
 SkyBox mySky;
-//tree:
 SmartTreeModel myTree;
-Texture texTrunk, texLeaves;
-//street lamp & side walk:
 Sidewalk mySidewalk;
 StreetLamp myLamp;
-//road:
-Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
-Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
-ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
-
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f);
+Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);
+ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f);
 Plaza buildingPlaza;
 CityLayout myCity;
-bool g_darkMode = false; //salma
-Mercedes mercedes;
 
-//salma
-void setupLighting()
-{
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+// Textures
+Texture texFront, texBack, texLeft, texRight, texUp, texDown;
+Texture texSidewalk, texPlaza, texGrass, texResturant, texTrunk, texLeaves;
 
-    GLfloat ambientLight[4];
-    GLfloat diffuseLight[4];
-    GLfloat lightPos[4] = { 0.0f, 500.0f, 500.0f, 1.0f };
+// Display List
+GLuint displayListID;
 
-    if (g_darkMode)
-    {
-        // 🌙 DARK MODE LIGHTING
-        ambientLight[0] = 0.15f;
-        ambientLight[1] = 0.15f;
-        ambientLight[2] = 0.20f;
-        ambientLight[3] = 1.0f;
+// --- 2. Function Prototypes ---
+void display();
+void reshape(int w, int h);
+void init();
+void idle();
+void timer(int value);
+void setupLighting();
+void drawGround();
+//void keyboardCallback(unsigned char key, int x, int y);
+//void specialKeysCallback(int key, int x, int y);
+//void mouseMove(int x, int y);
+//void mouseButton(int button, int state, int x, int y);
+void updateScene();
 
-        diffuseLight[0] = 0.3f;
-        diffuseLight[1] = 0.3f;
-        diffuseLight[2] = 0.35f;
-        diffuseLight[3] = 1.0f;
-    }
-    else
-    {
-        // ☀️ NORMAL MODE LIGHTING
-        ambientLight[0] = 0.6f;
-        ambientLight[1] = 0.6f;
-        ambientLight[2] = 0.6f;
-        ambientLight[3] = 1.0f;
-
-        diffuseLight[0] = 1.0f;
-        diffuseLight[1] = 1.0f;
-        diffuseLight[2] = 1.0f;
-        diffuseLight[3] = 1.0f;
-    }
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-}
-
-
-void drawGround()
-{
-    glPushMatrix();
-    texGrass.Use();
-
-    // ضبط التكرار ليكون العشب واقعياً
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    //glColor3f(1.0f, 1.0f, 1.0f);
-    //salma
-    if (g_darkMode)
-        glColor3f(0.4f, 0.4f, 0.4f);
-    else
-        glColor3f(1.0f, 1.0f, 1.0f);
-
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 0.0f);  glVertex3f(2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 50.0f); glVertex3f(2000.0f, -3.01f, 2000.0f);
-    glTexCoord2f(0.0f, 50.0f);  glVertex3f(-2000.0f, -3.01f, 2000.0f);
-    glEnd();
-
-    // REMOVED: glDisable(GL_TEXTURE_2D); 
-    // Do not disable here, or it will turn off textures for the buildings/truck drawn afterwards.
-
-    glPopMatrix();
-}
-
-GLuint loadBMP_custom(const char* imagepath) {
-    unsigned char header[54];
-    unsigned int dataPos;
-    unsigned int width, height;
-    unsigned int imageSize;
-    unsigned char* data;
-
-    FILE* file = fopen(imagepath, "rb");
-    if (!file) { printf("Image could not be opened\n"); return 0; }
-
-    if (fread(header, 1, 54, file) != 54) { printf("Not a correct BMP file\n"); return 0; }
-    if (header[0] != 'B' || header[1] != 'M') { printf("Not a correct BMP file\n"); return 0; }
-
-    dataPos = *(int*)&(header[0x0A]);
-    imageSize = *(int*)&(header[0x22]);
-    width = *(int*)&(header[0x12]);
-    height = *(int*)&(header[0x16]);
-
-    if (imageSize == 0)    imageSize = width * height * 3;
-    if (dataPos == 0)      dataPos = 54;
-
-    data = new unsigned char[imageSize];
-    fread(data, 1, imageSize, file);
-    fclose(file);
-
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, data);
-
-    delete[] data;
-    return textureID;
-}
-
-int main(int argc, char** argv)
-{
+// --- 3. Main Function ---
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(g_iHeight, g_iWidth);
-    glutCreateWindow("weee");
-    //glutFullScreen();
+    glutInitWindowSize(g_iWidth, g_iHeight);
+    glutCreateWindow("Car Show | Final Version");
     init();
-
-    Controller::init(camera, isInsideView);
-
-    // Add vehicles to controller
-    Controller::addVehicle(&t);
-    Controller::addVehicle(&mercedes);
-
-    // Set GLUT callbacks
-    glutKeyboardFunc(Controller::keyboard);
-    glutSpecialFunc(Controller::specialKeys);
-    glutPassiveMotionFunc(Controller::mouseMove);
-    glutMouseFunc(Controller::mouseButton);
-
     glutDisplayFunc(display);
     glutIdleFunc(idle);
     glutReshapeFunc(reshape);
-    camera.SetPos(-500.0f, 10.0f, 800.0f);
+    glutKeyboardFunc(Controller::keyboard);
+    //glutKeyboardFunc(keyboardCallback);
+    glutSpecialFunc(Controller::specialKeys);
+    //glutSpecialFunc(specialKeysCallback);
+    glutPassiveMotionFunc(Controller::mouseMove);
+    //glutPassiveMotionFunc(mouseMove);
+    glutMouseFunc(Controller::mouseButton);
+    //glutMouseFunc(mouseButton);
+
+    camera.SetPos(-500.0f, 20.0f, 800.0f);
     camera.RotateYaw(-1.0);
-    camera.SetPitch(0);
-
-
     glutTimerFunc(1, timer, 0);
     glutMainLoop();
+    return 0;
 }
 
-void display()
-{
+// --- 4. Display Function ---
+void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glClearColor(g_background.r, g_background.g, g_background.b, 1.0);
-    //salma
-    if (g_darkMode)
-        glClearColor(0.05f, 0.05f, 0.08f, 1.0f); // dark night sky
-    else
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);   // normal
-
+    if (g_darkMode) glClearColor(0.05f, 0.05f, 0.08f, 1.0f);
+    else glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
     camera.Refresh();
-    //salma
     setupLighting();
 
-
-    //setupLighting();
-    //setupShadow();
-    drawGround();
-
-    buildingStructure.draw();
-    mainRoad.draw(); //salma
-    sideRoad.draw(); //salma
-    parking.draw(); //salma
-    mercedes.Draw();
-    buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
-    myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
-    myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
-
-	//glPushMatrix();
-	////glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
-	//glColor3f(0.8, 0.1, 0.1);
-	//t.draw(0.8, 0.8, 0.7);
-	float x, y, z;
-	camera.GetPos(x, y, z);
-	cout << "CameraPos: " << x << " " << y << " "<< z << endl;
-	//glPopMatrix();
-    for (Vehicle* vehicle : Controller::vehicles) {
-        vehicle->Draw();
-    }
-	buildingStructure.draw();
-	mainRoad.draw(); //salma
-	sideRoad.draw(); //salma
-	parking.draw(); //salma
+    cout << camera.GetPos().x << " " << camera.GetPos().y << " " << camera.GetPos().z << endl;
 
     glCallList(displayListID);
 
-    for (int i = 0; i < 2; i++)
-    {
-        float xBase = -500.0f + (i * 200.0f); // مسافة 200 بين الشجر
-        float zPos = -450.0f;
-        glPushMatrix();
-        glTranslatef(xBase, -3.0f, zPos);
-        glScalef(10.0f, 10.0f, 10.0f);
-        myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
-        glPopMatrix();
-    }
+    drawGround();
+    buildingStructure.draw();
+    //mountainHall.draw();
+    mainRoad.draw();
+    sideRoad.draw();
+    parking.draw();
+    buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f);
+    myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);
+    myCity.drawCityBuildings(myLamp, texResturant.textureID);
+
+    glPushMatrix();
+    glColor3f(0.8, 0.1, 0.1);
+    t.draw(0.8, 0.8, 0.7);
+    mercedes.Draw();
+    glPopMatrix();
+
     glutSwapBuffers();
-
 }
 
-
-void idle()
-{
-	/*t.Update();
-	t.load();*/
-	updateScene();
-	display();
-}
-
-void timer(int value)
-{
-    glutTimerFunc(1000 / 30, timer, 0);	//call the timer again each 1 millisecond
-
-}
-
-//initialize some variables
-void init()
-{
-    //salma
+// --- 5. Initialization Function ---
+void init() {
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    //****************//
 
-    g_background.r = 1;
-    g_background.g = 1;
-    g_background.b = 1;
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D); // Ensure texturing is enabled globally
-    //salma
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-
-    // ==========================================
-    // 1. LOAD ALL TEXTURES FIRST
-    // ==========================================
-
-    // NOTE: Changed "textures" to "Textures" to match your folder name
-    wallTexture.loadTexture("Textures/outside.jpg");
-    buildingStructure.wallTex = wallTexture.textureID;
-
-    wallTexture.loadTexture("Textures/insideWall.jpg");
-    buildingStructure.wallTex2 = wallTexture.textureID;
-
-		
-	texFront.loadTexture("Textures/Sky_Clouds.jpg");
-	texBack.loadTexture("Textures/Sky_Clouds.jpg");
-	texLeft.loadTexture("Textures/Sky_Clouds.jpg");
-	texRight.loadTexture("Textures/Sky_Clouds.jpg");
-	texUp.loadTexture("Textures/Sky_Clouds.jpg");
-	texDown.loadTexture("Textures/Sky_Clouds.jpg");
-	mySky.SKYFRONT = texFront.textureID;
-	mySky.SKYBACK = texBack.textureID;
-	mySky.SKYLEFT = texLeft.textureID;
-	mySky.SKYRIGHT = texRight.textureID;
-	mySky.SKYUP = texUp.textureID;
-	mySky.SKYDOWN = texDown.textureID;
-	//side walk texture:
-	texSidewalk.loadTexture("Textures/sidewalk.jpg");
-	texSidewalk2.loadTexture("Textures/sidewalk.jpg");
-	texPlaza.loadTexture("Textures/tile2.jpg");
-	texGrass.loadTexture("Textures/grass5.jpg");
-	texResturant.loadTexture("Textures/building.jpg");
-	//load tree model
-
-    // Tree Textures
-    // Assuming 'models' folder is lowercase. If it is 'Models', change it here.
-    myTree.loadOBJ("models/Tree-Model/Tree1.obj");
-    texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
-    texLeaves.loadTexture("models/Tree-Model/bat.bmp");
-
-    // Assign Texture IDs to Skybox Object
+    Texture tempTex1, tempTex2;
+    tempTex1.loadTexture("Textures/outside.jpg");
+    buildingStructure.wallTex = tempTex1.textureID;
+    tempTex2.loadTexture("Textures/insideWall.jpg");
+    buildingStructure.wallTex2 = tempTex2.textureID;
+    texFront.loadTexture("Textures/Sky_Clouds.jpg");
+    texBack.loadTexture("Textures/Sky_Clouds.jpg");
+    texLeft.loadTexture("Textures/Sky_Clouds.jpg");
+    texRight.loadTexture("Textures/Sky_Clouds.jpg");
+    texUp.loadTexture("Textures/Sky_Clouds.jpg");
+    texDown.loadTexture("Textures/Sky_Clouds.jpg");
     mySky.SKYFRONT = texFront.textureID;
     mySky.SKYBACK = texBack.textureID;
     mySky.SKYLEFT = texLeft.textureID;
     mySky.SKYRIGHT = texRight.textureID;
     mySky.SKYUP = texUp.textureID;
     mySky.SKYDOWN = texDown.textureID;
-    
 
-    // Cars Model //
-    mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
-    mercedes.SetPosition(-432.036 ,0.3087 ,441.793);
+    texSidewalk.loadTexture("Textures/sidewalk.jpg");
+    texPlaza.loadTexture("Textures/tile2.jpg");
+    texGrass.loadTexture("Textures/grass5.jpg");
+    texResturant.loadTexture("Textures/building.jpg");
+    myTree.loadOBJ("models/Tree-Model/Tree1.obj");
+    texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
+    texLeaves.loadTexture("models/Tree-Model/bat.bmp");
+
+    /*mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
+    mercedes.SetPosition(-432.036, 0.3087, 441.793);
     mercedes.SetRotationY(90.0f);
+    mercedes.EnterVehicle(true);*/
+    Controller::init(camera, t, buildingStructure, isInsideView, mercedes);
 
-    t.load();
-
-    // ==========================================
-    // 2. COMPILE DISPLAY LISTS
-    // ==========================================
-
-    // Only generate one display list for ID, or generate a new ID for the second one.
-    // I am re-using the variable here to match your logic, but ensuring we don't leak memory.
     displayListID = glGenLists(1);
     glNewList(displayListID, GL_COMPILE);
-
-    // Do NOT load textures inside here. Only draw.
     mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
-    glColor3f(0.2f, 0.3f, 0.8f);
-    buildingStructure.draw();
-
     glEndList();
 }
 
-// function to call when the window is resized
-void reshape(int w, int h)
-{
-    g_iHeight = h;
-    g_iWidth = w;
+// --- 6. Other Functions ---
+void reshape(int w, int h) {
+    g_iWidth = w; g_iHeight = h;
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -421,22 +190,73 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
+void idle() {
+    updateScene();
+    display();
+}
+
+void timer(int value) {
+    glutTimerFunc(1000 / 30, timer, 0);
+}
+
 void updateScene() {
-    // UPDATE ALL VEHICLES through Controller
-    for (Vehicle* vehicle : Controller::vehicles) {
-        vehicle->Update();
-    }
+    t.Update();
+    mercedes.Update();
 
-    // Update camera if inside a vehicle
-    if (isInsideView && Controller::currentVehicle) {
-        Point driverPos = Controller::currentVehicle->GetDriverSeatPosition();
-        float driverYaw = Controller::currentVehicle->GetDriverViewYaw();
+    if (isInsideView) {
+        if (Controller::activeVehicle == 1) {
+            float rad = t.rotationAngle * (M_PI / 180.0f);
+            float localX = (t.length * 0.4f) - 14.0f;
+            float localY = t.height * 0.6f;
+            float localZ = t.width * 0.2f;
+            camera.SetPos(t.position.x + (localX * cos(rad) - localZ * sin(rad)),
+                t.position.y + localY - 2,
+                t.position.z - (localX * sin(rad) + localZ * cos(rad)));
+            camera.SetYaw(-rad);
+        }
+        else if (Controller::activeVehicle == 2) {
+            Point seat = mercedes.GetDriverSeatPosition();
+            camera.SetPos(seat.x, seat.y, seat.z);
 
-        // Directly set camera to driver position
-        camera.SetPos(driverPos.x, driverPos.y, driverPos.z);
-        camera.SetYaw(driverYaw);
-        camera.SetPitch(0); // Look straight ahead
+   
+            float rad = mercedes.GetRotationY() * (3.14159f / 180.0f);
+
+            camera.SetYaw(-rad + 1.5708f);
+        }
     }
 }
 
+void setupLighting() {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    GLfloat ambientLight[4];
+    GLfloat diffuseLight[4];
+    GLfloat lightPos[4] = { 0.0f, 500.0f, 500.0f, 1.0f };
+    if (g_darkMode) {
+        ambientLight[0] = 0.15f; ambientLight[1] = 0.15f; ambientLight[2] = 0.20f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 0.3f; diffuseLight[1] = 0.3f; diffuseLight[2] = 0.35f; diffuseLight[3] = 1.0f;
+    }
+    else {
+        ambientLight[0] = 0.6f; ambientLight[1] = 0.6f; ambientLight[2] = 0.6f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 1.0f; diffuseLight[1] = 1.0f; diffuseLight[2] = 1.0f; diffuseLight[3] = 1.0f;
+    }
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+}
 
+void drawGround() {
+    glPushMatrix();
+    texGrass.Use();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    if (g_darkMode) glColor3f(0.4f, 0.4f, 0.4f);
+    else glColor3f(1.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);
+    glTexCoord2f(50.0f, 0.0f);  glVertex3f(2000.0f, -3.01f, -2000.0f);
+    glTexCoord2f(50.0f, 50.0f); glVertex3f(2000.0f, -3.01f, 2000.0f);
+    glTexCoord2f(0.0f, 50.0f);  glVertex3f(-2000.0f, -3.01f, 2000.0f);
+    glEnd();
+    glPopMatrix();
+}

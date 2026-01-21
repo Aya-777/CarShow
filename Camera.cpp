@@ -85,6 +85,9 @@ void Camera::SetPos(float x, float y, float z)
 
 	Refresh();
 }
+Point Camera::GetPos() {
+	return Point(m_x, m_y, m_z);
+}
 
 //to obtain the position of camera (for debugging)
 void Camera::GetPos(float& x, float& y, float& z)

@@ -19,11 +19,11 @@ std::map<std::string, Vec3> debugColors = {
     {"Windows", {0.0f, 0.5f, 1.0f}},               // Blue - Windows plural
     {"Interior", {0.0f, 0.0f, 0.0f}},              // Brown - Interior
     {"Leather", {0.0f, 0.0f, 0.0f}},               // BLACK - Leather seats
-    {"Seat", {0.0f, 0.0f, 0.0f}},                  // BLACK - Seats
-    {"Steering", {0.0f, 0.0f, 0.0f}},              // BLACK - Steering wheel
-    {"Dashboard", {0.0f, 0.0f, 0.0f}},             // BLACK - Dashboard
-    {"Engine", {0.6f, 0.6f, 0.6f}},                // Gray - Engine parts
-    {"Badge", {1.0f, 1.0f, 0.0f}},                 // Yellow - Badges/emblems                // Yellow - Badges/emblems
+    {"Seat", {0.0f, 0.0f, 0.0f}},                  
+    {"Steering", {0.0f, 0.0f, 0.0f}},              
+    {"Dashboard", {0.0f, 0.0f, 0.0f}},             
+    {"Engine", {0.6f, 0.6f, 0.6f}},              
+    {"Badge", {1.0f, 1.0f, 0.0f}},                               
     {"Emblem", {1.0f, 1.0f, 0.0f}},                // Yellow - Emblems
     {"Mirror", {0.8f, 0.8f, 0.8f}},                // Light gray - Mirrors
     //{"Grille", {0.0f, 0.6f, 0.0f}},                // Green - Grille
@@ -65,32 +65,37 @@ Mercedes::Mercedes()
     m_displayListGlass = 0;
     m_x = m_y = m_z = 0.0f;
     m_rotY = 0.0f;
-    m_useDebugColors = true;  // Set to TRUE by default
     m_speed = 0.0f;
     m_wheelSpin = 0.0f;
     m_steerAngle = 0.0f;
     m_isMovable = false;
+    m_useDebugColors = true;
 }
 
 // Add update method
-void Mercedes::Update()
-{
-    if (m_isMovable)
-    {
-        // Update position based on rotation and speed
-        float rad = m_rotY * (3.14159f / 180.0f);
-        m_x += cos(rad) * m_speed * 0.1f;
-        m_z -= sin(rad) * m_speed * 0.1f;
+void Mercedes::Update() {
+    // Convert rotation to radians for trig functions
+    float rad = m_rotY * (3.14159f / 180.0f);
 
-        // Update wheel spin for visual effect
-        m_wheelSpin -= m_speed * 5.0f;
+    if (m_isMovable) {
+        // 1. Move position based on current heading (m_rotY) and speed
+        // Matches Truck logic: +cos for X, -sin for Z
+        m_x += sin(rad) * m_speed;
+        m_z += cos(rad) * m_speed;
 
-        // Gradually reduce steering angle
-        m_steerAngle *= 0.9f;
+        // 2. Roll the wheels based on movement
+        m_wheelSpin -= m_speed * 10.0f;
 
-        // Reduce speed gradually (friction)
+        // 3. Apply steering to rotation
+        m_rotY += (m_steerAngle * 0.05f);
+
+        // 4. Gradually reduce speed (Friction)
         m_speed *= 0.95f;
         if (fabs(m_speed) < 0.01f) m_speed = 0.0f;
+
+        // 5. Gradually return steering wheel to center
+        m_steerAngle *= 0.9f;
+        if (fabs(m_steerAngle) < 0.1f) m_steerAngle = 0.0f;
     }
 }
 
@@ -107,21 +112,23 @@ void Mercedes::MoveBackward(float step)
     if (m_speed < -11.5f) m_speed = -11.5f;
 }
 
-void Mercedes::RotateLeft(float angle)
-{
-    m_rotY += angle;
-    m_steerAngle = angle * 2.0f;
+void Mercedes::RotateLeft(float angle) {
+    if (m_isMovable) {
+        m_rotY += angle;
+        m_steerAngle = 20.0f;
+    }
 }
 
-void Mercedes::RotateRight(float angle)
-{
-    m_rotY -= angle;
-    m_steerAngle = -angle * 2.0f;
+void Mercedes::RotateRight(float angle) {
+    if (m_isMovable) {
+        m_rotY -= angle;
+        m_steerAngle = -20.0f;
+    }
 }
 
-void Mercedes::EnterVehicle(bool enter)
-{
+void Mercedes::EnterVehicle(bool enter) {
     m_isMovable = enter;
+    if (!enter) m_speed = 0.0f;
 }
 
 Mercedes::~Mercedes()
@@ -132,32 +139,29 @@ Mercedes::~Mercedes()
         glDeleteLists(m_displayListGlass, 1);
 }
 
-Point Mercedes::GetDriverSeatPosition() const
-{
-    float rad = m_rotY * (3.14159f / 180.0f);
+Point Mercedes::GetDriverSeatPosition() const {
+    float rad = (m_rotY + 90.0f) * (3.14159f / 180.0f);
 
-    // CORRECT offsets to get (-439.914, 10.0115, 438.077)
-    // when car is at (-432.036, 0.3087, 441.793) with rotation 90°
-    float localX = 6.716f;    // Forward/backward offset
-    float localY = 9.7028f;    // Height offset  
-    float localZ = -15.178f;     // Left/right offset (positive = right side)
+    float localX = -5.0f; 
+    float localY = 8.0f;  
+    float localZ = 10.5;
 
-    // Transform to world coordinates
+    // Transform to world coordinates using the car's rotation
     float worldX = m_x + (localX * cos(rad) - localZ * sin(rad));
     float worldZ = m_z + (localX * sin(rad) + localZ * cos(rad));
     float worldY = m_y + localY;
 
-    // Debug output to verify
-    // printf("Car: (%.3f, %.3f, %.3f) rot: %.1f\n", m_x, m_y, m_z, m_rotY);
-    // printf("Local: (%.3f, %.3f, %.3f)\n", localX, localY, localZ);
-    // printf("Result: (%.3f, %.3f, %.3f)\n", worldX, worldY, worldZ);
-
-    return Point(worldX, worldY, worldZ);
+    return Point(worldX - 10.0, worldY, worldZ + 6.0);
 }
+/*
+float localX = 10.5f;
+    float localY = 8.0f;
+    float localZ = -5.0f;
+*/
 
-float Mercedes::GetDriverViewYaw() const
-{
-    return -m_rotY * (3.14159f / 180.0f);
+float Mercedes::GetDriverViewYaw() const {
+    // Return negative rotation to align camera with car's front
+    return -m_rotY * (3.14159f / 180.0f) + (1.5708f);
 }
 
 
@@ -490,9 +494,9 @@ void Mercedes::SetRotationY(float angle)
     m_rotY = angle;
 }
 
-// Add this function to toggle debug colors
-void Mercedes::SetDebugColors(bool enabled)
-{
-    m_useDebugColors = enabled;
-    std::cout << "Debug colors: " << (enabled ? "ENABLED" : "DISABLED") << std::endl;
-}
+//// Add this function to toggle debug colors
+//void Mercedes::SetDebugColors(bool enabled)
+//{
+//    m_useDebugColors = enabled;
+//    std::cout << "Debug colors: " << (enabled ? "ENABLED" : "DISABLED") << std::endl;
+//}
