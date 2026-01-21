@@ -6,7 +6,7 @@
 // - The car's initial position is a placeholder; it will be set dynamically
 //   in the draw() function to ensure it's always centered.
 // -----------------------------------------------------------------------------
-MountainHall::MountainHall() : mainCar(Point(0, 0, 0)) , secondCar(Point(0,100,0)) {
+MountainHall::MountainHall() : mainCar(Point(0, 0, 0)) {
 }
 
 // -----------------------------------------------------------------------------
