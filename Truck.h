@@ -11,7 +11,7 @@ extern std::vector<Door*> globalDoors;
 
 class Truck : public Vehicle { 
 public:
-    float length = 70.0, height = 25, width = 25;
+    float length = 95.0, height = 37.5, width = 37.5;
     Wheel wheelUnit;
     Point wheelPositions[6];
     const char* musicSoundPath = "debug/resources/sounds/cryingdoor.wav";

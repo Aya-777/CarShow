@@ -15,4 +15,5 @@ public:
 private:
     // The hall "owns" an instance of the MountainCar
     MountainCar mainCar;
+    MountainCar secondCar;
 };

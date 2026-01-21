@@ -269,7 +269,6 @@ void Truck::draw(float r, float g, float b) {
     Cuboid container(Point(-length * 0.15f, 0, 0), height, width, containerLengthX);
     container.draw();
 
-    // إطارات النوافذ للمطوية الخلفية
     Window leftFramec(Point(-length * 0.15f, 0, width / 2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
     leftFramec.draw(0.2, 0.2, 0.2);
     Window rightFramec(Point(-length * 0.15f, 0, -width / 2), 1, containerLengthX + 1, height, 0.75, 0.75, 0.75, 0.75, false);
@@ -319,12 +318,12 @@ void Truck::draw(float r, float g, float b) {
 
     // --- IMPROVED GEAR SHIFTER (Tall) ---
     glPushMatrix();
-    glTranslatef(cabL / 12, thickness, 0.0f);
+    glTranslatef(10, thickness, -cabW/10);
     Cylinder gearStick;
     glColor3f(0.1f, 0.1f, 0.1f);
     gearStick.draw(Point(0, 0.8f, 0), 0.45f, 0.35f, 0.8f, 16, 16); // Base
     glColor3f(0.05f, 0.05f, 0.05f);
-    gearStick.draw(Point(0, 6.5f, 0), 0.12f, 0.12f, 6.5f, 20, 20); // Long Shaft
+    gearStick.draw(Point(0, 6.5f, 0), 0.12f, 0.12f, cabH/1.5, 20, 20); // Long Shaft
     glColor3f(0.3f, 0.3f, 0.3f);
     gearStick.draw(Point(0, 7.3f, 0), 0.4f, 0.4f, 0.8f, 16, 16);   // Knob
     glPopMatrix();

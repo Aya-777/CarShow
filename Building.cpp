@@ -18,7 +18,7 @@ void Building::draw() {
 	Cuboid wall4(Point(400, 2, 70), 150, 565, 15); // left short
 	Cuboid roof(Point(50, -358, -152), 580, 10, 915); // roof
 	Cuboid ground(Point(50, -358, 0), 580, 1, 915); // ground
-	Cuboid insideWall1(Point(237, 2, -50), 150, 10, 250); // insideWall1
+	Cuboid insideWall1(Point(237, 2, -150), 150, 10, 250); // insideWall1
 	Cuboid insideWall2(Point(237, 2, 140), 150, 10, 200); // insideWall2
 	Cuboid insideWall3(Point(237, 2, 320), 150, 10, 200); // insideWall3
 	//Cuboid administrationBuilding(Point(-140, 2, 570), 100, 150, 150); // administration building

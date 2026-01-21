@@ -40,7 +40,9 @@ vector<Door*> globalDoors;
 Camera camera;
 Building buildingStructure;
 MountainHall mountainHall;
-Truck t(Point(-300, 3.5, 450));
+Truck t(Point(-550, 7, 775));
+Truck t2(Point(-200, 10, 200));
+Truck t3(Point(-200, 10, 300));
 Mercedes mercedes;
 bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
 int g_lastMouseX = 0, g_lastMouseY = 0;
@@ -189,7 +191,11 @@ void display() {
     t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
     glPopMatrix();
-
+    glPushMatrix();
+        glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+        t2.draw(0.3,0.4,0.4);
+        t3.draw(0.5, 0.4, 0.3);
+    glPopMatrix();
     // Draw Again (As per your original code)
     forceLightingState();
     buildingStructure.draw();
@@ -285,7 +291,7 @@ void updateScene() {
             float localY = t.height * 0.6f;
             float localZ = t.width * 0.2f;
             camera.SetPos(t.position.x + (localX * cos(rad) - localZ * sin(rad)),
-                t.position.y + localY - 2,
+                t.position.y + localY - 8,
                 t.position.z - (localX * sin(rad) + localZ * cos(rad)));
             camera.SetYaw(-rad);
         }
