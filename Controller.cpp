@@ -96,9 +96,10 @@ void Controller::specialKeys(int key, int x, int y)
     case GLUT_KEY_UP:
         if (*isInsideViewRef) {
             if (activeVehicle == 1) {
-                truckRef->position.x += cos(truckRad) * truckStep;
-                truckRef->position.z -= sin(truckRad) * truckStep;
-                truckRef->wheelSpin -= 10.0f;
+              truckRef->speed = 2.0f; // Set backward speed
+                // truckRef->position.x += cos(truckRad) * truckStep;
+                // truckRef->position.z -= sin(truckRad) * truckStep;
+                // truckRef->wheelSpin -= 10.0f;
             }
             else if (activeVehicle == 2) {
                 mercedesRef->MoveForward(mercStep);
@@ -112,9 +113,10 @@ void Controller::specialKeys(int key, int x, int y)
     case GLUT_KEY_DOWN:
         if (*isInsideViewRef) {
             if (activeVehicle == 1) { 
-                truckRef->position.x -= cos(truckRad) * truckStep;
-                truckRef->position.z += sin(truckRad) * truckStep;
-                truckRef->wheelSpin += 10.0f;
+              truckRef->speed = -2.0f; // Set backward speed
+                // truckRef->position.x -= cos(truckRad) * truckStep;
+                // truckRef->position.z += sin(truckRad) * truckStep;
+                // truckRef->wheelSpin += 10.0f;
             }
             else if (activeVehicle == 2) {
                 mercedesRef->MoveBackward(mercStep);
@@ -139,7 +141,7 @@ void Controller::specialKeys(int key, int x, int y)
             cameraRef->Strafe(camStep);
         }
         break;
-
+        
     case GLUT_KEY_RIGHT:
         if (*isInsideViewRef) {
             if (activeVehicle == 1) {
@@ -154,9 +156,75 @@ void Controller::specialKeys(int key, int x, int y)
             cameraRef->Strafe(-camStep);
         }
         break;
+        
     }
     glutPostRedisplay();
 }
+//    float rad = truckRef->rotationAngle * (M_PI / 180.0f);
+//    float step = 2.0f;
+//
+//    switch (key)
+//    {
+//    case GLUT_KEY_UP:
+//        cameraRef->Move(20.0);
+//        if (*isInsideViewRef) {
+//            Point nextPos = truckRef->position;
+//            // FORWARD MATH
+//            nextPos.x += cos(rad) * step;
+//            nextPos.z -= sin(rad) * step;
+//
+//            if (!truckRef->checkCollision(nextPos)) {
+//                truckRef->position = nextPos;
+//                truckRef->wheelSpin -= 10.0f;
+//            }
+//            else {
+//                std::cout << "Collision ahead!" << std::endl;
+//                truckRef->isMovable = false; // Disable auto-movement if you have any
+//                truckRef->steerAngle = 0;    // Reset steering
+//            }
+//        }
+//        break;
+//
+//    case GLUT_KEY_DOWN:
+//        cameraRef->Move(-10.0);
+//        if (*isInsideViewRef) {
+//            Point nextPos = truckRef->position;
+//            // BACKWARD MATH: Notice the signs are swapped (- and +)
+//            nextPos.x -= cos(rad) * step;
+//            nextPos.z += sin(rad) * step;
+//
+//            if (!truckRef->checkCollision(nextPos)) {
+//                truckRef->position = nextPos; // This correctly moves it back
+//                truckRef->wheelSpin += 10.0f;
+//            }
+//            else {
+//                std::cout << "Collision behind!" << std::endl;
+//                truckRef->isMovable = false; // Disable auto-movement if you have any
+//                truckRef->steerAngle = 0;    // Reset steering
+//            }
+//        }
+//        break;
+//
+//    case GLUT_KEY_LEFT:
+//        cameraRef->Strafe(10.0);
+//        if (*isInsideViewRef) {
+//            // Turning usually doesn't need a nextPos check unless the truck moves while turning
+//            truckRef->rotationAngle += 5.0f;
+//            truckRef->steerAngle = 20.0f;
+//        }
+//        break;
+//
+//    case GLUT_KEY_RIGHT:
+//        cameraRef->Strafe(-10.0);
+//        if (*isInsideViewRef) {
+//            truckRef->rotationAngle -= 5.0f;
+//            truckRef->steerAngle = -20.0f;
+//        }
+//        break;
+//    }
+//    glutPostRedisplay();
+//}
+
 
 void Controller::mouseMove(int x, int y) {
     if (!mouseCaptured || !cameraRef) return;

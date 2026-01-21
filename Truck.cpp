@@ -3,6 +3,7 @@
 #include "Glass.h"
 #include "Texture.h"
 #include "Window.h"
+#include "aabb.h"
 #include "Cylinder.h"
 #include <mmsystem.h>
 #include <iostream>
@@ -51,8 +52,58 @@ void Truck::load() {
         printf("Truck failed to load Steering Wheel OBJ!\n");
     }
 }
-void Truck::Update() {
 
+bool Truck::checkCollision(Point testPos) {
+    // Create a temporary AABB based on the position we are testing
+    AABB testBox;
+    float halfW = width / 2.0f;
+    float halfL = length / 2.0f;
+
+    testBox.min = Point(testPos.x - halfL, testPos.y, testPos.z - halfW);
+    testBox.max = Point(testPos.x + halfL, testPos.y + height, testPos.z + halfW);
+
+    // Check against the global walls
+    for (const auto& wall : walls) {
+        if (testBox.max.x >= wall.min.x && wall.max.x >= testBox.min.x &&
+            testBox.max.y >= wall.min.y && wall.max.y >= testBox.min.y &&
+            testBox.max.z >= wall.min.z && wall.max.z >= testBox.min.z)
+        {
+            return true; // 💥 Hit!
+        }
+    }
+    return false;
+}
+void Truck::Move(){
+
+    Point oldPos = this->position;
+
+    if (checkCollision(oldPos)) {
+        std::cout << " Truck Collision Detected! Reverting Position." << std::endl;
+        this->position = oldPos;
+    }
+    else {
+        // Roll the wheels based on movement
+        wheelSpin -= 5.0f;
+        rotationAngle += (steerAngle * 0.1f);
+
+    }
+
+
+    //std::cout << "isMovable: " << isMovable << std::endl;
+
+    //if (isMovable) {
+
+        // Move position based on current heading
+        //position.x += cos(rad) * 0.8f;
+        //position.z -= sin(rad) * 0.8f;
+
+    //}
+
+}
+
+
+    /*
+void Truck::update() {
     float rad = rotationAngle * (3.14159f / 180.0f);
 
     // --- DRIVER DOOR POSITION ---
@@ -86,26 +137,6 @@ void Truck::Update() {
     backDoors.center.y = position.y + (height * 0.5f);
     backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
 
-
-    if (isMovable) {
-        // Move position based on current heading and speed
-        position.x += cos(rad) * speed;
-        position.z -= sin(rad) * speed;
-
-        // Roll the wheels based on movement
-        wheelSpin -= speed * 10.0f;
-
-        // Apply steering
-        rotationAngle += (steerAngle * 0.05f);
-
-        // Gradually reduce speed (friction)
-        speed *= 0.95f;
-        if (fabs(speed) < 0.01f) speed = 0.0f;
-
-        // Gradually reduce steering angle (return to center)
-        steerAngle *= 0.9f;
-        if (fabs(steerAngle) < 0.1f) steerAngle = 0.0f;
-    }
     if (driverDoor.open) {
 		if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
     }
@@ -119,89 +150,78 @@ void Truck::Update() {
     else {
         if (backDoors.OpenRate > 0.0f) backDoors.OpenRate -= 0.2f;
     }
-
-    
-}
-//CameraPos: -439.914 10.0115 438.077
-//-427.236 7.8087 444.793
-
-void Truck::Draw()
-{
-    draw(0.8f, 0.8f, 0.7f); // Call your existing draw method
-}
-
-void Truck::EnterVehicle(bool enter)
-{
-    isMovable = enter;
-    if (enter) {
-        std::cout << "Entered Truck" << std::endl;
-    }
-    else {
-        std::cout << "Exited Truck" << std::endl;
-        speed = 0.0f; // Stop when exiting
-    }
-}
-
-void Truck::MoveForward(float step)
-{
-    if (isMovable)
-    {
-        // We'll handle movement in update() with speed variable
-        speed = step * 1.5f; // Convert step to speed
-        if (speed > 15.0f) speed = 15.0f; // Max speed
-    }
-}
-
-void Truck::MoveBackward(float step)
-{
-    if (isMovable)
-    {
-        speed = -step * 1.5f; // Negative speed for backward
-        if (speed < -10.5f) speed = -10.5f; // Max reverse speed
-    }
-}
-
-void Truck::RotateLeft(float angle)
-{
-    if (isMovable)
-    {
-        rotationAngle += angle;
-        steerAngle = 20.0f; // Visual steering effect
-    }
-}
-
-void Truck::RotateRight(float angle)
-{
-    if (isMovable)
-    {
-        rotationAngle -= angle;
-        steerAngle = -20.0f; // Visual steering effect
-    }
-}
-
-Point Truck::GetDriverSeatPosition() const
-{
+    */
+void Truck::update() {
     float rad = rotationAngle * (3.14159f / 180.0f);
 
-    // Fixed offset for truck driver seat
-    float localX = length * 0.35f - 2.0f;  // Forward from center
-    float localY = height * 0.6f + 1.0f;   // Eye level
-    float localZ = -width * 0.2f;          // Left side (driver side)
+    if (speed != 0.0f) {
+        // 1. Where do we want to go?
+        Point nextPos = position;
+        nextPos.x += cos(rad) * speed;
+        nextPos.z -= sin(rad) * speed;
 
-    // Transform to world coordinates
-    float worldX = position.x + (localX * cos(rad) - localZ * sin(rad));
-    float worldZ = position.z + (localX * sin(rad) + localZ * cos(rad));
-    float worldY = position.y + localY;
+        // 2. Is that spot safe?
+        if (!checkCollision(nextPos)) {
+            position = nextPos; // Safe to move!
+            wheelSpin -= (speed * 10.0f);
+            rotationAngle += (steerAngle * 0.1f);
+        }
+        else {
+            speed = 0.0f; // STOP
+            std::cout << "CRASH: Movement halted." << std::endl;
+        }
+    }
 
-    return Point(worldX, worldY, worldZ);
-}
 
-float Truck::GetDriverViewYaw() const
-{
-    // Camera looks opposite to truck direction (truck faces +X, camera looks -Z)
-    // Convert to radians and return negative (camera looks in opposite direction of movement)
-    return -rotationAngle * (3.14159f / 180.0f);
-}
+   // --- DRIVER DOOR POSITION ---
+        float drvLocalX = length * 0.35f;
+        float drvLocalZ = -width * 0.5f;
+
+        // Standard Rotation Formula (No flipping!)
+        driverDoor.center.x = position.x + (drvLocalX * cos(rad) - drvLocalZ * sin(rad));
+        driverDoor.center.y = position.y + (height * 0.5f);
+        driverDoor.center.z = position.z + (drvLocalX * sin(rad) + drvLocalZ * cos(rad));
+
+        // --- PASSENGER DOOR POSITION ---
+        float psgLocalX = length * 0.35f;
+        float psgLocalZ = width * 0.5f; // Positive Z for right side
+        passengerDoor.center.x = position.x + (psgLocalX * cos(rad) - psgLocalZ * sin(rad));
+        passengerDoor.center.y = position.y + (height * 0.5f);
+        passengerDoor.center.z = position.z + (psgLocalX * sin(rad) + psgLocalZ * cos(rad));
+
+        // --- PASSENGER DOOR ANIMATION ---
+        if (passengerDoor.open) {
+            if (passengerDoor.OpenRate < 80.0f) passengerDoor.OpenRate += 0.2f;
+        }
+        else {
+            if (passengerDoor.OpenRate > 0.0f) passengerDoor.OpenRate -= 0.2f;
+        }
+        // --- BACK DOORS POSITION ---
+        float backLocalX = -length * 0.5f;
+        float backLocalZ = 0.0f;
+
+        backDoors.center.x = position.x + (backLocalX * cos(rad) - backLocalZ * sin(rad));
+        backDoors.center.y = position.y + (height * 0.5f);
+        backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
+
+        if (driverDoor.open) {
+            if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
+        }
+        else {
+            if (driverDoor.OpenRate > 0.0f) driverDoor.OpenRate -= 0.2f;
+        }
+
+        if (backDoors.open) {
+            if (backDoors.OpenRate < 90.0f) backDoors.OpenRate += 0.2f;
+        }
+        else {
+            if (backDoors.OpenRate > 0.0f) backDoors.OpenRate -= 0.2f;
+        }
+		speed = 0.0f; // Reset speed after each update
+        steerAngle = 0.0f;   // RESET STEERING so it doesn't keep turning!
+    }
+    
+//}
 void drawLightCircle(float radius, int segments, float r, float g, float b) {
     glColor3f(r, g, b);
     glBegin(GL_TRIANGLE_FAN);

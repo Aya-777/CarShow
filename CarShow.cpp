@@ -55,6 +55,7 @@ SkyBox mySky;
 SmartTreeModel myTree;
 Sidewalk mySidewalk;
 StreetLamp myLamp;
+Cuboid ground(Point(0, -2, 0), 1, 4000, 4000);
 //road:
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
 Road sideRoad(-550.0f, -3.0f, 775.0f, 120.0f, 910.0f, 90.0f);    //salma
@@ -248,7 +249,15 @@ void init() {
     myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
+    
 
+    for (const AABB& wall : buildingStructure.getWalls()) {
+        camera.addWall(wall);
+    }
+	camera.addWall(ground.getAABB());
+	t.walls = camera.walls;
+    //std::cout<< "Total Walls in Camera Collision System: " << camera.walls.size() << std::endl;
+	
     /*mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
     mercedes.SetPosition(-432.036, 0.3087, 441.793);
     mercedes.SetRotationY(90.0f);
@@ -337,16 +346,7 @@ void setupLighting() {
 
 void drawGround() {
     glPushMatrix();
-    texGrass.Use();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    if (g_darkMode) glColor3f(0.3f, 0.3f, 0.35f);
-    else glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 0.0f);  glVertex3f(2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 50.0f); glVertex3f(2000.0f, -3.01f, 2000.0f);
-    glTexCoord2f(0.0f, 50.0f);  glVertex3f(-2000.0f, -3.01f, 2000.0f);
+	ground.drawWithTexture(texGrass.textureID, 50, 50);
     glEnd();
     glPopMatrix();
 }

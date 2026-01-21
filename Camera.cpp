@@ -1,9 +1,10 @@
-#include "Camera.h"
+﻿#include "Camera.h"
 #include <iostream>
 #include <vector>
 #include "GL/glut.h"
 #include "Point.h"
 #include "Door.h"
+#include "aabb.h"
 using namespace std;
 extern vector<Door*> globalDoors;
 //init values
@@ -37,16 +38,37 @@ void Camera::Refresh()
 	//printf("Camera: %f %f %f Direction vector: %f %f %f\n", m_x, m_y, m_z, m_lx, m_ly, m_lz);
 }
 
-bool Camera::CheckCollision(const Point& newPos) {
+bool Camera::CheckCollision(const Point& newPos)
+{
 	for (const auto& wall : walls) {
-		if (newPos.x > wall.min.x && newPos.x < wall.max.x &&
-			newPos.y > wall.min.y && newPos.y < wall.max.y &&
-			newPos.z > wall.min.z && newPos.z < wall.max.z) {
-			return true; // ????? ?? ????
+
+		float closestX = std::max(wall.min.x, std::min(newPos.x, wall.max.x));
+		float closestY = std::max(wall.min.y, std::min(newPos.y, wall.max.y));
+		float closestZ = std::max(wall.min.z, std::min(newPos.z, wall.max.z));
+
+		float dx = newPos.x - closestX;
+		float dy = newPos.y - closestY;
+		float dz = newPos.z - closestZ;
+
+		if ((dx * dx + dy * dy + dz * dz) < (radius * radius)) {
+			return true; // 💥 CRASH
 		}
 	}
-	return false; // ?? ???? ?????
+	return false;
 }
+
+
+
+//bool Camera::CheckCollision(const Point& newPos) {
+//	for (const auto& wall : walls) {
+//		if (newPos.x > wall.min.x && newPos.x < wall.max.x &&
+//			newPos.y > wall.min.y && newPos.y < wall.max.y &&
+//			newPos.z > wall.min.z && newPos.z < wall.max.z) {
+//			return true; // ????? ?? ????
+//		}
+//	}
+//	return false; // ?? ???? ?????
+//}
 bool Camera::CheckDoorCollision(const Point& newPos) {
 	//if (newPos.x > doorWalls[0].min.x && newPos.x < doorWalls[0].max.x &&
 	//	newPos.y > doorWalls[0].min.y && newPos.y < doorWalls[0].max.y &&
@@ -208,4 +230,8 @@ void Camera::openNearestDoor() {
 		}
 	}
 	if (closest) closest->open = !closest->open;
+}
+
+void Camera::addWall(const AABB& box) {
+	walls.push_back(box);
 }
