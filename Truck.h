@@ -7,6 +7,7 @@
 #include "Vehicle.h"
 #include <string>
 #include <vector>
+#include "aabb.h"
 extern std::vector<Door*> globalDoors;
 
 class Truck : public Vehicle { 
@@ -28,6 +29,8 @@ public:
     float rotationAngle;
     float speed;
     SteeringWheel driverSteeringWheel;
+    std::vector<AABB> walls;
+
 
     Truck(Point position);
 
@@ -53,6 +56,9 @@ public:
     void draw(float r = 0.9f, float g = 0.9f, float b = 0.85f); // Renamed from draw to Draw
     void load();
     void playMusic(Point cameraPos);
+    bool checkCollision(Point oldPos);
+    AABB getAABB() const;
+    void Move();
     void checkMusicDistance(Point cameraPos);
 
 };

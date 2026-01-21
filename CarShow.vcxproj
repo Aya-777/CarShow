@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="aabb.cpp" />
     <ClCompile Include="AdminDoor.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="bugatti.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aabb.h" />
     <ClInclude Include="AdminDoor.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="bugatti.h" />

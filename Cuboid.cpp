@@ -308,3 +308,18 @@ void Cuboid::drawWithStretchTexture(GLuint textureID) {
     glEnd();
     glDisable(GL_TEXTURE_2D);
 }
+
+AABB Cuboid::getAABB() const {
+    AABB box;
+    box.min = Point(
+        center.x - width / 2,
+        center.y,
+        center.z - length / 2
+    );
+    box.max = Point(
+        center.x + width / 2,
+        center.y + height,
+        center.z + length / 2
+    );
+    return box;
+}
