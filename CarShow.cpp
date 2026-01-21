@@ -28,6 +28,7 @@
 #include "Bureau.h" //salma
 #include "AdminDoor.h" //salma
 #include "Chair.h"
+#include "ModelTree.h"
 
 
 using namespace std;
@@ -157,7 +158,7 @@ void display() {
 
     buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
-    myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
+    //myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
 
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
