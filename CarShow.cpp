@@ -60,14 +60,13 @@ Cuboid ground(Point(0, -5, 0), 1, 4000, 4000);
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
 Road sideRoad(-550.0f, -3.0f, 775.0f, 120.0f, 910.0f, 90.0f);    //salma
 ParkingRoad parking(100.0f, -3.0f, 500.5f, 435.0f, 260.0f,90); //salma
-//salma
-Sofa sofa(Point(-145, 0, 630)); // salma
+Sofa sofa(Point(-50, 2, 660)); // salma
 //Sofa sofa2(Point()); // salma
-Sofa sofa2(Point(-145, 0, 520)); // salma
-Sofa tripleSofa(Point(-190, 0, 614)); // salma
-Bureau bureau(Point(-100, -1, 580));  // salma
-AdminDoor adminDoor(Point(-200, 0, 510)); //salma
-Chair adminChair(-80, -1, 580); //salma
+Sofa sofa2(Point(-50, 2, 550)); // salma
+Sofa tripleSofa(Point(-95, 2, 644)); // salma
+Bureau bureau(Point(-5, 2, 610));  // salma
+AdminDoor adminDoor(Point(-150, 0, 510)); //salma
+Chair adminChair(15, 2, 610); //salma
 
 
 

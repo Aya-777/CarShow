@@ -34,42 +34,45 @@ void AdminDoor::update()
 
 void AdminDoor::draw()
 {
+    float DOOR_WIDTH = 50.0f;
+    float DOOR_HEIGHT = 50.0f;
+    float DOOR_THICK = 3.0f;
+
     glPushMatrix();
 
-    // Move to hinge
+    // Move to hinge position
     glTranslatef(hinge.x, hinge.y, hinge.z);
 
-    // Rotate around hinge
+    // Rotate around hinge (LEFT side)
     glRotatef(angle, 0, 1, 0);
 
-    // Draw door (hinge on left)
-    glColor3f(0.55f, 0.27f, 0.07f);
+    glColor3ub(77, 82, 79);
 
     glBegin(GL_QUADS);
 
-    // Front face
+    // ===== FRONT =====
     glVertex3f(0, 0, 0);
-    glVertex3f(30, 0, 0);
-    glVertex3f(30, 50, 0);
-    glVertex3f(0, 50, 0);
+    glVertex3f(DOOR_WIDTH, 0, 0);
+    glVertex3f(DOOR_WIDTH, DOOR_HEIGHT, 0);
+    glVertex3f(0, DOOR_HEIGHT, 0);
 
-    // Back face
-    glVertex3f(0, 0, -2);
-    glVertex3f(30, 0, -2);
-    glVertex3f(30, 50, -2);
-    glVertex3f(0, 50, -2);
+    // ===== BACK =====
+    glVertex3f(0, 0, -DOOR_THICK);
+    glVertex3f(DOOR_WIDTH, 0, -DOOR_THICK);
+    glVertex3f(DOOR_WIDTH, DOOR_HEIGHT, -DOOR_THICK);
+    glVertex3f(0, DOOR_HEIGHT, -DOOR_THICK);
 
-    // Left side (hinge)
+    // ===== LEFT (HINGE) =====
     glVertex3f(0, 0, 0);
-    glVertex3f(0, 50, 0);
-    glVertex3f(0, 50, -2);
-    glVertex3f(0, 0, -2);
+    glVertex3f(0, DOOR_HEIGHT, 0);
+    glVertex3f(0, DOOR_HEIGHT, -DOOR_THICK);
+    glVertex3f(0, 0, -DOOR_THICK);
 
-    // Right side
-    glVertex3f(30, 0, 0);
-    glVertex3f(30, 50, 0);
-    glVertex3f(30, 50, -2);
-    glVertex3f(30, 0, -2);
+    // ===== RIGHT =====
+    glVertex3f(DOOR_WIDTH, 0, 0);
+    glVertex3f(DOOR_WIDTH, DOOR_HEIGHT, 0);
+    glVertex3f(DOOR_WIDTH, DOOR_HEIGHT, -DOOR_THICK);
+    glVertex3f(DOOR_WIDTH, 0, -DOOR_THICK);
 
     glEnd();
 

@@ -52,6 +52,7 @@ void Controller::keyboard(unsigned char key, int x, int y) {
     case 'p': truckRef->playMusic(cameraRef->GetPos()); break;
     case 'm': g_darkMode = !g_darkMode; break;
     case 'e': buldingRef->toggleDoor(); break;
+    case 'o': adminDoor.toggle(); break;
 
 
     case ' ': 
