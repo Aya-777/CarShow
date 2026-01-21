@@ -170,6 +170,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aabb.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="bugatti.h" />
     <ClInclude Include="Camera.h" />

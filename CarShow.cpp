@@ -46,6 +46,7 @@ SkyBox mySky;
 SmartTreeModel myTree;
 Sidewalk mySidewalk;
 StreetLamp myLamp;
+Cuboid ground(Point(0, -2, 0), 1, 4000, 4000);
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f);
 Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);
 ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f);
@@ -172,7 +173,14 @@ void init() {
     myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
+    
 
+    for (const AABB& wall : buildingStructure.getWalls()) {
+        camera.addWall(wall);
+    }
+	camera.addWall(ground.getAABB());
+    //std::cout<< "Total Walls in Camera Collision System: " << camera.walls.size() << std::endl;
+	
     displayListID = glGenLists(1);
     glNewList(displayListID, GL_COMPILE);
     mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
@@ -234,16 +242,7 @@ void setupLighting() {
 
 void drawGround() {
     glPushMatrix();
-    texGrass.Use();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    if (g_darkMode) glColor3f(0.4f, 0.4f, 0.4f);
-    else glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 0.0f);  glVertex3f(2000.0f, -3.01f, -2000.0f);
-    glTexCoord2f(50.0f, 50.0f); glVertex3f(2000.0f, -3.01f, 2000.0f);
-    glTexCoord2f(0.0f, 50.0f);  glVertex3f(-2000.0f, -3.01f, 2000.0f);
+	ground.drawWithTexture(texGrass.textureID, 50, 50);
     glEnd();
     glPopMatrix();
 }

@@ -6,6 +6,7 @@
 #include <vector>
 #include "Door.h"
 #include "Point.h"
+#include "aabb.h"
 
 struct Wall {
 	Point min;//?????? ??????? ?????? ???????? 
@@ -29,6 +30,7 @@ class Camera
 		bool CheckCollision(const Point& newPos);
 		bool CheckDoorCollision(const Point& newPos);
 		void openNearestDoor();
+		void addWall(const AABB& box);
 		// Navigation
 		void Move(float incr);
 		void Strafe(float incr);
@@ -36,22 +38,14 @@ class Camera
 		void RotateYaw(float angle);
 		void RotatePitch(float angle);
 
+
 		std::vector<Door*> Doors;
 		std::vector<Door*> ElevetorDoors;
+		std::vector<AABB> walls; 
+		float radius = 1.5f; // camera size
 		std::vector<Wall> doorWalls{
 			{Point(151.668,11.6564,-32.3706),Point(157.606,35.3446,-19.1159)},//??? ?????? 
 		};
-
-		std::vector<Wall> walls = {
-
-			// mall 
-			//{Point(-7.20473,2.10463,-326.21),Point(218.896,13.067,2.14833)},//?????? ??? ??? ????? ????? 
-			//{Point(150.905,62.1459,-190.26),Point(156.874,81.5486,-183.352)},//????? ??? ??? ???? ??? ????????? 
-			// Furniture Store
-
-			// Super Market
-			};
-		//Elevator elevator;
 
 	private:
 		float m_x, m_y, m_z;   // Position

@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <string>
 #include "Texture.h"
+#include "aabb.h"
 
 class Cuboid
 {
@@ -15,4 +16,5 @@ public:
 	void drawWithTextureNoTopBottom(GLuint textureID, int repeatX, int repeatY);
 	void drawWithTextureOnOneFace(GLuint textureID, const std::string& face, int repeatX, int repeatY);
 	void drawWithStretchTexture(GLuint textureID);
+	AABB getAABB() const;
 };
