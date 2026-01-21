@@ -37,7 +37,7 @@ Truck::Truck(Point position) : wheelUnit(this->height * 0.08f, this->height * 0.
 }
 
 void Truck::load() {
-    bool success = driverSteeringWheel.Load("resources/models/steeringWheel/steeeringwheel_mercedezbenz_bus.obj", 15.0f);
+    bool success = driverSteeringWheel.Load("resources/models/steeringWheel/steering_wheel.obj", 15.0f);
 
     if (success) {
         driverSteeringWheel.SetPosition(-5.0f, -13.0f, -4.0f);

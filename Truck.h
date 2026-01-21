@@ -12,7 +12,7 @@ public:
     float length=70.0, height=25, width=25;
     Wheel wheelUnit;
     Point wheelPositions[6];
-    const char* musicSoundPath = "resources/sounds/cryingdoor.wav";
+    const char* musicSoundPath = "debug/resources/sounds/cryingdoor.wav";
 
 public:
     Point position;

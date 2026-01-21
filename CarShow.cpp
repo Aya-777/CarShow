@@ -68,10 +68,10 @@ void idle();
 void timer(int value);
 void setupLighting();
 void drawGround();
-void keyboardCallback(unsigned char key, int x, int y);
-void specialKeysCallback(int key, int x, int y);
-void mouseMove(int x, int y);
-void mouseButton(int button, int state, int x, int y);
+//void keyboardCallback(unsigned char key, int x, int y);
+//void specialKeysCallback(int key, int x, int y);
+//void mouseMove(int x, int y);
+//void mouseButton(int button, int state, int x, int y);
 void updateScene();
 
 // --- 3. Main Function ---
@@ -84,10 +84,15 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutIdleFunc(idle);
     glutReshapeFunc(reshape);
-    glutKeyboardFunc(keyboardCallback);
-    glutSpecialFunc(specialKeysCallback);
-    glutPassiveMotionFunc(mouseMove);
-    glutMouseFunc(mouseButton);
+    glutKeyboardFunc(Controller::keyboard);
+    //glutKeyboardFunc(keyboardCallback);
+    glutSpecialFunc(Controller::specialKeys);
+    //glutSpecialFunc(specialKeysCallback);
+    glutPassiveMotionFunc(Controller::mouseMove);
+    //glutPassiveMotionFunc(mouseMove);
+    glutMouseFunc(Controller::mouseButton);
+    //glutMouseFunc(mouseButton);
+
     camera.SetPos(-500.0f, 20.0f, 800.0f);
     camera.RotateYaw(-1.0);
     glutTimerFunc(1, timer, 0);
@@ -134,13 +139,14 @@ void init() {
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
-    // building textures
+    Controller::init(camera, t, buildingStructure, isInsideView);
+     // building textures
     outsideWallTex.loadTexture("Textures/outside.jpg");
     buildingStructure.wallTex = outsideWallTex.textureID;
     insideWallTex.loadTexture("Textures/insideWall.jpg");
     buildingStructure.wallTex2 = insideWallTex.textureID;
 
-    // sky textures
+      // sky textures
     texFront.loadTexture("Textures/Sky_Clouds.jpg");
     texBack.loadTexture("Textures/Sky_Clouds.jpg");
     texLeft.loadTexture("Textures/Sky_Clouds.jpg");
@@ -242,40 +248,3 @@ void drawGround() {
     glPopMatrix();
 }
 
-void keyboardCallback(unsigned char key, int x, int y) {
-    switch (key) {
-    case 'm': case 'M': g_darkMode = !g_darkMode; break;
-    case 'a': camera.RotateYaw(-0.02); break;
-    case 'd': camera.RotateYaw(0.02); break;
-    case 'w': camera.Fly(2.0); break;
-    case 's': camera.Fly(-2.0); break;
-    case 'e': buildingStructure.toggleDoor(); break;
-    }
-    glutPostRedisplay();
-}
-void specialKeysCallback(int key, int x, int y) {
-    switch (key) {
-    case GLUT_KEY_UP: camera.Move(20.0); break;
-    case GLUT_KEY_DOWN: camera.Move(-10.0); break;
-    case GLUT_KEY_LEFT: camera.Strafe(10.0); break;
-    case GLUT_KEY_RIGHT: camera.Strafe(-10.0); break;
-    }
-    glutPostRedisplay();
-}
-
-void mouseMove(int x, int y) {
-    if (!g_mouseCaptured) return;
-    int dx = x - g_lastMouseX, dy = y - g_lastMouseY;
-    g_lastMouseX = x; g_lastMouseY = y;
-    camera.RotateYaw(dx * g_mouseSensitivity);
-    camera.RotatePitch(-dy * g_mouseSensitivity);
-    glutPostRedisplay();
-}
-
-void mouseButton(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        g_mouseCaptured = true;
-        g_lastMouseX = x; g_lastMouseY = y;
-        glutSetCursor(GLUT_CURSOR_NONE);
-    }
-}
