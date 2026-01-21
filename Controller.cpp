@@ -1,6 +1,8 @@
 #include "Controller.h"
 #include <iostream>
 #include <cmath>
+#include "AdminDoor.h" //salma
+#include "Chair.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -16,6 +18,8 @@ int Controller::lastMouseY = 0;
 float Controller::mouseSensitivity = 0.0025f;
 //salma
 extern bool g_darkMode;
+extern AdminDoor adminDoor;
+extern Chair adminChair;
 
 
 void Controller::init(Camera& cam, Truck& trk, bool& viewFlag) {
@@ -31,12 +35,18 @@ void Controller::keyboard(unsigned char key, int x, int y) {
     float step = 2.0f;
 
     switch (key) {
+    case 'r':   // rotate chair
+        adminChair.rotate(5.0f);
+        break;
     case 'a': cameraRef->RotateYaw(-0.02f); break;
     case 'd': cameraRef->RotateYaw(0.02f); break;
     case 'w': cameraRef->Fly(2.0f); break;
     case 's': cameraRef->Fly(-2.0f); break;
     case 'o':
-    case 'O': truckRef->backDoors.open = !truckRef->backDoors.open; break;
+    case 'O':
+        truckRef->backDoors.open = !truckRef->backDoors.open;
+        adminDoor.toggle();
+        break;
     case 'p': truckRef->driverDoor.open = !truckRef->driverDoor.open; break;
     case '1': // FORWARD
         truckRef->position.x += cos(rad) * step;

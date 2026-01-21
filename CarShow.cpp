@@ -11,7 +11,7 @@
 #include "Window.h"
 #include "Building.h"
 #include "Skybox.h"
-#include "ModelTree.h"
+//#include "ModelTree.h"
 #include "StreetLamp.h"
 #include "Sidewalk.h"
 #include "FamilyCar.h"
@@ -20,6 +20,9 @@
 #include "Controller.h"
 #include "frontOfBuilding.h"
 #include "OutSide.h"
+#include "Bureau.h" //salma
+#include "AdminDoor.h" //salma
+#include "Chair.h"
 
 
 using namespace std;
@@ -77,15 +80,26 @@ Texture texFront, texBack, texLeft, texRight, texUp, texDown;
 Texture texRoad;
 SkyBox mySky;
 //tree:
-SmartTreeModel myTree;
+//SmartTreeModel myTree;
 Texture texTrunk, texLeaves;
 //street lamp & side walk:
 Sidewalk mySidewalk;
 StreetLamp myLamp;
 //road:
-Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f); //salma
-Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);    //salma
-ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f); //salma
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
+Road sideRoad(-550.0f, -3.0f, 695.0f, 100.0f, 755.0f, 90.0f);    //salma
+ParkingRoad parking(-65.0f, -3.0f, 575.5f, 140.0f, 270.0f, 90.0f, 2.0f, 40.0f); //salma
+//salma
+Sofa sofa(Point(-145, 0, 630)); // salma
+//Sofa sofa2(Point()); // salma
+Sofa sofa2(Point(-145, 0, 520)); // salma
+Sofa tripleSofa(Point(-190, 0, 614)); // salma
+Bureau bureau(Point(-100, -1, 580));  // salma
+AdminDoor adminDoor(Point(-200, 0, 510)); //salma
+Chair adminChair(-80, -1, 580); //salma
+
+
+
 
 Plaza buildingPlaza;
 CityLayout myCity;
@@ -260,6 +274,19 @@ void display()
     sideRoad.draw(); //salma
     parking.draw(); //salma
 
+    sofa.setRotation(180); //salma
+    sofa2.setRotation(0); //salma
+    tripleSofa.setRotation(90);//salma
+
+    sofa.draw(); //salma
+    sofa2.draw(); //salma
+    tripleSofa.drawTriple();
+    bureau.draw(); //salma
+    adminDoor.update(); //salma
+    adminDoor.draw();//salma
+    adminChair.draw();//salma
+
+
     buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
     myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
@@ -279,16 +306,16 @@ void display()
 
     glCallList(displayListID);
 
-    for (int i = 0; i < 2; i++)
-    {
-        float xBase = -500.0f + (i * 200.0f); // مسافة 200 بين الشجر
-        float zPos = -450.0f;
-        glPushMatrix();
-        glTranslatef(xBase, -3.0f, zPos);
-        glScalef(10.0f, 10.0f, 10.0f);
-        myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
-        glPopMatrix();
-    }
+    //for (int i = 0; i < 2; i++)
+    //{
+    //    float xBase = -500.0f + (i * 200.0f); // مسافة 200 بين الشجر
+    //    float zPos = -450.0f;
+    //    glPushMatrix();
+    //    glTranslatef(xBase, -3.0f, zPos);
+    //    glScalef(10.0f, 10.0f, 10.0f);
+    //    myTree.draw(1.0f, texTrunk.textureID, texLeaves.textureID);
+    //    glPopMatrix();
+    //}
     glutSwapBuffers();
 
 }
@@ -361,7 +388,7 @@ void init()
 
     // Tree Textures
     // Assuming 'models' folder is lowercase. If it is 'Models', change it here.
-    myTree.loadOBJ("models/Tree-Model/Tree1.obj");
+    //myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
 

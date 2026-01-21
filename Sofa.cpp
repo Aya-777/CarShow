@@ -47,7 +47,8 @@ void Sofa::draw() {
 
     glColor3ub(22, 22, 22);
 
-    Cuboid(Point(0, 0, 0), 1, 7, 10).draw();
+    Cuboid(Point(0, 0, 0), 2, 14, 20).draw();
+    //Cuboid(Point(0, 0, 0), 1, 7, 10).draw();
 
 
 
@@ -55,7 +56,8 @@ void Sofa::draw() {
 
     glColor3ub(55, 55, 55);
 
-    Cuboid(Point(-5.25, 0, 0), 5, 7, 0.5).draw();
+    Cuboid(Point(-10.5, 0, 0), 10, 14, 1).draw();
+    //Cuboid(Point(-5.25, 0, 0), 5, 7, 0.5).draw();
 
 
 
@@ -63,7 +65,8 @@ void Sofa::draw() {
 
     glColor3ub(88, 88, 88);
 
-    Cuboid(Point(5.25, 0, 0), 5, 7, 0.5).draw();
+    Cuboid(Point(10.5, 0, 0), 10, 14, 1).draw();
+    //Cuboid(Point(5.25, 0, 0), 5, 7, 0.5).draw();
 
 
 
@@ -71,7 +74,8 @@ void Sofa::draw() {
 
     glColor3ub(136, 0, 21);
 
-    Cuboid(Point(0, 0, -3.75), 5, 0.5, 11).draw();
+    Cuboid(Point(0, 0, -7.5), 10, 1, 22).draw();
+    //Cuboid(Point(0, 0, -3.75), 5, 0.5, 11).draw();
 
 
 
@@ -79,13 +83,17 @@ void Sofa::draw() {
 
     glColor3ub(55, 55, 55);
 
-    Cuboid(Point(5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+    //Cuboid(Point(5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(10.5, -4, 6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+    //Cuboid(Point(-5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-10.5, -4, 6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+    //Cuboid(Point(5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+    Cuboid(Point(10.5, -4, -6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+    //Cuboid(Point(-5.25, -2, -3.7), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-10.5, -4, -6.4), 4, 1.2, 1).draw();
 
 
 
@@ -111,7 +119,8 @@ void Sofa::drawTriple() {
 
     glColor3ub(22, 22, 22);
 
-    Cuboid(Point(0, 0, 0), 0.5, 7, 10).draw();
+    //Cuboid(Point(0, 0, 0), 0.5, 7, 10).draw();
+    Cuboid(Point(0, 0, 0), 1, 14, 20).draw();
 
 
 
@@ -119,7 +128,8 @@ void Sofa::drawTriple() {
 
     glColor3ub(22, 22, 22);
 
-    Cuboid(Point(-8.5, 0, 4), 0.5, 15, 7).draw();
+    Cuboid(Point(-17, 0, 8), 1, 30, 14).draw();
+    //Cuboid(Point(-8.5, 0, 4), 0.5, 15, 7).draw();
 
 
 
@@ -127,7 +137,8 @@ void Sofa::drawTriple() {
 
     glColor3ub(88, 88, 88);
 
-    Cuboid(Point(4.75, 0.5, 0), 4.5, 7, 0.5).draw();
+    Cuboid(Point(9.5, 1, 0), 9, 14, 1).draw();
+    //Cuboid(Point(4.75, 0.5, 0), 4.5, 7, 0.5).draw();
 
 
 
@@ -135,93 +146,51 @@ void Sofa::drawTriple() {
 
     glColor3ub(136, 0, 21);
 
-    Cuboid(Point(-3.75, 0.5, -3.25), 4.5, 0.5, 16.5).draw();
+    Cuboid(Point(-7.5, 1, -6.5), 9, 1, 33).draw();
+    //Cuboid(Point(-3.75, 0.5, -3.25), 4.5, 0.5, 16.5).draw();
 
-
+    
 
     // second back
 
     glColor3ub(136, 0, 21);
 
-    Cuboid(Point(-11.75, 0.5, 4), 4.5, 14, 0.5).draw();
+    Cuboid(Point(-23.5, 1, 8), 9, 28, 1).draw();
+    //Cuboid(Point(-11.75, 0.5, 4), 4.5, 14, 0.5).draw();
 
-
+    
 
     // left hand
 
     glColor3ub(55, 55, 55);
 
-    Cuboid(Point(-8.5, 0.5, 11.25), 4.5, 0.5, 7).draw();
+    Cuboid(Point(-17, 1, 22.5), 9, 1, 14).draw();
+    //Cuboid(Point(-8.5, 0.5, 11.25), 4.5, 0.5, 7).draw();
 
-
+    
 
     // legs
 
     glColor3ub(55, 55, 55);
 
-    Cuboid(Point(4.75, -2, 3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(9.5, -4, 6.4), 4, 1.2, 1).draw();
+    //Cuboid(Point(4.75, -2, 3.2), 2, 0.6, 0.5).draw();
 
-    Cuboid(Point(4.75, -2, -3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(9.5, -4, -6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-5.25, -2, 3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-10.5, -4, 6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-5.25, -2, -3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-10.5, -4, -6.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-5.25, -2, 11.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-10.5, -4, 22.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-11.75, -2, 11.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-23.5, -4, 22.4), 4, 1.2, 1).draw();
 
-    Cuboid(Point(-11.75, -2, -3.2), 2, 0.6, 0.5).draw();
+    Cuboid(Point(-23.5, -4, -6.4), 4, 1.2, 1).draw();
 
 
 
     glPopMatrix();
 
 }
-
-/*
-* after fixing the building:
-* #include "Sofa.h" //salma
-#include "Door.h" //salma
-#include "Desk.h" //salma
-
-
-//Sofa sofa; //salma
-Sofa sofa(Point(-100, 0, 365)); // slightly in front of desk
-Sofa sofa2(Point(-100, 0, 300)); // slightly in front of desk
-//Sofa sofa(Point(-60, 0, 350)); // slightly in front of desk
-Door door(Point(-120, 0, 305)); //salma
-//Door door(Point(-60, 0, 300)); //salma
-Desk desk(Point(-30, 0, 365));  // slightly above floor
-//Desk desk(Point(-60, 0, 380));  // slightly above floor
-door.update(); //salma
-    sofa.setRotation(180);
-    sofa2.setRotation(-90);
-
-    door.draw(); //salma
-    // draw sofa
-    //sofa.draw(Point(0.0f, -1.5f, 0.0f)); //salma
-    sofa.draw();
-    sofa2.draw();
-    desk.draw(); //salma
-    door.update();   // ? animate door
-
-
-
-            //salma
-    case 'o':
-        door.toggle();
-        break;
-        
-
-
-    }
-    //salma
-    // Call this outside the switch so ANY key press refreshes the screen
-    glutPostRedisplay();
-    // *** //
-
-
-
-*/
 
