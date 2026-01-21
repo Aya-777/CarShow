@@ -44,6 +44,8 @@ Truck t(Point(-550, 7, 775));
 Truck t2(Point(-200, 10, 200));
 Truck t3(Point(-200, 10, 300));
 Mercedes mercedes;
+FamilyCar familyCar;
+FamilyCar familyCar2(Point(200, 20, 450), true); // Convertible car
 bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
 int g_lastMouseX = 0, g_lastMouseY = 0;
 int g_iWidth = 1200, g_iHeight = 800;
@@ -190,6 +192,9 @@ void display() {
     glColor3f(0.8, 0.1, 0.1);
     t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
+    familyCar.setPosition(Point(200, 20, 370));
+    familyCar.draw();
+    familyCar2.draw();
     glPopMatrix();
     glPushMatrix();
         glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
