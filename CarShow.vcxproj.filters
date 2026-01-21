@@ -114,6 +114,9 @@
     <ClCompile Include="Bureau.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="aabb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">

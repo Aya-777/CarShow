@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="aabb.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="bugatti.cpp" />
     <ClCompile Include="Camera.cpp" />

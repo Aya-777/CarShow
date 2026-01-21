@@ -5,6 +5,7 @@
 #include "Door.h"
 #include "SteeringWheel.h"
 #include <vector>
+#include "aabb.h"
 extern std::vector<Door*> globalDoors;
 
 class Truck {
@@ -25,6 +26,7 @@ public:
     float rotationAngle;
     float speed;
     SteeringWheel driverSteeringWheel;
+    std::vector<AABB> walls;
 
 
     Truck(Point position);
@@ -32,7 +34,9 @@ public:
     void draw(float r = 0.9f, float g = 0.9f, float b = 0.85f);
     void load();
     void playMusic(Point cameraPos);
-
+    bool checkCollision(Point oldPos);
+    AABB getAABB() const;
+    void Move();
 };
 
 #endif

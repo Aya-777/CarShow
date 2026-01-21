@@ -179,6 +179,7 @@ void init() {
         camera.addWall(wall);
     }
 	camera.addWall(ground.getAABB());
+	t.walls = camera.walls;
     //std::cout<< "Total Walls in Camera Collision System: " << camera.walls.size() << std::endl;
 	
     displayListID = glGenLists(1);

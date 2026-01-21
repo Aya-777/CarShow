@@ -20,7 +20,6 @@ void Building::draw()
 	wall12.drawWithTexture(wallTex, repeatX1, repeatY);
 	wall13.drawWithTexture(wallTex, repeatX1, repeatY);
 	wall2.drawWithTexture(wallTex, repeatX1, repeatY);
-	//glRotatef(90, 0, 1, 0);
 	wall3.drawWithTexture(wallTex, repeatX2 - 2, repeatY);
 	wall32.drawWithTexture(wallTex, 1, 2);
 	wall33.drawWithTexture(wallTex, 1, 1);
@@ -29,8 +28,6 @@ void Building::draw()
 
 	// roof
 	glPushMatrix();
-	//glRotatef(90, 1, 0, 0);
-	//glRotatef(90, 0, 0, 1);
 	roof.drawWithTexture(wallTex, repeatX1, repeatY);
 	glPopMatrix();
 
@@ -55,7 +52,6 @@ void Building::draw()
 	glColor3f(0.7, 0.7, 0.7);
 	bwall3.drawWithTexture(wallTex, repeatX1, repeatY);
 	bwall4.drawWithTexture(wallTex, repeatX1, repeatY);
-	//glRotatef(90, 0, 1, 0);
 	bwall1.drawWithTexture(wallTex, 1, 2);
 	bwall12.drawWithTexture(wallTex, repeatX1, repeatY);
 	bwall13.drawWithTexture(wallTex, 1, 1);
@@ -72,7 +68,7 @@ void Building::draw()
 	glPopMatrix();
 
 
-	// doors (unchanged)
+	// doors
 	glPushMatrix();
 	glRotatef(90, 0, 1, 0);
 	leftdoor.openWindow();
@@ -117,17 +113,6 @@ Building::Building()
 	initWalls();
 }
 
-
-//Building::Building(double x2, double y2, double z2, double w, double h, double l,Window leftdoor, Window rightdoor)
-//: leftdoor(leftdoor),
-//  rightdoor(rightdoor){
-//	width = w;
-//	height = h;
-//	length = l;
-//	x = x2;
-//	y = y2;
-//	z = z2;
-//}
 
 const std::vector<AABB>& Building::getWalls() const {
 	return walls;
