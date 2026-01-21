@@ -54,7 +54,7 @@ CityLayout myCity;
 
 // Textures
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
-Texture texSidewalk, texPlaza, texGrass, texResturant, texTrunk, texLeaves;
+Texture texSidewalk, texPlaza, texStone, texResturant, texTrunk, texLeaves , texGrass;
 Texture insideWallTex, outsideWallTex;
 
 // Display List
@@ -119,9 +119,9 @@ void display() {
     mainRoad.draw();
     sideRoad.draw();
     parking.draw();
-    buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f);
+    buildingPlaza.draw(-550.0f, -500.0f, 0.0f, 720.0f, texPlaza.textureID, 20.0f);
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);
-    myCity.drawCityBuildings(myLamp, texResturant.textureID);
+    myCity.drawCityBuildings(myLamp, texResturant.textureID, texStone);
 
     glPushMatrix();
     glColor3f(0.8, 0.1, 0.1);
@@ -163,6 +163,7 @@ void init() {
 	// side walk and plaza textures
     texSidewalk.loadTexture("Textures/sidewalk.jpg");
     texPlaza.loadTexture("Textures/tile2.jpg");
+    texStone.loadTexture("Textures/ground.jpg");
     texGrass.loadTexture("Textures/grass5.jpg");
     texResturant.loadTexture("Textures/building.jpg");
 	// building's ground texture 
@@ -247,4 +248,3 @@ void drawGround() {
     glEnd();
     glPopMatrix();
 }
-

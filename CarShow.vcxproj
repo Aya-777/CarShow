@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libraries\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,8 +160,10 @@
     <ClCompile Include="MountainHall.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="Sidewalk.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Sofa.cpp" />
+    <ClCompile Include="StreetLamp.cpp" />
     <ClCompile Include="testcar.cpp" />
     <ClCompile Include="SteeringWheel.cpp" />
     <ClCompile Include="Texture.cpp" />
