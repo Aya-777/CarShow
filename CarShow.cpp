@@ -55,8 +55,8 @@ Sidewalk mySidewalk;
 StreetLamp myLamp;
 //road:
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
-Road sideRoad(-550.0f, -3.0f, 695.0f, 100.0f, 755.0f, 90.0f);    //salma
-ParkingRoad parking(-65.0f, -3.0f, 575.5f, 140.0f, 270.0f, 90.0f, 2.0f, 40.0f); //salma
+Road sideRoad(-550.0f, -3.0f, 775.0f, 120.0f, 910.0f, 90.0f);    //salma
+ParkingRoad parking(100.0f, -3.0f, 500.5f, 435.0f, 260.0f,90); //salma
 //salma
 Sofa sofa(Point(-145, 0, 630)); // salma
 //Sofa sofa2(Point()); // salma
@@ -88,6 +88,7 @@ void idle();
 void timer(int value);
 void setupLighting();
 void drawGround();
+void forceLightingState(); // Helper to force lighting ON
 //void keyboardCallback(unsigned char key, int x, int y);
 //void specialKeysCallback(int key, int x, int y);
 //void mouseMove(int x, int y);
@@ -129,20 +130,44 @@ void display() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     camera.Refresh();
+
+    // 1. SETUP GLOBAL LIGHTING (SUN/MOON)
     setupLighting();
 
+    // 2. DRAW SKYBOX
+    // We disable lighting for the skybox itself (it's an environment map)
+    // But we apply a dark color to tint it.
+    glDisable(GL_LIGHTING);
+    if (g_darkMode) glColor3f(0.3f, 0.3f, 0.4f); // Dark Blue tint for night sky
+    else glColor3f(1.0f, 1.0f, 1.0f);           // White tint for day sky
+
+    // Force texture modulate so the glColor above affects the sky texture
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glCallList(displayListID);
+
+    // 3. RESET COLOR AND ENABLE LIGHTING FOR WORLD
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glEnable(GL_LIGHTING);
 
     drawGround();
     buildingStructure.draw();
     mountainHall.draw();
+
+    // --- CRITICAL FIX FOR ROADS ---
+    // The Road class likely disables lighting internally. 
+    // We force it back ON here.
+    forceLightingState();
     mainRoad.draw();
     sideRoad.draw();
     parking.draw();
+
+    // --- CRITICAL FIX FOR PLAZA & SIDEWALKS ---
+    forceLightingState();
     buildingPlaza.draw(-550.0f, -500.0f, 0.0f, 720.0f, texPlaza.textureID, 20.0f);
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);
     myCity.drawCityBuildings(myLamp, texResturant.textureID, texStone);
 
+    forceLightingState();
     sofa.setRotation(180); //salma
     sofa2.setRotation(0); //salma
     tripleSofa.setRotation(90);//salma
@@ -156,13 +181,18 @@ void display() {
     adminChair.draw();//salma
 
 
-	glPushMatrix();
+    // --- VEHICLES ---
+    forceLightingState();
+    glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
-	glColor3f(0.8, 0.1, 0.1);
-	t.draw(0.8, 0.8, 0.7);
+    glColor3f(0.8, 0.1, 0.1);
+    t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
-	glPopMatrix();
-	buildingStructure.draw();
+    glPopMatrix();
+
+    // Draw Again (As per your original code)
+    forceLightingState();
+    buildingStructure.draw();
 	mainRoad.draw(); //salma
 	sideRoad.draw(); //salma
 	parking.draw(); //salma
@@ -271,15 +301,24 @@ void updateScene() {
     }
 }
 
-void setupLighting() {
+// Helper to force correct lighting state
+void forceLightingState() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    // Force modulate mode so textures take light into account
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}
+
+void setupLighting() {
+    forceLightingState();
     GLfloat ambientLight[4];
     GLfloat diffuseLight[4];
     GLfloat lightPos[4] = { 0.0f, 500.0f, 500.0f, 1.0f };
     if (g_darkMode) {
-        ambientLight[0] = 0.15f; ambientLight[1] = 0.15f; ambientLight[2] = 0.20f; ambientLight[3] = 1.0f;
-        diffuseLight[0] = 0.3f; diffuseLight[1] = 0.3f; diffuseLight[2] = 0.35f; diffuseLight[3] = 1.0f;
+        ambientLight[0] = 0.1f; ambientLight[1] = 0.1f; ambientLight[2] = 0.15f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 0.1f; diffuseLight[1] = 0.1f; diffuseLight[2] = 0.15f; diffuseLight[3] = 1.0f;
     }
     else {
         ambientLight[0] = 0.6f; ambientLight[1] = 0.6f; ambientLight[2] = 0.6f; ambientLight[3] = 1.0f;
@@ -295,7 +334,7 @@ void drawGround() {
     texGrass.Use();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    if (g_darkMode) glColor3f(0.4f, 0.4f, 0.4f);
+    if (g_darkMode) glColor3f(0.3f, 0.3f, 0.35f);
     else glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);   glVertex3f(-2000.0f, -3.01f, -2000.0f);

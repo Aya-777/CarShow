@@ -16,7 +16,7 @@ private:
 public:
     ParkingRoad(); // default
     ParkingRoad(float xPos, float yPos, float zPos, float w, float l, float rotY = 0.0f,
-        float lineW = 2.0f, float spacing = 20.0f);
+        float lineW = 3.0f, float spacing = 40.0f);
 
     void setPosition(float xPos, float yPos, float zPos);
     void setSize(float w, float l);
