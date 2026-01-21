@@ -55,7 +55,7 @@ SkyBox mySky;
 SmartTreeModel myTree;
 Sidewalk mySidewalk;
 StreetLamp myLamp;
-Cuboid ground(Point(0, -2, 0), 1, 4000, 4000);
+Cuboid ground(Point(0, -5, 0), 1, 4000, 4000);
 //road:
 Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
 Road sideRoad(-550.0f, -3.0f, 775.0f, 120.0f, 910.0f, 90.0f);    //salma

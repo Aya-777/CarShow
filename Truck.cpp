@@ -102,126 +102,78 @@ void Truck::Move(){
 }
 
 
-    /*
-void Truck::update() {
+
+void Truck::Update() {
     float rad = rotationAngle * (3.14159f / 180.0f);
 
-    // --- DRIVER DOOR POSITION ---
+    // --- 1. MOVEMENT & COLLISION ---
+    if (speed != 0.0f) {
+        Point nextPos = position;
+        nextPos.x += cos(rad) * speed;
+        nextPos.z -= sin(rad) * speed;
+
+        if (!checkCollision(nextPos)) {
+            position = nextPos;
+            wheelSpin -= (speed * 10.0f);
+            rotationAngle += (steerAngle * 0.1f);
+        }
+        else {
+            speed = 0.0f;
+            std::cout << "CRASH: Movement halted." << std::endl;
+        }
+    }
+
+    // --- 2. UPDATE DOOR POSITIONS (Relative to Truck) ---
+    // Driver Door
     float drvLocalX = length * 0.35f;
     float drvLocalZ = -width * 0.5f;
-
-    // Standard Rotation Formula (No flipping!)
     driverDoor.center.x = position.x + (drvLocalX * cos(rad) - drvLocalZ * sin(rad));
     driverDoor.center.y = position.y + (height * 0.5f);
     driverDoor.center.z = position.z + (drvLocalX * sin(rad) + drvLocalZ * cos(rad));
 
-    // --- PASSENGER DOOR POSITION ---
+    // Passenger Door
     float psgLocalX = length * 0.35f;
-    float psgLocalZ = width * 0.5f; // Positive Z for right side
+    float psgLocalZ = width * 0.5f;
     passengerDoor.center.x = position.x + (psgLocalX * cos(rad) - psgLocalZ * sin(rad));
     passengerDoor.center.y = position.y + (height * 0.5f);
     passengerDoor.center.z = position.z + (psgLocalX * sin(rad) + psgLocalZ * cos(rad));
 
-    // --- PASSENGER DOOR ANIMATION ---
+    // Back Doors
+    float backLocalX = -length * 0.5f;
+    float backLocalZ = 0.0f;
+    backDoors.center.x = position.x + (backLocalX * cos(rad) - backLocalZ * sin(rad));
+    backDoors.center.y = position.y + (height * 0.5f);
+    backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
+
+    // --- 3. DOOR ANIMATIONS (Opening/Closing) ---
+    // Driver Door Anim
+    if (driverDoor.open) {
+        if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
+    }
+    else {
+        if (driverDoor.OpenRate > 0.0f) driverDoor.OpenRate -= 0.2f;
+    }
+
+    // Passenger Door Anim
     if (passengerDoor.open) {
         if (passengerDoor.OpenRate < 80.0f) passengerDoor.OpenRate += 0.2f;
     }
     else {
         if (passengerDoor.OpenRate > 0.0f) passengerDoor.OpenRate -= 0.2f;
     }
-    // --- BACK DOORS POSITION ---
-    float backLocalX = -length * 0.5f;
-    float backLocalZ = 0.0f;
 
-    backDoors.center.x = position.x + (backLocalX * cos(rad) - backLocalZ * sin(rad));
-    backDoors.center.y = position.y + (height * 0.5f);
-    backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
-
-    if (driverDoor.open) {
-		if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
-    }
-    else {
-        if (driverDoor.OpenRate > 0.0f) driverDoor.OpenRate -= 0.2f;
-    }
-
+    // Back Door Anim
     if (backDoors.open) {
         if (backDoors.OpenRate < 90.0f) backDoors.OpenRate += 0.2f;
     }
     else {
         if (backDoors.OpenRate > 0.0f) backDoors.OpenRate -= 0.2f;
     }
-    */
-void Truck::update() {
-    float rad = rotationAngle * (3.14159f / 180.0f);
 
-    if (speed != 0.0f) {
-        // 1. Where do we want to go?
-        Point nextPos = position;
-        nextPos.x += cos(rad) * speed;
-        nextPos.z -= sin(rad) * speed;
-
-        // 2. Is that spot safe?
-        if (!checkCollision(nextPos)) {
-            position = nextPos; // Safe to move!
-            wheelSpin -= (speed * 10.0f);
-            rotationAngle += (steerAngle * 0.1f);
-        }
-        else {
-            speed = 0.0f; // STOP
-            std::cout << "CRASH: Movement halted." << std::endl;
-        }
-    }
-
-
-   // --- DRIVER DOOR POSITION ---
-        float drvLocalX = length * 0.35f;
-        float drvLocalZ = -width * 0.5f;
-
-        // Standard Rotation Formula (No flipping!)
-        driverDoor.center.x = position.x + (drvLocalX * cos(rad) - drvLocalZ * sin(rad));
-        driverDoor.center.y = position.y + (height * 0.5f);
-        driverDoor.center.z = position.z + (drvLocalX * sin(rad) + drvLocalZ * cos(rad));
-
-        // --- PASSENGER DOOR POSITION ---
-        float psgLocalX = length * 0.35f;
-        float psgLocalZ = width * 0.5f; // Positive Z for right side
-        passengerDoor.center.x = position.x + (psgLocalX * cos(rad) - psgLocalZ * sin(rad));
-        passengerDoor.center.y = position.y + (height * 0.5f);
-        passengerDoor.center.z = position.z + (psgLocalX * sin(rad) + psgLocalZ * cos(rad));
-
-        // --- PASSENGER DOOR ANIMATION ---
-        if (passengerDoor.open) {
-            if (passengerDoor.OpenRate < 80.0f) passengerDoor.OpenRate += 0.2f;
-        }
-        else {
-            if (passengerDoor.OpenRate > 0.0f) passengerDoor.OpenRate -= 0.2f;
-        }
-        // --- BACK DOORS POSITION ---
-        float backLocalX = -length * 0.5f;
-        float backLocalZ = 0.0f;
-
-        backDoors.center.x = position.x + (backLocalX * cos(rad) - backLocalZ * sin(rad));
-        backDoors.center.y = position.y + (height * 0.5f);
-        backDoors.center.z = position.z + (backLocalX * sin(rad) + backLocalZ * cos(rad));
-
-        if (driverDoor.open) {
-            if (driverDoor.OpenRate < 80.0f) driverDoor.OpenRate += 0.2f;
-        }
-        else {
-            if (driverDoor.OpenRate > 0.0f) driverDoor.OpenRate -= 0.2f;
-        }
-
-        if (backDoors.open) {
-            if (backDoors.OpenRate < 90.0f) backDoors.OpenRate += 0.2f;
-        }
-        else {
-            if (backDoors.OpenRate > 0.0f) backDoors.OpenRate -= 0.2f;
-        }
-		speed = 0.0f; // Reset speed after each update
-        steerAngle = 0.0f;   // RESET STEERING so it doesn't keep turning!
-    }
-    
-//}
+    // --- 4. RESET STATE ---
+    speed = 0.0f;
+    steerAngle = 0.0f;
+}
 void drawLightCircle(float radius, int segments, float r, float g, float b) {
     glColor3f(r, g, b);
     glBegin(GL_TRIANGLE_FAN);
@@ -520,3 +472,17 @@ void Truck::draw(float r, float g, float b) {
 
     glPopMatrix(); // Final Truck Pop
 }
+void Truck::Draw() {
+    this->draw(0.9f, 0.9f, 0.85f);
+}
+
+// These satisfy the Vehicle.h requirements
+void Truck::EnterVehicle(bool enter) { this->isMovable = enter; }
+void Truck::MoveForward(float step) { this->speed = step; }
+void Truck::MoveBackward(float step) { this->speed = -step; }
+void Truck::RotateLeft(float angle) { this->steerAngle = angle; }
+void Truck::RotateRight(float angle) { this->steerAngle = -angle; }
+
+// Return basic values for camera/view
+Point Truck::GetDriverSeatPosition() const { return this->position; }
+float Truck::GetDriverViewYaw() const { return this->rotationAngle; }
