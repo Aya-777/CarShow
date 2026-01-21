@@ -2,7 +2,7 @@
 #include "MountainCar.h"
 
 //
-// MountainHall Class
+// MountainHall Class (Your Section)
 // This class is responsible for drawing your specific section of the showroom.
 // It creates and manages the main car and the platform it sits on.
 //
