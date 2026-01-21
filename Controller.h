@@ -5,14 +5,17 @@
 #include "Camera.h"
 #include "Truck.h"
 #include "Building.h"
+#include "Mercedes.h"
 
 class Controller {
 public:
     // References to the objects the controller needs to manipulate
     static Camera* cameraRef;
     static Truck* truckRef;
+    static Mercedes* mercedesRef;
     static Building* buldingRef;
     static bool* isInsideViewRef;
+    static int activeVehicle;
 
     // Mouse state
     static bool mouseCaptured;
@@ -27,7 +30,7 @@ public:
     static void mouseButton(int button, int state, int x, int y);
 
     // Initialization
-    static void init(Camera& cam, Truck& trk, Building& bld, bool& viewFlag);
+    static void init(Camera& cam, Truck& trk, Building& bld, bool& viewFlag , Mercedes& m);
 };
 
 #endif

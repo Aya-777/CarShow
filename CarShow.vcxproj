@@ -200,6 +200,7 @@
     <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Truck.h" />
+    <ClInclude Include="Vehicle.h" />
     <ClInclude Include="Wheel.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

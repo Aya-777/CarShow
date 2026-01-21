@@ -24,6 +24,8 @@
 #include "frontOfBuilding.h"
 #include "OutSide.h"
 #include "MountainHall.h" 
+#include "Mercedes.h";
+
 
 using namespace std;
 
@@ -35,6 +37,7 @@ Camera camera;
 Building buildingStructure;
 MountainHall mountainHall;
 Truck t(Point(-300, 3.5, 450));
+Mercedes mercedes;
 bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
 int g_lastMouseX = 0, g_lastMouseY = 0;
 int g_iWidth = 1200, g_iHeight = 800;
@@ -126,6 +129,7 @@ void display() {
     glPushMatrix();
     glColor3f(0.8, 0.1, 0.1);
     t.draw(0.8, 0.8, 0.7);
+    mercedes.Draw();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -139,14 +143,14 @@ void init() {
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
-    Controller::init(camera, t, buildingStructure, isInsideView);
-     // building textures
+    Controller::init(camera, t, buildingStructure, isInsideView, mercedes);
+    // building textures
     outsideWallTex.loadTexture("Textures/outside.jpg");
     buildingStructure.wallTex = outsideWallTex.textureID;
     insideWallTex.loadTexture("Textures/insideWall.jpg");
     buildingStructure.wallTex2 = insideWallTex.textureID;
 
-      // sky textures
+    // sky textures
     texFront.loadTexture("Textures/Sky_Clouds.jpg");
     texBack.loadTexture("Textures/Sky_Clouds.jpg");
     texLeft.loadTexture("Textures/Sky_Clouds.jpg");
@@ -160,18 +164,23 @@ void init() {
     mySky.SKYUP = texUp.textureID;
     mySky.SKYDOWN = texDown.textureID;
 
-	// side walk and plaza textures
+    // side walk and plaza textures
     texSidewalk.loadTexture("Textures/sidewalk.jpg");
     texPlaza.loadTexture("Textures/tile2.jpg");
     texGrass.loadTexture("Textures/grass5.jpg");
     texResturant.loadTexture("Textures/building.jpg");
-	// building's ground texture 
+    // building's ground texture 
     buildingStructure.groundTex = texPlaza.textureID;
 
-	// tree model textures
+    // tree model textures
     myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
+
+    /*mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
+    mercedes.SetPosition(-432.036, 0.3087, 441.793);
+    mercedes.SetRotationY(90.0f);
+    mercedes.EnterVehicle(true);*/
 
     displayListID = glGenLists(1);
     glNewList(displayListID, GL_COMPILE);
@@ -200,17 +209,29 @@ void timer(int value) {
 }
 
 void updateScene() {
-    t.update();
+    t.Update();
+    mercedes.Update();
+
     if (isInsideView) {
-        float rad = t.rotationAngle * (3.1415926535 / 180.0f);
-        float localX = (t.length * 0.4f) - 14.0f;
-        float localY = t.height * 0.6f;
-        float localZ = t.width * 0.2f;
-        float finalX = t.position.x + (localX * cos(rad) - localZ * sin(rad));
-        float finalZ = t.position.z - (localX * sin(rad) + localZ * cos(rad));
-        float finalY = t.position.y + localY;
-        camera.SetPos(finalX, finalY - 3, finalZ);
-        camera.SetYaw(-rad);
+        if (Controller::activeVehicle == 1) {
+            float rad = t.rotationAngle * (M_PI / 180.0f);
+            float localX = (t.length * 0.4f) - 14.0f;
+            float localY = t.height * 0.6f;
+            float localZ = t.width * 0.2f;
+            camera.SetPos(t.position.x + (localX * cos(rad) - localZ * sin(rad)),
+                t.position.y + localY - 2,
+                t.position.z - (localX * sin(rad) + localZ * cos(rad)));
+            camera.SetYaw(-rad);
+        }
+        else if (Controller::activeVehicle == 2) {
+            Point seat = mercedes.GetDriverSeatPosition();
+            camera.SetPos(seat.x, seat.y, seat.z);
+
+
+            float rad = mercedes.GetRotationY() * (3.14159f / 180.0f);
+
+            camera.SetYaw(-rad + 1.5708f);
+        }
     }
 }
 
