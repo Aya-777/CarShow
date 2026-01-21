@@ -3,21 +3,17 @@
 
 //
 // MountainCar Class
-// This class defines the structure and behavior of the main G-Wagon style car.
-// It handles its own drawing, details, and position.
+// Can now render both a closed and a convertible (open-top) version.
 //
 class MountainCar {
 public:
-    // Constructor: Initializes the car at a specific position.
-    MountainCar(Point position);
+    // Constructor now accepts a 'convertible' flag. Defaults to false (closed).
+    MountainCar(Point position = Point(0, 0, 0), bool convertible = false);
 
-    // draw: The main function that renders all parts of the car.
     void draw();
-
-    // setPosition: A public "setter" function to safely update the car's private position.
     void setPosition(Point newPosition);
 
 private:
-    // The car's current position in the 3D world.
     Point pos;
+    bool isConvertible; // Flag to check if the car should be drawn without a roof.
 };

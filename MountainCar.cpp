@@ -1,7 +1,6 @@
 ﻿#include "MountainCar.h"
 #include <GL/freeglut.h>
 
-// HELPER FUNCTION to draw a complete wheel
 void drawWheelWithRim(GLUquadric* quadric) {
     glColor3f(0.05f, 0.05f, 0.05f);
     glPushMatrix();
@@ -19,19 +18,16 @@ void drawWheelWithRim(GLUquadric* quadric) {
     glPopMatrix();
 }
 
-// CONSTRUCTOR
-MountainCar::MountainCar(Point position) {
+MountainCar::MountainCar(Point position, bool convertible) {
     this->pos = position;
+    this->isConvertible = convertible;
 }
 
-// SETTER FUNCTION
 void MountainCar::setPosition(Point newPosition) {
     this->pos = newPosition;
 }
 
-// MAIN DRAW FUNCTION
 void MountainCar::draw() {
-    // --- 1. SETUP ---
     GLUquadric* quadric = gluNewQuadric();
     float whiteEmission[] = { 1.0, 1.0, 1.0, 1.0 };
     float redEmission[] = { 1.0, 0.0, 0.0, 1.0 };
@@ -42,23 +38,69 @@ void MountainCar::draw() {
     float default_specular[] = { 0.0, 0.0, 0.0, 1.0 };
     float default_shininess[] = { 0.0 };
 
-    // --- 2. CORE TRANSFORMATIONS ---
     glPushMatrix();
     glTranslatef(this->pos.x, this->pos.y, this->pos.z);
     glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
     glScalef(1.2, 1.2, 1.2);
 
-    // --- 3. MAIN BODY ---
-    glColor3f(0.1f, 0.1f, 0.1f);
+    // --- MAIN BODY (CHASSIS) ---
+    if (isConvertible) {
+        glColor3f(0.5f, 0.0f, 0.0f); // <<< Dark Red Color
+    }
+    else {
+        glColor3f(0.1f, 0.1f, 0.1f);
+    }
     glPushMatrix();
     glScalef(50, 20, 90); glutSolidCube(1);
     glPopMatrix();
-    glColor3f(0.15f, 0.15f, 0.15f);
-    glPushMatrix();
-    glTranslatef(0, 18, -10); glScalef(48, 16, 60); glutSolidCube(1);
-    glPopMatrix();
 
-    // --- 4. WHEELS ---
+    // --- CONDITIONAL ROOF/CABIN ---
+    if (!isConvertible) {
+        // Closed Car
+        glColor3f(0.15f, 0.15f, 0.15f);
+        glPushMatrix();
+        glTranslatef(0, 18, -10); glScalef(48, 16, 60); glutSolidCube(1);
+        glPopMatrix();
+        glColor3f(0.2f, 0.2f, 0.2f);
+        glPushMatrix();
+        glTranslatef(20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
+        glPopMatrix();
+    }
+    else {
+        // Convertible Car
+        glColor3f(0.5f, 0.0f, 0.0f); // <<< Dark Red Color
+        glPushMatrix();
+        glTranslatef(0, 18, 5); glScalef(48, 16, 30); glutSolidCube(1);
+        glPopMatrix();
+        glColor3f(0.0f, 0.0f, 0.0f);
+        glPushMatrix();
+        glTranslatef(0, 10.1, -25); glScalef(46, 1, 30); glutSolidCube(1);
+        glPopMatrix();
+        glColor3f(0.2f, 0.2f, 0.2f);
+        glPushMatrix();
+        glTranslatef(20, 26.5, 5); glScalef(2, 1, 30); glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-20, 26.5, 5); glScalef(2, 1, 30); glutSolidCube(1);
+        glPopMatrix();
+    }
+
+    // --- FRONT WINDSHIELD ---
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(0.6f, 0.8f, 1.0f, 0.4f);
+    glBegin(GL_QUADS);
+    glVertex3f(-23.0f, 25.0f, 20.1f);
+    glVertex3f(23.0f, 25.0f, 20.1f);
+    glVertex3f(23.0f, 11.0f, 22.1f);
+    glVertex3f(-23.0f, 11.0f, 22.1f);
+    glEnd();
+    glDisable(GL_BLEND);
+
+    // --- WHEELS ---
     glPushMatrix();
     glTranslatef(25, -8, 35); glRotatef(90, 0, 1, 0); drawWheelWithRim(quadric);
     glPopMatrix();
@@ -75,25 +117,13 @@ void MountainCar::draw() {
     glTranslatef(0, 5, -50.0f); drawWheelWithRim(quadric);
     glPopMatrix();
 
-    // --- 5. FRONT BUMPER ---
+    // --- FRONT BUMPER ---
     glColor3f(0.2f, 0.2f, 0.2f);
     glPushMatrix();
     glTranslatef(0, -12, 46); glScalef(52, 4, 4); glutSolidCube(1);
     glPopMatrix();
 
-    // --- 6. FRONT WINDSHIELD ---
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(0.6f, 0.8f, 1.0f, 0.4f);
-    glBegin(GL_QUADS);
-    glVertex3f(-23.0f, 25.0f, 20.1f);
-    glVertex3f(23.0f, 25.0f, 20.1f);
-    glVertex3f(23.0f, 11.0f, 22.1f);
-    glVertex3f(-23.0f, 11.0f, 22.1f);
-    glEnd();
-    glDisable(GL_BLEND);
-
-    // --- 7. LIGHTS ---
+    // --- LIGHTS ---
     glEnable(GL_LIGHTING);
     glMaterialfv(GL_FRONT, GL_EMISSION, whiteEmission);
     glPushMatrix();
@@ -112,31 +142,33 @@ void MountainCar::draw() {
     glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
     glDisable(GL_LIGHTING);
 
-    // --- 8. SIDE WINDOWS ---
-    glEnable(GL_LIGHTING);
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, glass_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, glass_shininess);
-    glPushMatrix();
-    glTranslatef(24.1, 18, 5); glScalef(1, 12, 25); glutSolidCube(1);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(24.1, 18, -25); glScalef(1, 12, 20); glutSolidCube(1);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-24.1, 18, 5); glScalef(1, 12, 25); glutSolidCube(1);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-24.1, 18, -25); glScalef(1, 12, 20); glutSolidCube(1);
-    glPopMatrix();
-    glMaterialfv(GL_FRONT, GL_SPECULAR, default_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, default_shininess);
-    glDisable(GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
+    // --- SIDE WINDOWS (Only for closed car) ---
+    if (!isConvertible) {
+        glEnable(GL_LIGHTING);
+        glColor3f(0.0f, 0.0f, 0.0f);
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, glass_specular);
+        glMaterialfv(GL_FRONT, GL_SHININESS, glass_shininess);
+        glPushMatrix();
+        glTranslatef(24.1, 18, 5); glScalef(1, 12, 25); glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(24.1, 18, -25); glScalef(1, 12, 20); glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-24.1, 18, 5); glScalef(1, 12, 25); glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-24.1, 18, -25); glScalef(1, 12, 20); glutSolidCube(1);
+        glPopMatrix();
+        glMaterialfv(GL_FRONT, GL_SPECULAR, default_specular);
+        glMaterialfv(GL_FRONT, GL_SHININESS, default_shininess);
+        glDisable(GL_COLOR_MATERIAL);
+        glDisable(GL_LIGHTING);
+    }
 
-    // --- 9. DOOR DETAILS ---
+    // --- DOOR DETAILS ---
     glColor3f(0.0f, 0.0f, 0.0f);
     glPushMatrix();
     glTranslatef(25.1, 8, 10); glScalef(1, 1.5, 5); glutSolidCube(1);
@@ -156,7 +188,7 @@ void MountainCar::draw() {
     glVertex3f(-25.1, 26, -8); glVertex3f(-25.1, -10, -8);
     glEnd();
 
-    // --- 10. FINAL DETAILS ---
+    // --- FINAL DETAILS ---
     glColor3f(0.15f, 0.15f, 0.15f);
     glPushMatrix();
     glTranslatef(26, 15, 15); glScalef(4, 8, 4); glutSolidCube(1);
@@ -164,18 +196,14 @@ void MountainCar::draw() {
     glPushMatrix();
     glTranslatef(-26, 15, 15); glScalef(4, 8, 4); glutSolidCube(1);
     glPopMatrix();
+
+    // ** RE-ADDED GRILLE **
     glColor3f(0.05f, 0.05f, 0.05f);
     glPushMatrix();
     glTranslatef(0, 0, 45.2); glScalef(40, 12, 1); glutSolidCube(1);
     glPopMatrix();
-    glColor3f(0.2f, 0.2f, 0.2f);
-    glPushMatrix();
-    glTranslatef(20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-20, 26.5, -10); glScalef(2, 1, 58); glutSolidCube(1);
-    glPopMatrix();
 
+    // ** RE-ADDED FOG LIGHTS **
     glEnable(GL_LIGHTING);
     glMaterialfv(GL_FRONT, GL_EMISSION, yellowEmission);
     glPushMatrix();
@@ -189,7 +217,9 @@ void MountainCar::draw() {
     glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
     glDisable(GL_LIGHTING);
 
-    // --- 11. CLEANUP ---
     glPopMatrix();
     gluDeleteQuadric(quadric);
 }
+
+
+
