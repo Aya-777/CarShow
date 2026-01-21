@@ -54,11 +54,11 @@ void Road::draw()
     glTranslatef(0.0f, 0.01f, 0.0f);        // avoid z-fighting
 
     // Asphalt
-    //glColor3f(0.2f, 0.2f, 0.2f);
-    if (g_darkMode)
-        glColor3f(0.08f, 0.08f, 0.1f);   // dark asphalt
-    else
-        glColor3f(0.2f, 0.2f, 0.2f);    // normal asphalt
+    glColor3f(0.2f, 0.2f, 0.2f);
+    //if (g_darkMode)
+    //    glColor3f(0.08f, 0.08f, 0.1f);   // dark asphalt
+    //else
+    //    glColor3f(0.2f, 0.2f, 0.2f);    // normal asphalt
 
     glBegin(GL_QUADS);
     glVertex3f(-width / 2, 0.0f, 0.0f);
@@ -68,11 +68,11 @@ void Road::draw()
     glEnd();
 
     // Center dashed line
-    //glColor3f(1.0f, 1.0f, 1.0f);
-    if (g_darkMode)
-    glColor3f(0.6f, 0.6f, 0.6f);   // dimmed white
-else
     glColor3f(1.0f, 1.0f, 1.0f);
+//    if (g_darkMode)
+//    glColor3f(0.6f, 0.6f, 0.6f);   // dimmed white
+//else
+//    glColor3f(1.0f, 1.0f, 1.0f);
 
     glLineWidth(2.0f);
 
