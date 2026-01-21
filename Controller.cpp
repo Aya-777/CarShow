@@ -9,6 +9,7 @@
 // Initialize static members
 Camera* Controller::cameraRef = nullptr;
 Truck* Controller::truckRef = nullptr;
+Building* Controller::buldingRef = nullptr;
 bool* Controller::isInsideViewRef = nullptr;
 bool Controller::mouseCaptured = false;
 int Controller::lastMouseX = 0;
@@ -18,9 +19,10 @@ float Controller::mouseSensitivity = 0.0025f;
 extern bool g_darkMode;
 
 
-void Controller::init(Camera& cam, Truck& trk, bool& viewFlag) {
+void Controller::init(Camera& cam, Truck& trk, Building& bld, bool& viewFlag) {
     cameraRef = &cam;
     truckRef = &trk;
+    buldingRef = &bld;
     isInsideViewRef = &viewFlag;
 }
 
@@ -35,51 +37,61 @@ void Controller::keyboard(unsigned char key, int x, int y) {
     case 'd': cameraRef->RotateYaw(0.02f); break;
     case 'w': cameraRef->Fly(2.0f); break;
     case 's': cameraRef->Fly(-2.0f); break;
-    case 'o':
-    case 'O': truckRef->backDoors.open = !truckRef->backDoors.open; break;
-    case 'p': truckRef->driverDoor.open = !truckRef->driverDoor.open; break;
-    case '1': // FORWARD
-        truckRef->position.x += cos(rad) * step;
-        truckRef->position.z -= sin(rad) * step;
-        truckRef->wheelSpin -= 10.0f;
-        break;
-    case '2': // BACKWARD
-        truckRef->position.x -= cos(rad) * step;
-        truckRef->position.z += sin(rad) * step;
-        truckRef->wheelSpin += 10.0f;
-        break;
-    case '3': // TURN LEFT
-        truckRef->rotationAngle += 5.0f;
-        truckRef->steerAngle = 20.0f;
-        break;
-    case '4': // TURN RIGHT
-        truckRef->rotationAngle -= 5.0f;
-        truckRef->steerAngle = -20.0f;
-        break;
+        /*case 'o': truckRef->backDoors.open = !truckRef->backDoors.open; break;
+        case 'p': truckRef->driverDoor.open = !truckRef->driverDoor.open; break;*/
+    case 'p': truckRef->playMusic(cameraRef->GetPos());
+    case 'm': g_darkMode = !g_darkMode; break;
+    case 'e': buldingRef->toggleDoor(); break;
     case ' ':
-        *isInsideViewRef = !(*isInsideViewRef);
-        if (!(*isInsideViewRef)) cameraRef->Strafe(20);
+        if (cameraRef->GetPos().dist(truckRef->position) <= 50) {
+            *isInsideViewRef = !(*isInsideViewRef);
+            if (!(*isInsideViewRef)) cameraRef->Strafe(20);
+        }
         break;
     case 'n':
         cameraRef->openNearestDoor();
         break;
         //salma
-    case 'm':
-        g_darkMode = !g_darkMode;
-        break;
-        //*****//
 
     }
     glutPostRedisplay();
 }
-
-void Controller::specialKeys(int key, int x, int y) {
-    if (!cameraRef) return;
-    switch (key) {
-    case GLUT_KEY_UP:    cameraRef->Move(20.0); break;
-    case GLUT_KEY_DOWN:  cameraRef->Move(-10.0); break;
-    case GLUT_KEY_LEFT:  cameraRef->Strafe(10.0); break;
-    case GLUT_KEY_RIGHT: cameraRef->Strafe(-10.0); break;
+void Controller::specialKeys(int key, int x, int y)
+{
+    float rad = truckRef->rotationAngle * (M_PI / 180.0f);
+    float step = 2.0f;
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        cameraRef->Move(20.0);
+        if (*isInsideViewRef) {
+            truckRef->position.x += cos(rad) * step;
+            truckRef->position.z -= sin(rad) * step;
+            truckRef->wheelSpin -= 10.0f;
+        }
+        break;
+    case GLUT_KEY_DOWN:
+        cameraRef->Move(-10.0);
+        if (*isInsideViewRef) {
+            truckRef->position.x -= cos(rad) * step;
+            truckRef->position.z += sin(rad) * step;
+            truckRef->wheelSpin += 10.0f;
+        }
+        break;
+    case GLUT_KEY_LEFT:
+        cameraRef->Strafe(10.0);
+        if (*isInsideViewRef) {
+            truckRef->rotationAngle += 5.0f;
+            truckRef->steerAngle = 20.0f;
+        }
+        break;
+    case GLUT_KEY_RIGHT:
+        cameraRef->Strafe(-10.0);
+        if (*isInsideViewRef) {
+            truckRef->rotationAngle -= 5.0f;
+            truckRef->steerAngle = -20.0f;
+        }
+        break;
     }
     glutPostRedisplay();
 }
