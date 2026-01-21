@@ -1,21 +1,3 @@
-//#pragma once
-//#include "Point.h"
-//class Sofa
-//{
-//	//new
-//private:
-//	Point center; // sofa position
-//	//***//
-//public:
-//	Sofa(Point c);       // constructor with position new
-//	void setPosition(Point c);  // move sofa new 
-//	//void draw(Point center);
-//	void draw();
-//	//void drawTriple(Point center);
-//	void drawTriple();    // optional triple sofa
-//};
-//
-
 #pragma once
 #include "Point.h"
 

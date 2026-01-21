@@ -14,7 +14,7 @@
 #include "Window.h"
 #include "Building.h"
 #include "Skybox.h"
-#include "ModelTree.h"
+//#include "ModelTree.h"
 #include "StreetLamp.h"
 #include "Sidewalk.h"
 #include "FamilyCar.h"
@@ -25,6 +25,9 @@
 #include "OutSide.h"
 #include "MountainHall.h" 
 #include "Mercedes.h";
+#include "Bureau.h" //salma
+#include "AdminDoor.h" //salma
+#include "Chair.h"
 
 
 using namespace std;
@@ -49,9 +52,22 @@ SkyBox mySky;
 SmartTreeModel myTree;
 Sidewalk mySidewalk;
 StreetLamp myLamp;
-Road mainRoad(-700.0f, -3.0f, -2000.0f, 200.0f, 4000.0f, 0.0f);
-Road sideRoad(-606.0f, -3.0f, 440.0f, 80.0f, 760.0f, 90.0f);
-ParkingRoad parking(0.0f, -3.0f, 360.0f, 80.0f, 155.0f, 90.0f, 2.0f, 40.0f);
+//road:
+Road mainRoad(-700.0f, -3.0f, -2000.0f, 300.0f, 4000.0f, 0.0f); //salma
+Road sideRoad(-550.0f, -3.0f, 695.0f, 100.0f, 755.0f, 90.0f);    //salma
+ParkingRoad parking(-65.0f, -3.0f, 575.5f, 140.0f, 270.0f, 90.0f, 2.0f, 40.0f); //salma
+//salma
+Sofa sofa(Point(-145, 0, 630)); // salma
+//Sofa sofa2(Point()); // salma
+Sofa sofa2(Point(-145, 0, 520)); // salma
+Sofa tripleSofa(Point(-190, 0, 614)); // salma
+Bureau bureau(Point(-100, -1, 580));  // salma
+AdminDoor adminDoor(Point(-200, 0, 510)); //salma
+Chair adminChair(-80, -1, 580); //salma
+
+
+
+
 Plaza buildingPlaza;
 CityLayout myCity;
 
@@ -126,11 +142,33 @@ void display() {
     myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);
     myCity.drawCityBuildings(myLamp, texResturant.textureID, texStone);
 
-    glPushMatrix();
-    glColor3f(0.8, 0.1, 0.1);
-    t.draw(0.8, 0.8, 0.7);
+    sofa.setRotation(180); //salma
+    sofa2.setRotation(0); //salma
+    tripleSofa.setRotation(90);//salma
+
+    sofa.draw(); //salma
+    sofa2.draw(); //salma
+    tripleSofa.drawTriple();
+    bureau.draw(); //salma
+    adminDoor.update(); //salma
+    adminDoor.draw();//salma
+    adminChair.draw();//salma
+
+
+    buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
+    myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
+    myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
+
+	glPushMatrix();
+	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
+	glColor3f(0.8, 0.1, 0.1);
+	t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
-    glPopMatrix();
+	glPopMatrix();
+	buildingStructure.draw();
+	mainRoad.draw(); //salma
+	sideRoad.draw(); //salma
+	parking.draw(); //salma
 
     glutSwapBuffers();
 }
