@@ -14,6 +14,6 @@ public:
 
     Window(Point pos, float l, float w, float h, float gapBottom, float gapTop, float gapLeft, float gapRight, bool hasGlass);
     void draw(float r, float g, float b);
-    void drawMovingWindow(float r, float g, float b);
+    void drawMovingWindow(float r, float g, float b, bool bleft);
     void openWindow();
 };

@@ -18,8 +18,10 @@ void MountainHall::draw() {
     GLUquadric* quadric = gluNewQuadric();
 
     // --- 2. CALCULATE CENTER POSITION ---
-    // These coordinates place the display in the correct hall space.
-    float hallCenterX = 50.0f;
+    // These coordinates place the display in the center of the 2nd showroom hall.
+    // X = 50 moves it "back" into the hall, away from the entrance.
+    float hallCenterX = 230.0f;
+    // Z = 45 is the horizontal center of the 2nd hall space.
     float hallCenterZ = 45.0f;
 
     //// --- 3. DRAW THE PLATFORM ---

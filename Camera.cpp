@@ -14,6 +14,10 @@ void Camera::Init()
 	SetPos(-5, 4, 12);	//to start over the floor
 }
 
+Point Camera::GetPos() {
+	return Point(m_x, m_y, m_z);
+}
+
 //invoke each time in the draw function
 void Camera::Refresh()
 {

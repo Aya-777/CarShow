@@ -20,6 +20,7 @@ class Camera
 
 		void Init();
 		void Refresh();
+		Point GetPos(); 
 		void SetPos(float x, float y, float z);
 		void GetPos(float& x, float& y, float& z);
 		void GetDirectionVector(float& x, float& y, float& z);

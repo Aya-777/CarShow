@@ -50,7 +50,7 @@ void Window::draw(float r, float g, float b) {
 
     glPopMatrix();
 }
-void Window::drawMovingWindow(float r, float g, float b)
+void Window::drawMovingWindow(float r, float g, float b,bool bleft)
 {
     glPushMatrix();
 
@@ -60,8 +60,13 @@ void Window::drawMovingWindow(float r, float g, float b)
     // 2. Move pivot to left edge (hinge)
     glTranslatef(-w / 2.0f, 0.0f, 0.0f);
 
-    // 3. Rotate around Y axis
-    glRotatef(-90.0f * OpenRate, 0, 1, 0);
+    if (bleft) {
+        // 3. Rotate around Y axis
+        glTranslatef(-OpenRate * 100.0f, 0.0f, 0.0f); // sliding on Z axis
+    }
+    else {
+        glTranslatef(OpenRate * 100.0f, 0.0f, 0.0f); // sliding on Z axis
+    }
 
     // 4. Move back from pivot
     glTranslatef(w / 2.0f, 0.0f, 0.0f);
