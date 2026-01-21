@@ -156,10 +156,6 @@ void display() {
     adminChair.draw();//salma
 
 
-    buildingPlaza.draw(-550.0f, -350.0f, 0.0f, 400.0f, texPlaza.textureID, 20.0f); // tile of out side
-    myCity.drawAllSidewalks(mySidewalk, myLamp, texSidewalk.textureID);// out side scene
-    //myCity.drawCityBuildings(myLamp, texResturant.textureID); // buildings of out side scene
-
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
