@@ -7,11 +7,9 @@
 class CityLayout {
 public:
     void drawAllSidewalks(Sidewalk& sw, StreetLamp& lamp, GLuint texSW);
-    void drawCityBuildings(StreetLamp& lamp, GLuint texBuilding);
+    void drawCityBuildings(StreetLamp& lamp, GLuint texBuilding, Texture& texStone);
 private:
-    // لرسم الأرصفة الطولية
     void drawMainSidewalks(Sidewalk& sw, GLuint tex);
-    // لرسم الأرصفة الجانبية
     void drawSideSidewalks(Sidewalk& sw, GLuint tex);
     void drawEnvironment(StreetLamp& lamp);
 };
