@@ -10,12 +10,12 @@
 class Building {
 public:
 	Building();
-	Building(double x, double y, double z, double w, double h, double l,Window door);
+	Building(double x, double y, double z, double w, double h, double l,Window leftdoor, Window rightdoor);
 	void draw();
 	void toggleDoor();
 	double width, height, length, x, y, z;
-	GLuint wallTex, wallTex2;
-	Window door;
+	GLuint wallTex, wallTex2, groundTex;
+	Window leftdoor, rightdoor;
 private:
 };
 

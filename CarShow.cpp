@@ -55,6 +55,7 @@ CityLayout myCity;
 // Textures
 Texture texFront, texBack, texLeft, texRight, texUp, texDown;
 Texture texSidewalk, texPlaza, texGrass, texResturant, texTrunk, texLeaves;
+Texture insideWallTex, outsideWallTex;
 
 // Display List
 GLuint displayListID;
@@ -139,11 +140,13 @@ void init() {
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
     Controller::init(camera, t, buildingStructure, isInsideView);
-    Texture tempTex1, tempTex2;
-    tempTex1.loadTexture("Textures/outside.jpg");
-    buildingStructure.wallTex = tempTex1.textureID;
-    tempTex2.loadTexture("Textures/insideWall.jpg");
-    buildingStructure.wallTex2 = tempTex2.textureID;
+     // building textures
+    outsideWallTex.loadTexture("Textures/outside.jpg");
+    buildingStructure.wallTex = outsideWallTex.textureID;
+    insideWallTex.loadTexture("Textures/insideWall.jpg");
+    buildingStructure.wallTex2 = insideWallTex.textureID;
+
+      // sky textures
     texFront.loadTexture("Textures/Sky_Clouds.jpg");
     texBack.loadTexture("Textures/Sky_Clouds.jpg");
     texLeft.loadTexture("Textures/Sky_Clouds.jpg");
@@ -157,10 +160,15 @@ void init() {
     mySky.SKYUP = texUp.textureID;
     mySky.SKYDOWN = texDown.textureID;
 
+	// side walk and plaza textures
     texSidewalk.loadTexture("Textures/sidewalk.jpg");
     texPlaza.loadTexture("Textures/tile2.jpg");
     texGrass.loadTexture("Textures/grass5.jpg");
     texResturant.loadTexture("Textures/building.jpg");
+	// building's ground texture 
+    buildingStructure.groundTex = texPlaza.textureID;
+
+	// tree model textures
     myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
