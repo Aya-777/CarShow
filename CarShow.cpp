@@ -183,6 +183,7 @@ void reshape(int w, int h) {
 
 void idle() {
     updateScene();
+    t.checkMusicDistance(camera.GetPos());
     display();
 }
 
@@ -200,7 +201,7 @@ void updateScene() {
         float finalX = t.position.x + (localX * cos(rad) - localZ * sin(rad));
         float finalZ = t.position.z - (localX * sin(rad) + localZ * cos(rad));
         float finalY = t.position.y + localY;
-        camera.SetPos(finalX, finalY - 2, finalZ);
+        camera.SetPos(finalX, finalY - 3, finalZ);
         camera.SetYaw(-rad);
     }
 }
@@ -239,4 +240,3 @@ void drawGround() {
     glEnd();
     glPopMatrix();
 }
-

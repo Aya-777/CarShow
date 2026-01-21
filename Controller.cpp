@@ -39,7 +39,7 @@ void Controller::keyboard(unsigned char key, int x, int y) {
     case 's': cameraRef->Fly(-2.0f); break;
         /*case 'o': truckRef->backDoors.open = !truckRef->backDoors.open; break;
         case 'p': truckRef->driverDoor.open = !truckRef->driverDoor.open; break;*/
-    case 'p': truckRef->playMusic(cameraRef->GetPos());
+    case 'p': truckRef->playMusic(cameraRef->GetPos()); break;
     case 'm': g_darkMode = !g_darkMode; break;
     case 'e': buldingRef->toggleDoor(); break;
     case ' ':

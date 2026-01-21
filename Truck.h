@@ -13,6 +13,7 @@ public:
     Wheel wheelUnit;
     Point wheelPositions[6];
     const char* musicSoundPath = "debug/resources/sounds/cryingdoor.wav";
+    bool isMusicPlaying = false;
 
 public:
     Point position;
@@ -32,6 +33,7 @@ public:
     void draw(float r = 0.9f, float g = 0.9f, float b = 0.85f);
     void load();
     void playMusic(Point cameraPos);
+    void checkMusicDistance(Point cameraPos);
 
 };
 
