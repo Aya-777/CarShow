@@ -71,7 +71,7 @@ public:
 		, broof // roof
 		, bground; // ground
 
-private:
+public:
     std::vector<Cuboid> wallCuboids;
 
     // COLLISION BOXES

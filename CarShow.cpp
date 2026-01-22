@@ -41,7 +41,7 @@ vector<Door*> globalDoors;
 Camera camera;
 Building buildingStructure;
 MountainHall mountainHall;
-Truck t(Point(-550, 7, 775));
+Truck t(Point(-500, 7, 775));
 Truck t2(Point(-200, 10, 200));
 Truck t3(Point(-200, 10, 300));
 Mercedes mercedes , mercedes1;
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     glutMouseFunc(Controller::mouseButton);
     //glutMouseFunc(mouseButton);
 
-    camera.SetPos(-500.0f, 20.0f, 800.0f);
+    camera.SetPos(-600.0f, 20.0f, 1000.0f);
     camera.RotateYaw(-1.0);
     glutTimerFunc(1, timer, 0);
     glutMainLoop();
@@ -132,7 +132,10 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (g_darkMode) glClearColor(0.05f, 0.05f, 0.08f, 1.0f);
     else glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
-
+    if (buildingStructure.leftdoor.pos.dist(camera.GetPos()) < 500.0f) {
+        buildingStructure.leftdoor.isOpen = buildingStructure.leftdoor.isOpen = true;
+        buildingStructure.rightdoor.isOpen = buildingStructure.rightdoor.isOpen = true;
+    }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     camera.Refresh();
@@ -356,8 +359,8 @@ void setupLighting() {
         diffuseLight[0] = 0.1f; diffuseLight[1] = 0.1f; diffuseLight[2] = 0.15f; diffuseLight[3] = 1.0f;
     }
     else {
-        ambientLight[0] = 0.3f; ambientLight[1] = 0.3f; ambientLight[2] = 0.3f; ambientLight[3] = 1.0f;
-        diffuseLight[0] = 0.6f; diffuseLight[1] = 0.6f; diffuseLight[2] = 0.6f; diffuseLight[3] = 1.0f;
+        ambientLight[0] = 0.6f; ambientLight[1] = 0.6f; ambientLight[2] = 0.6f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 1.0f; diffuseLight[1] = 1.0f; diffuseLight[2] = 1.0f; diffuseLight[3] = 1.0f;
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
