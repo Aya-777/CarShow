@@ -1,8 +1,6 @@
 #include "FSportCar.h"
 #include <iostream>
 
-// IMPORTANT: this function already exists in your project
-// (from bugatti.cpp / obj loader)
 GLuint LoadOBJToDisplayList(const std::string& objPath, float scale);
 
 FSportCar::FSportCar()
@@ -23,6 +21,7 @@ bool FSportCar::Load(const std::string& objPath, float scale)
         std::cout << "Failed to load car model: " << objPath << std::endl;
         return false;
     }
+    std::cout << "Trueeeeeee" << std::endl;
 
     return true;
 }
@@ -41,15 +40,26 @@ void FSportCar::SetRotationY(float angleDeg)
 
 void FSportCar::Draw() const
 {
-    if (m_displayList == 0)
-        return;
+    if (m_displayList == 0) return;
 
     glPushMatrix();
 
+    // Save current states (lighting, enable bits, colors)
+    glPushAttrib(GL_ENABLE_BIT | GL_LIGHTING_BIT | GL_CURRENT_BIT);
+
+    // --- CRITICAL CHANGES ---
+    glDisable(GL_LIGHTING);       // This removes all shadows and light reflections
+    glDisable(GL_COLOR_MATERIAL); // Uses the colors from your .mtl file directly
+    glDisable(GL_TEXTURE_2D);     // Ensures no residual textures affect the color
+
+    // Transformations
     glTranslatef(m_posX, m_posY, m_posZ);
     glRotatef(m_rotY, 0.0f, 1.0f, 0.0f);
 
+    // Draw the model with flat colors
     glCallList(m_displayList);
 
+    // Restore the settings for the rest of the scene
+    glPopAttrib();
     glPopMatrix();
 }

@@ -130,6 +130,8 @@ void Controller::specialKeys(int key, int x, int y)
             if (activeVehicle == 1) { 
                 truckRef->rotationAngle += 5.0f;
                 truckRef->steerAngle = 20.0f;
+                std::cout << "TRUCK: Rotating LEFT. New rotationAngle: "
+                    << truckRef->rotationAngle << "°" << std::endl;
             }
             else if (activeVehicle == 2) {
                 mercedesRef->RotateLeft(5.0f);

@@ -29,6 +29,7 @@
 #include "AdminDoor.h" //salma
 #include "Chair.h"
 #include "ModelTree.h"
+#include "fsportcar.h";
 
 
 using namespace std;
@@ -41,7 +42,8 @@ Camera camera;
 Building buildingStructure;
 MountainHall mountainHall;
 Truck t(Point(-300, 3.5, 450));
-Mercedes mercedes;
+Mercedes mercedes  , mercedes1;
+FSportCar fsportcar , ssportcar;
 bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
 int g_lastMouseX = 0, g_lastMouseY = 0;
 int g_iWidth = 1200, g_iHeight = 800;
@@ -155,12 +157,17 @@ void display() {
     adminDoor.draw();//salma
     adminChair.draw();//salma
 
+    cout << camera.GetPos().x << " " << camera.GetPos().y << " " << camera.GetPos().z << " " << endl;
+
 
 	glPushMatrix();
 	//glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // اذا كبيتها ببطل راكبها
 	glColor3f(0.8, 0.1, 0.1);
 	t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
+    mercedes1.Draw();
+    fsportcar.Draw();
+    ssportcar.Draw();
 	glPopMatrix();
 	buildingStructure.draw();
 	mainRoad.draw(); //salma
@@ -209,21 +216,31 @@ void init() {
     buildingStructure.groundTex = texPlaza.textureID;
 
     // tree model textures
-    myTree.loadOBJ("models/Tree-Model/Tree1.obj");
+    /*myTree.loadOBJ("models/Tree-Model/Tree1.obj");
     texTrunk.loadTexture("models/Tree-Model/bark_loo.bmp");
     texLeaves.loadTexture("models/Tree-Model/bat.bmp");
 
-    /*mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
-    mercedes.SetPosition(-432.036, 0.3087, 441.793);
-    mercedes.SetRotationY(90.0f);
-    mercedes.EnterVehicle(true);*/
+    mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
+    mercedes.SetPosition(-632.488 , 0.3087, 705.301);
+    mercedes.SetRotationY(180.0f);
+    mercedes.EnterVehicle(true);
+
+    mercedes1.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 18.0f);
+    mercedes1.SetPosition(170.223 ,2.02747 ,230.45);
+    mercedes1.SetRotationY(270.0f);
+
+    bool carrLoaded = ssportcar.Load("./resources/models/ssportcar/generic_sport_car_low_poly.obj", 18.0f);
+    if (carrLoaded) {
+        ssportcar.SetPosition(260.223, 0.62747, 220.45);
+        ssportcar.SetRotationY(180.0f);
+    }*/
 
     displayListID = glGenLists(1);
     glNewList(displayListID, GL_COMPILE);
     mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
     glEndList();
 }
-
+//.\resources\models\fsportcar\low-poly_sports_car.obj
 // --- 6. Other Functions ---
 void reshape(int w, int h) {
     g_iWidth = w; g_iHeight = h;
@@ -270,7 +287,7 @@ void updateScene() {
         }
     }
 }
-
+//227.567 30.2698 192.213
 void setupLighting() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -282,14 +299,13 @@ void setupLighting() {
         diffuseLight[0] = 0.3f; diffuseLight[1] = 0.3f; diffuseLight[2] = 0.35f; diffuseLight[3] = 1.0f;
     }
     else {
-        ambientLight[0] = 0.6f; ambientLight[1] = 0.6f; ambientLight[2] = 0.6f; ambientLight[3] = 1.0f;
-        diffuseLight[0] = 1.0f; diffuseLight[1] = 1.0f; diffuseLight[2] = 1.0f; diffuseLight[3] = 1.0f;
+        ambientLight[0] = 0.3f; ambientLight[1] = 0.3f; ambientLight[2] = 0.3f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 0.6f; diffuseLight[1] = 0.6f; diffuseLight[2] = 0.6f; diffuseLight[3] = 1.0f;
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
-
 void drawGround() {
     glPushMatrix();
     texGrass.Use();
