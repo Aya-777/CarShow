@@ -29,6 +29,7 @@
 #include "AdminDoor.h" //salma
 #include "Chair.h"
 #include "ModelTree.h"
+#include "fsportcar.h";
 
 
 using namespace std;
@@ -43,7 +44,8 @@ MountainHall mountainHall;
 Truck t(Point(-550, 7, 775));
 Truck t2(Point(-200, 10, 200));
 Truck t3(Point(-200, 10, 300));
-Mercedes mercedes;
+Mercedes mercedes , mercedes1;
+FSportCar fsportcar, ssportcar;
 FamilyCar familyCar;
 FamilyCar familyCar2(Point(200, 20, 450), true); // Convertible car
 bool isInsideView = false, g_mouseCaptured = false, g_darkMode = false;
@@ -184,6 +186,7 @@ void display() {
     adminDoor.draw();//salma
     adminChair.draw();//salma
 
+    cout << camera.GetPos().x << " " << camera.GetPos().y << " " << camera.GetPos().z << " " << endl;
 
     // --- VEHICLES ---
     forceLightingState();
@@ -192,6 +195,9 @@ void display() {
     glColor3f(0.8, 0.1, 0.1);
     t.draw(0.8, 0.8, 0.7);
     mercedes.Draw();
+    mercedes1.Draw();
+    fsportcar.Draw();
+    ssportcar.Draw();
     familyCar.setPosition(Point(200, 20, 370));
     familyCar.draw();
     familyCar2.draw();
@@ -261,18 +267,28 @@ void init() {
 	camera.addWall(ground.getAABB());
 	t.walls = camera.walls;
     //std::cout<< "Total Walls in Camera Collision System: " << camera.walls.size() << std::endl;
-	
-    /*mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
-    mercedes.SetPosition(-432.036, 0.3087, 441.793);
-    mercedes.SetRotationY(90.0f);
-    mercedes.EnterVehicle(true);*/
+
+    mercedes.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 10.0f);
+    mercedes.SetPosition(-632.488, 0.3087, 705.301);
+    mercedes.SetRotationY(180.0f);
+    mercedes.EnterVehicle(true);
+
+    mercedes1.Load("./resources/models/mercedes/mercedes-benz_amg_gt_black_series.obj", 18.0f);
+    mercedes1.SetPosition(170.223, 2.02747, 230.45);
+    mercedes1.SetRotationY(270.0f);
+
+    bool carrLoaded = ssportcar.Load("./resources/models/ssportcar/generic_sport_car_low_poly.obj", 18.0f);
+    if (carrLoaded) {
+        ssportcar.SetPosition(260.223, 0.62747, 220.45);
+        ssportcar.SetRotationY(180.0f);
+    }
 
     displayListID = glGenLists(1);
     glNewList(displayListID, GL_COMPILE);
     mySky.Draw_Skybox(0, 0, 0, 10000, 10000, 10000);
     glEndList();
 }
-
+//.\resources\models\fsportcar\low-poly_sports_car.obj
 // --- 6. Other Functions ---
 void reshape(int w, int h) {
     g_iWidth = w; g_iHeight = h;
@@ -340,14 +356,13 @@ void setupLighting() {
         diffuseLight[0] = 0.1f; diffuseLight[1] = 0.1f; diffuseLight[2] = 0.15f; diffuseLight[3] = 1.0f;
     }
     else {
-        ambientLight[0] = 0.6f; ambientLight[1] = 0.6f; ambientLight[2] = 0.6f; ambientLight[3] = 1.0f;
-        diffuseLight[0] = 1.0f; diffuseLight[1] = 1.0f; diffuseLight[2] = 1.0f; diffuseLight[3] = 1.0f;
+        ambientLight[0] = 0.3f; ambientLight[1] = 0.3f; ambientLight[2] = 0.3f; ambientLight[3] = 1.0f;
+        diffuseLight[0] = 0.6f; diffuseLight[1] = 0.6f; diffuseLight[2] = 0.6f; diffuseLight[3] = 1.0f;
     }
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
-
 void drawGround() {
     glPushMatrix();
 	ground.drawWithTexture(texGrass.textureID, 50, 50);

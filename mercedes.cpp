@@ -78,8 +78,7 @@ void Mercedes::Update() {
     float rad = m_rotY * (3.14159f / 180.0f);
 
     if (m_isMovable) {
-        // 1. Move position based on current heading (m_rotY) and speed
-        // Matches Truck logic: +cos for X, -sin for Z
+  
         m_x += sin(rad) * m_speed;
         m_z += cos(rad) * m_speed;
 
@@ -115,7 +114,7 @@ void Mercedes::MoveBackward(float step)
 void Mercedes::RotateLeft(float angle) {
     if (m_isMovable) {
         m_rotY += angle;
-        m_steerAngle = 20.0f;
+        m_steerAngle = 0.0f;
     }
 }
 
@@ -143,7 +142,7 @@ Point Mercedes::GetDriverSeatPosition() const {
     float rad = (m_rotY + 90.0f) * (3.14159f / 180.0f);
 
     float localX = -5.0f; 
-    float localY = 8.0f;  
+    float localY = 8.5f;  
     float localZ = 10.5;
 
     // Transform to world coordinates using the car's rotation
@@ -151,7 +150,7 @@ Point Mercedes::GetDriverSeatPosition() const {
     float worldZ = m_z + (localX * sin(rad) + localZ * cos(rad));
     float worldY = m_y + localY;
 
-    return Point(worldX - 10.0, worldY, worldZ + 6.0);
+    return Point(worldX - 14.0, worldY, worldZ + 3.0);
 }
 /*
 float localX = 10.5f;
